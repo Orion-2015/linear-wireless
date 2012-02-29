@@ -1,0 +1,568 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        27/Feb/2012  21:21:04 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\ApplicationFramwork\log.c                     /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          -DTHIS_DEVICE_ADDRESS={0x1} -DEND_DEVICE          /
+//                          -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK) -f          /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\Configuration\s /
+//                          mpl_nwk_config.dat" (-DMAX_HOPS=3                 /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DEXTENDED_API -DxSMPL_SECURE                     /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\Appli /
+//                          cationFramwork\log.c" -D "MCU_H=\"ioCC1110.h\""   /
+//                          -D MRFI_CC1110 -lB "C:\Texas                      /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\CC1110-LinkTo\List\" -o   /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\O /
+//                          bj\" -e --debug --core=plain                      /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -I       /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\ApplicationFramwork\" -Ohs             /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\log.s51                                        /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME log
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ADD_XSTACK_DISP0_8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?DPH1
+        EXTERN ?DPL1
+        EXTERN ?DPS
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSP
+        EXTERN ?XSTACK_RESTORE_DPTRS_1
+        EXTERN ?XSTACK_SAVE_DPTRS_1
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC log
+        PUBLIC logBuffer
+        PUBLIC logIndex
+        PUBLIC logLevel
+        PUBLIC logTemp
+        PUBLIC removeOldLog
+
+        EXTERN strlen
+        EXTERN memcpy
+        EXTERN getMyAddress
+        EXTERN console
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\ApplicationFramwork\log.c
+//    1 /*************************************
+//    2  * log module
+//    3  *
+//    4  * Create date: 2011/11/22 
+//    5  * Author: yongfa.zhou, email: zyfa2008@163.com
+//    6  * bupt fop laboratory
+//    7  */
+//    8 
+//    9 #include "framework.h"
+//   10 
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   11 uint8 logBuffer[LOGBUFFERLEN];
+logBuffer:
+        DS 500
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA16
+//   12 volatile uint16 logIndex = 0;
+logIndex:
+        DS 2
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   13 char logTemp[LOGTEMP_SIZE];
+logTemp:
+        DS 100
+        REQUIRE __INIT_XDATA_Z
+//   14 
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+//   15 uint8 logLevel = INFO; 
+logLevel:
+        DATA8
+        DS 1
+        REQUIRE `?<Initializer for logLevel>`
+        REQUIRE __INIT_XDATA_I
+//   16 
+//   17 /* not implement, send to uart or lcd
+//   18  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   19 void log(uint8 logType, char* logContent)
+log:
+        CODE
+//   20 {
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 13
+        ; Auto size: 0
+        MOV     ?V0 + 0,R1
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+//   21 	uint8 myAddr;
+//   22 	if(logType <= logLevel)
+        MOV     DPTR,#logLevel
+        MOVX    A,@DPTR
+        CLR     C
+        SUBB    A,?V0 + 0
+        JNC     $+5
+        LJMP    ??log_0
+//   23 	{
+//   24 		if(logIndex + strlen(logContent) + 1 > LOGBUFFERLEN)
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        MOV     R6,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R7,A
+        ; Setup parameters for call to function strlen
+        LCALL   strlen
+        MOV     ?V0 + 2,R2
+        MOV     ?V0 + 3,R3
+        MOV     A,R6
+        ADD     A,?V0 + 2
+        MOV     R0,A
+        MOV     A,R7
+        ADDC    A,?V0 + 3
+        MOV     R1,A
+        MOV     A,R0
+        ADD     A,#0x1
+        INC     R0
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+        CLR     C
+        MOV     A,R0
+        SUBB    A,#-0xb
+        MOV     A,R1
+        SUBB    A,#0x1
+        JNC     $+5
+        LJMP    ??log_1
+//   25 		{
+//   26 			removeOldLog(strlen(logContent) + 1);
+        ; Setup parameters for call to function strlen
+        MOV     R2,?DPL1
+        MOV     R3,?DPH1
+        LCALL   strlen
+        MOV     ?V0 + 2,R2
+        MOV     ?V0 + 3,R3
+        MOV     R4,?V0 + 2
+        MOV     R5,?V0 + 3
+        MOV     A,#logBuffer & 0xff
+        ADD     A,R4
+        MOV     DPL,A
+        MOV     A,#(logBuffer >> 8) & 0xff
+        ADDC    A,R5
+        MOV     DPH,A
+        SJMP    ??log_2
+??log_3:
+        MOV     A,R4
+        ADD     A,#0x1
+        INC     R4
+        MOV     A,R5
+        ADDC    A,#0x0
+        MOV     R5,A
+        INC     DPTR
+??log_2:
+        MOVX    A,@DPTR
+        JZ      ??log_4
+        CLR     C
+        MOV     A,R4
+        SUBB    A,#-0xc
+        MOV     A,R5
+        SUBB    A,#0x1
+        JC      ??log_3
+??log_4:
+        MOV     A,#-0xc
+        XRL     A,R4
+        JNZ     ??log_5
+        MOV     A,#0x1
+        XRL     A,R5
+??log_5:
+        JNZ     ??log_6
+        MOV     DPTR,#logIndex
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        SJMP    ??log_7
+??log_6:
+        MOV     A,R4
+        ADD     A,#0x1
+        INC     R4
+        MOV     A,R5
+        ADDC    A,#0x0
+        MOV     R5,A
+        CLR     C
+        MOV     A,R4
+        SUBB    A,#-0xc
+        MOV     A,R5
+        SUBB    A,#0x1
+        JNC     ??log_8
+        MOV     R0,#logBuffer & 0xff
+        MOV     R1,#(logBuffer >> 8) & 0xff
+        MOV     A,R0
+        ADD     A,R4
+        MOV     R2,A
+        MOV     A,R1
+        ADDC    A,R5
+        MOV     R3,A
+        MOV     A,#-0xc
+        CLR     C
+        SUBB    A,R4
+        MOV     R6,A
+        MOV     A,#0x1
+        SUBB    A,R5
+        MOV     R7,A
+??log_9:
+        MOV     DPL,R2
+        MOV     DPH,R3
+        MOVX    A,@DPTR
+        MOV     DPL,R0
+        MOV     DPH,R1
+        MOVX    @DPTR,A
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        MOV     R2,DPL
+        MOV     R3,DPH
+        MOV     DPL,R0
+        MOV     DPH,R1
+        INC     DPTR
+        MOV     R0,DPL
+        MOV     R1,DPH
+        MOV     A,R6
+        ADD     A,#-0x1
+        DEC     R6
+        MOV     A,R7
+        ADDC    A,#-0x1
+        MOV     R7,A
+        MOV     A,R6
+        ORL     A,R7
+        JNZ     ??log_9
+??log_8:
+        MOV     DPTR,#logIndex
+        CLR     C
+        MOVX    A,@DPTR
+        SUBB    A,R4
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        SUBB    A,R5
+??log_7:
+        MOVX    @DPTR,A
+//   27 		}
+//   28 		/* olgIndex has updated by removeOldLog() function if has call it */
+//   29 		memcpy(logBuffer + logIndex, logContent, strlen(logContent) + 1);
+??log_1:
+        ; Setup parameters for call to function strlen
+        MOV     R2,?DPL1
+        MOV     R3,?DPH1
+        LCALL   strlen
+        ; Setup parameters for call to function memcpy
+        MOV     A,R2
+        ADD     A,#0x1
+        MOV     ?V0 + 2,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     ?V0 + 3,A
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,?DPL1
+        MOV     R5,?DPH1
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        ADD     A,#logBuffer & 0xff
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        ADDC    A,#(logBuffer >> 8) & 0xff
+        MOV     R3,A
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//   30 		logIndex += (strlen(logContent) + 1);
+        ; Setup parameters for call to function strlen
+        MOV     R2,?DPL1
+        MOV     R3,?DPH1
+        LCALL   strlen
+        MOV     A,R2
+        ADD     A,#0x1
+        MOV     R0,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R1,A
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        ADD     A,R0
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        ADDC    A,R1
+        MOVX    @DPTR,A
+//   31 		
+//   32 		myAddr = getMyAddress();
+//   33 		if(myAddr == APADDRESS)
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        XRL     A,#0x1
+        JNZ     ??log_0
+//   34 		{
+//   35 			console(logContent);
+        ; Setup parameters for call to function console
+        MOV     R2,?DPL1
+        MOV     R3,?DPH1
+        LCALL   console
+//   36 		}
+//   37 	}
+//   38 }
+??log_0:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+//   39 
+//   40 /* remove the oldest log, and append new log to the last
+//   41  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   42 void removeOldLog(uint16 newLogLength)
+removeOldLog:
+        CODE
+//   43 {
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 10
+        ; Auto size: 0
+//   44 	uint16 i;
+//   45 	uint16 newIndex;
+//   46 	
+//   47 	i = newLogLength - 1;
+        MOV     A,R2
+        ADD     A,#-0x1
+        MOV     R0,A
+        MOV     A,R3
+        ADDC    A,#-0x1
+        MOV     R1,A
+        MOV     A,#logBuffer & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#(logBuffer >> 8) & 0xff
+        ADDC    A,R1
+        MOV     DPH,A
+        SJMP    ??removeOldLog_0
+//   48 	/* search to the end log content */
+//   49 	while(logBuffer[i] != '\0' && i < LOGBUFFERLEN)
+//   50 	{
+//   51 		i++;
+??removeOldLog_1:
+        MOV     A,R0
+        ADD     A,#0x1
+        INC     R0
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+        INC     DPTR
+//   52 	}
+??removeOldLog_0:
+        MOVX    A,@DPTR
+        JZ      ??removeOldLog_2
+        CLR     C
+        MOV     A,R0
+        SUBB    A,#-0xc
+        MOV     A,R1
+        SUBB    A,#0x1
+        JC      ??removeOldLog_1
+//   53 	/* remove all log data */
+//   54 	if(i == LOGBUFFERLEN)
+??removeOldLog_2:
+        MOV     A,#-0xc
+        XRL     A,R0
+        JNZ     ??removeOldLog_3
+        MOV     A,#0x1
+        XRL     A,R1
+??removeOldLog_3:
+        JNZ     ??removeOldLog_4
+//   55 	{
+//   56 		logIndex = 0;
+        MOV     DPTR,#logIndex
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        SJMP    ??removeOldLog_5
+//   57 		return;
+//   58 	}
+//   59 	i++; /* point to new log content */
+??removeOldLog_4:
+        MOV     A,R0
+        ADD     A,#0x1
+        INC     R0
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+//   60 	newIndex = i;
+        CLR     C
+        MOV     A,R0
+        SUBB    A,#-0xc
+        MOV     A,R1
+        SUBB    A,#0x1
+        JNC     ??removeOldLog_6
+        MOV     ?DPL1,#logBuffer & 0xff
+        MOV     ?DPH1,#(logBuffer >> 8) & 0xff
+        MOV     A,#logBuffer & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#(logBuffer >> 8) & 0xff
+        ADDC    A,R1
+        MOV     DPH,A
+        MOV     A,#-0xc
+        CLR     C
+        SUBB    A,R0
+        MOV     R2,A
+        MOV     A,#0x1
+        SUBB    A,R1
+        MOV     R3,A
+//   61 	
+//   62 	for(; i<LOGBUFFERLEN; i++)
+//   63 	{
+//   64 		logBuffer[i - newIndex] = logBuffer[i];
+??removeOldLog_7:
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        MOVX    A,@DPTR
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    @DPTR/*1*/,A
+//   65 	}
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        INC     DPTR
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        INC     DPTR/*1*/
+        MOV     A,R2
+        ADD     A,#-0x1
+        DEC     R2
+        MOV     A,R3
+        ADDC    A,#-0x1
+        MOV     R3,A
+        MOV     A,R2
+        ORL     A,R3
+        JNZ     ??removeOldLog_7
+//   66 	logIndex -= newIndex;
+??removeOldLog_6:
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        MOV     DPTR,#logIndex
+        CLR     C
+        MOVX    A,@DPTR
+        SUBB    A,R0
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        SUBB    A,R1
+??removeOldLog_5:
+        MOVX    @DPTR,A
+//   67 	return;
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x1
+        LJMP    ?FUNC_LEAVE_XDATA
+//   68 }
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for logLevel>`:
+        DATA8
+        DB 2
+
+        END
+//   69 
+// 
+// 504 bytes in segment NEAR_CODE
+//   1 byte  in segment XDATA_I
+//   1 byte  in segment XDATA_ID
+// 602 bytes in segment XDATA_Z
+// 
+// 505 bytes of CODE  memory
+// 603 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

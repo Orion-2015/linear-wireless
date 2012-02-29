@@ -1,0 +1,397 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        27/Feb/2012  22:42:10 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\ApplicationFramwork\radio.c                   /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          -DTHIS_DEVICE_ADDRESS={0x1} -DEND_DEVICE          /
+//                          -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK) -f          /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\Configuration\s /
+//                          mpl_nwk_config.dat" (-DMAX_HOPS=3                 /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DEXTENDED_API -DxSMPL_SECURE                     /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\Appli /
+//                          cationFramwork\radio.c" -D                        /
+//                          "MCU_H=\"ioCC1110.h\"" -D MRFI_CC1110 -lB         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\L /
+//                          ist\" -o "C:\Texas Instruments\SimpliciTI-IAR-1.2 /
+//                          .0\Projects\Examples\SRF04\UART_Bridge\IAR\CC1110 /
+//                          -LinkTo\Obj\" -e --debug --core=plain             /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -I       /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\ApplicationFramwork\" -Ohs             /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\radio.s51                                      /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME radio
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ADD_XSTACK_DISP0_8
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?DPH1
+        EXTERN ?DPL1
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSP
+        EXTERN ?XSTACK_RESTORE_DPTRS_1
+        EXTERN ?XSTACK_SAVE_DPTRS_1
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBWEAK _A_P1
+        PUBLIC receive
+        PUBLIC receiveLinkID
+        PUBLIC rx
+        PUBLIC send
+        PUBLIC sendLinkID
+        PUBLIC tx
+
+        EXTERN SMPL_LinkListen
+        EXTERN SMPL_Receive
+        EXTERN getNextAddress
+        EXTERN sprintf
+        EXTERN log
+        EXTERN SMPL_Link
+        EXTERN SMPL_Send
+        EXTERN MRFI_DelayMs
+        EXTERN SMPL_Unlink
+        EXTERN logTemp
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\ApplicationFramwork\radio.c
+//    1 #include "framework.h"
+
+        ASEGN SFR_AN:DATA:NOROOT,090H
+// union <unnamed> volatile __sfr _A_P1
+_A_P1:
+        DATA8
+        DS 1
+//    2 
+//    3 /* the transmit and receive buffers */
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//    4 uint8_t rx[MAX_APP_PAYLOAD], tx[MAX_APP_PAYLOAD];
+rx:
+        DS 20
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+tx:
+        DS 20
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//    5 linkID_t	receiveLinkID = 0;
+receiveLinkID:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//    6 linkID_t	sendLinkID = 0;
+sendLinkID:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+//    7 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//    8 struct AppFrame* receive()
+receive:
+        CODE
+//    9 { 
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 1
+        MOV     A,#-0x1
+        LCALL   ?ALLOC_XSTACK8
+//   10 	uint16 		i = 0;
+//   11 	uint8 		len;
+//   12 	uint16 		maxTimes = 1000;
+//   13 	if (SMPL_SUCCESS != SMPL_LinkListen(&receiveLinkID))
+        ; Setup parameters for call to function SMPL_LinkListen
+        MOV     R2,#receiveLinkID & 0xff
+        MOV     R3,#(receiveLinkID >> 8) & 0xff
+        LCALL   SMPL_LinkListen
+        MOV     A,R1
+        JZ      ??receive_0
+//   14 	{
+//   15 		/* blink LED until we link successfully */
+//   16 		BSP_TOGGLE_LED1( );
+        XRL     0x90,#0x1
+//   17 		return NULL;
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        SJMP    ??receive_1
+//   18 	}
+//   19 	/* sure we have received data */
+//   20 	//MRFI_DelayMs( 100 );
+//   21 	while( SMPL_Receive( receiveLinkID, rx, &len ) != SMPL_SUCCESS)
+??receive_0:
+        ; Setup parameters for call to function SMPL_Receive
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOV     R4,DPL
+        MOV     R5,DPH
+        MOV     R2,#rx & 0xff
+        MOV     R3,#(rx >> 8) & 0xff
+        MOV     DPTR,#receiveLinkID
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   SMPL_Receive
+        MOV     A,R1
+        JNZ     ??receive_0
+//   22 	{
+//   23 		if(i >= maxTimes)
+//   24 		{
+//   25 			//return NULL;
+//   26 		}
+//   27 		//MRFI_DelayMs(10);
+//   28 		//BSP_TOGGLE_LED2( );
+//   29 		i++;
+//   30 	}
+//   31 	
+//   32 	return (struct AppFrame*)rx;
+        MOV     R2,#rx & 0xff
+        MOV     R3,#(rx >> 8) & 0xff
+??receive_1:
+        MOV     A,#0x1
+        LCALL   ?DEALLOC_XSTACK8
+        POP     DPH
+        POP     DPL
+        RET
+        REQUIRE _A_P1
+//   33 }
+//   34 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   35 smplStatus_t send(void *data, uint8 len)
+send:
+        CODE
+//   36 {
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 13
+        ; Auto size: 0
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+        MOV     A,R1
+        MOV     R6,A
+//   37 	smplStatus_t rc;
+//   38 	struct AppFrame *frame = (struct AppFrame*)data;
+//   39 	uint8 nextAddr;
+//   40 	nextAddr = getNextAddress(frame->originalAddr, frame->finnalDstAddr, 1);
+        ; Setup parameters for call to function getNextAddress
+        MOV     R3,#0x1
+        MOV     DPL,?DPL1
+        MOV     DPH,?DPH1
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     DPL,?DPL1
+        MOV     DPH,?DPH1
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   getNextAddress
+        MOV     A,R1
+        MOV     R7,A
+//   41 	if(nextAddr)
+        JZ      ??send_0
+//   42 	{
+//   43 		frame->dstAddr = nextAddr;
+        MOV     DPL,?DPL1
+        MOV     DPH,?DPH1
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOV     ?V0 + 2,DPL
+        MOV     ?V0 + 3,DPH
+        MOVX    @DPTR,A
+        SJMP    ??send_1
+//   44 		while(SMPL_SUCCESS != SMPL_Link(&sendLinkID, nextAddr))
+//   45 		{
+//   46 			sprintf(logTemp, "link to %d failed\n", frame->dstAddr);
+??send_2:
+        ; Setup parameters for call to function sprintf
+        MOV     DPL,?V0 + 2
+        MOV     DPH,?V0 + 3
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "link to %d failed\\n">` & 0xff
+        MOV     R5,#(`?<Constant "link to %d failed\\n">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//   47 			log(ERROR, logTemp);
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x0
+        LCALL   log
+//   48 			BSP_TOGGLE_LED2( );
+        XRL     0x90,#0x2
+//   49 			//return SMPL_NO_LINK;
+//   50 		}
+??send_1:
+        ; Setup parameters for call to function SMPL_Link
+        MOV     A,R7
+        MOV     R1,A
+        MOV     R2,#sendLinkID & 0xff
+        MOV     R3,#(sendLinkID >> 8) & 0xff
+        LCALL   SMPL_Link
+        MOV     A,R1
+        JNZ     ??send_2
+//   51 		log(ERROR, "Link Success\n");
+        ; Setup parameters for call to function log
+        MOV     R2,#`?<Constant "Link Success\\n">` & 0xff
+        MOV     R3,#(`?<Constant "Link Success\\n">` >> 8) & 0xff
+        MOV     R1,#0x0
+        LCALL   log
+//   52 		rc = SMPL_Send(sendLinkID, data, len);
+        ; Setup parameters for call to function SMPL_Send
+        MOV     A,R6
+        MOV     R4,A
+        MOV     R2,?DPL1
+        MOV     R3,?DPH1
+        MOV     DPTR,#sendLinkID
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   SMPL_Send
+        MOV     A,R1
+        MOV     R7,A
+//   53 		MRFI_DelayMs( 5 );
+        ; Setup parameters for call to function MRFI_DelayMs
+        MOV     R2,#0x5
+        MOV     R3,#0x0
+        LCALL   MRFI_DelayMs
+//   54 		SMPL_Unlink(sendLinkID);
+        ; Setup parameters for call to function SMPL_Unlink
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   SMPL_Unlink
+//   55 		return rc;
+        MOV     A,R7
+        MOV     R1,A
+        SJMP    ??send_3
+//   56 	}
+//   57 	return 	SMPL_NO_LINK;
+??send_0:
+        MOV     R1,#0x5
+??send_3:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+        REQUIRE _A_P1
+//   58 }
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "link to %d failed`:
+        DB "link to %d failed\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Link Success\\n">>`:
+        DB "Link Success\012"
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "link to %d failed\\n">`:
+        DS 19
+        REQUIRE `?<Initializer for <Constant "link to %d failed`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Link Success\\n">`:
+        DS 14
+        REQUIRE `?<Initializer for <Constant "Link Success\\n">>`
+        REQUIRE __INIT_XDATA_I
+
+        END
+// 
+// 252 bytes in segment NEAR_CODE
+//   1 byte  in segment SFR_AN
+//  33 bytes in segment XDATA_I
+//  33 bytes in segment XDATA_ID
+//  42 bytes in segment XDATA_Z
+// 
+// 285 bytes of CODE  memory
+//   0 bytes of DATA  memory (+ 1 byte shared)
+//  75 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

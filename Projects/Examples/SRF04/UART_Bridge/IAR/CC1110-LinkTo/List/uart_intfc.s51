@@ -1,0 +1,1918 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        26/Feb/2012  22:48:26 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\bsp\drivers\code\uart_intfc.c                 /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          -DTHIS_DEVICE_ADDRESS={0x1} -DEND_DEVICE          /
+//                          -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK) -f          /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\Configuration\s /
+//                          mpl_nwk_config.dat" (-DMAX_HOPS=3                 /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DEXTENDED_API -DxSMPL_SECURE                     /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\bsp\d /
+//                          rivers\code\uart_intfc.c" -D                      /
+//                          "MCU_H=\"ioCC1110.h\"" -D MRFI_CC1110 -lB         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\L /
+//                          ist\" -o "C:\Texas Instruments\SimpliciTI-IAR-1.2 /
+//                          .0\Projects\Examples\SRF04\UART_Bridge\IAR\CC1110 /
+//                          -LinkTo\Obj\" -e --debug --core=plain             /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -I       /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\ApplicationFramwork\" -Ohs             /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\uart_intfc.s51                                 /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME uart_intfc
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ADD_XSTACK_DISP0_8
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?DPH1
+        EXTERN ?DPL1
+        EXTERN ?DPS
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?VB
+        EXTERN ?XSP
+        EXTERN ?XSTACK_DISP0_8
+        EXTERN ?XSTACK_DISP1_8
+        EXTERN ?XSTACK_RESTORE_DPTRS_1
+        EXTERN ?XSTACK_SAVE_DPTRS_1
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBWEAK _A_IEN0
+        PUBLIC buffer_free_space
+        PUBLIC buffer_used_space
+        PUBLIC console
+        PUBLIC pop_buffer
+        PUBLIC push_buffer
+        PUBLIC rx_handler
+        PUBLIC rx_peek
+        PUBLIC rx_receive
+        PUBLIC tx_handler
+        PUBLIC tx_peek
+        PUBLIC tx_send
+        PUBLIC tx_send_hex_wait
+        PUBLIC tx_send_wait
+        PUBLIC uart_busy
+        PUBLIC uart_intfc_init
+
+        EXTERN uart_init
+        EXTERN uart_rx_message
+        EXTERN strlen
+        EXTERN sprintf
+        EXTERN uart_tx_message
+        EXTERN logTemp
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\bsp\drivers\code\uart_intfc.c
+//    1 /**************************************************************************************************
+//    2   Filename:       uart_intfc.c
+//    3   Revised:        $Date: 2009-08-17 10:50:58 -0700 (Mon, 17 Aug 2009) $
+//    4   Author:         $Author: jnoxon $
+//    5 
+//    6   Description:    This file supports the SimpliciTI-compatible UART API functions.
+//    7 
+//    8   Copyright 2004-2009 Texas Instruments Incorporated. All rights reserved.
+//    9 
+//   10   IMPORTANT: Your use of this Software is limited to those specific rights granted under
+//   11   the terms of a software license agreement between the user who downloaded the software,
+//   12   his/her employer (which must be your employer) and Texas Instruments Incorporated (the
+//   13   "License"). You may not use this Software unless you agree to abide by the terms of the
+//   14   License. The License limits your use, and you acknowledge, that the Software may not be
+//   15   modified, copied or distributed unless embedded on a Texas Instruments microcontroller
+//   16   or used solely and exclusively in conjunction with a Texas Instruments radio frequency
+//   17   transceiver, which is integrated into your product. Other than for the foregoing purpose,
+//   18   you may not use, reproduce, copy, prepare derivative works of, modify, distribute,
+//   19   perform, display or sell this Software and/or its documentation for any purpose.
+//   20 
+//   21   YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE PROVIDED “AS IS?  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY
+//   22   WARRANTY OF MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
+//   23   IN NO EVENT SHALL TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
+//   24   NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER LEGAL EQUITABLE
+//   25   THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES INCLUDING BUT NOT LIMITED TO ANY
+//   26   INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST
+//   27   DATA, COST OF PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY
+//   28   THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+//   29 
+//   30   Should you have any questions regarding your right to use this Software,
+//   31   contact Texas Instruments Incorporated at www.TI.com.
+//   32 **************************************************************************************************/
+//   33 
+//   34 /******************************************************************************
+//   35  * INCLUDES
+//   36  */
+//   37 #include "uart_intfc.h"
+
+        ASEGN SFR_AN:DATA:NOROOT,0a8H
+// union <unnamed> volatile __sfr _A_IEN0
+_A_IEN0:
+        DATA8
+        DS 1
+//   38 #include <stdlib.h>
+//   39 #include <string.h>
+//   40 #include "bsp.h"
+//   41 #ifdef FREQUENCY_HOPPING
+//   42 #include "nwk_pll.h"
+//   43 #endif
+//   44 
+//   45 /******************************************************************************
+//   46  * CONSTANTS AND DEFINES
+//   47  */
+//   48 #ifndef RX_TX_BUFFER_SIZE       /* this value must be at least 2. */
+//   49 #define RX_TX_BUFFER_SIZE 50
+//   50 #endif
+//   51 
+//   52 /******************************************************************************
+//   53  * MACROS
+//   54  */
+//   55 #define RX_TX_BUFFER_THROTTLE_LIMIT ( ( ( UART_BAUD_RATE ) > 15000 \ 
+//   56                                        && ( RX_TX_BUFFER_SIZE ) > 8 ) \ 
+//   57                                              ? ( ( RX_TX_BUFFER_SIZE ) - 4 )\ 
+//   58                                              : ( ( RX_TX_BUFFER_SIZE ) - 1 ) )
+//   59 
+//   60 /******************************************************************************
+//   61  * LOCAL VARIABLES
+//   62  */
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   63 static unsigned char rx_buff[RX_TX_BUFFER_SIZE];
+rx_buff:
+        DS 50
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   64 static unsigned char tx_buff[RX_TX_BUFFER_SIZE];
+tx_buff:
+        DS 50
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "%02x">`:
+        DS 5
+        REQUIRE `?<Initializer for <Constant "%02x">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+//   65 static unsigned char* rx_head = rx_buff;
+rx_head:
+        DATA16
+        DS 2
+        REQUIRE `?<Initializer for rx_head>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+//   66 static unsigned char* rx_tail = rx_buff;
+rx_tail:
+        DATA16
+        DS 2
+        REQUIRE `?<Initializer for rx_tail>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+//   67 static unsigned char* tx_head = tx_buff;
+tx_head:
+        DATA16
+        DS 2
+        REQUIRE `?<Initializer for tx_head>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+//   68 static unsigned char* tx_tail = tx_buff;
+tx_tail:
+        DATA16
+        DS 2
+        REQUIRE `?<Initializer for tx_tail>`
+        REQUIRE __INIT_XDATA_I
+//   69 
+//   70 /******************************************************************************
+//   71  * LOCAL FUNCTIONS
+//   72  */
+//   73 
+//   74 /* uart data handler function prototypes */
+//   75 bool tx_handler( unsigned char* c );
+//   76 bool rx_handler( unsigned char c );
+//   77 
+//   78 int buffer_free_space( unsigned char* head, unsigned char* tail );
+//   79 int buffer_used_space( unsigned char* head, unsigned char* tail );
+//   80 bool push_buffer( unsigned char** head, unsigned char* tail,
+//   81                   unsigned char* buff, unsigned char* data, int len );
+//   82 int pop_buffer( unsigned char* head, unsigned char** tail,
+//   83                 unsigned char* buff, unsigned char* data, int max_len );
+//   84 
+//   85 /******************************************************************************
+//   86  * GLOBAL FUNCTIONS
+//   87  */
+//   88 
+//   89 /******************************************************************************
+//   90  * @fn          uart_intfc_init
+//   91  *
+//   92  * @brief       Initialize UART interface. Buffer pointers are initialized.
+//   93  *
+//   94  * input parameters
+//   95  *
+//   96  * output parameters
+//   97  *
+//   98  * @return   void
+//   99  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  100 void uart_intfc_init( void )
+uart_intfc_init:
+        CODE
+//  101   {
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+//  102   /* initialize the buffer pointers in case we are re-initialized */
+//  103   rx_head = rx_buff;
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        MOV     DPTR,#rx_head
+        MOV     A,#rx_buff & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(rx_buff >> 8) & 0xff
+        MOVX    @DPTR,A
+//  104   rx_tail = rx_buff;
+        MOV     DPTR,#rx_tail
+        MOV     A,#rx_buff & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(rx_buff >> 8) & 0xff
+        MOVX    @DPTR,A
+//  105   tx_head = tx_buff;
+        MOV     DPTR,#tx_head
+        MOV     A,#tx_buff & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(tx_buff >> 8) & 0xff
+        MOVX    @DPTR,A
+//  106   tx_tail = tx_buff;
+        MOV     DPTR,#tx_tail
+        MOV     A,#tx_buff & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(tx_buff >> 8) & 0xff
+        MOVX    @DPTR,A
+//  107 
+//  108   uart_init( ); /* initialize the uart for operations */
+        ; Setup parameters for call to function uart_init
+        LCALL   uart_init
+//  109   uart_rx_message( rx_handler ); /* enable us to receive uart data */
+        ; Setup parameters for call to function uart_rx_message
+        MOV     R2,#rx_handler & 0xff
+        MOV     R3,#(rx_handler >> 8) & 0xff
+        LCALL   uart_rx_message
+//  110 
+//  111 #if( defined UART_HARDWARE_HANDSHAKE_IN_SOFTWARE )
+//  112    UART_ASSERT_RTS( UART_RTS_DEASSERTED ); /* release flow control */
+//  113 #endif
+//  114 
+//  115   return;
+        REQUIRE ?Subroutine0
+        ; // Fall through to label ?Subroutine0
+//  116   }
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        POP     DPH
+        POP     DPL
+        RET
+//  117 
+//  118 /******************************************************************************
+//  119  * @fn          buffer_free_space
+//  120  *
+//  121  * @brief       Calculates amount of freespace in buffer from <head> and <tail>
+//  122  *              addresses
+//  123  *
+//  124  * input parameters
+//  125  * @param   head       - pointer to buffer head
+//  126  * @param   tail       - pointer to buffer tail
+//  127  *
+//  128  * output parameters
+//  129  *
+//  130  * @return   Buffer free space count in bytes
+//  131  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  132 int buffer_free_space( unsigned char* head, unsigned char* tail )
+buffer_free_space:
+        CODE
+//  133   {
+        ; Saved register size: 0
+        ; Auto size: 0
+//  134   /* the free count is the buffer size minus the used count minus one
+//  135    * because we don't want the pointers to ever get back on top of each other
+//  136    * because that would indicate an empty buffer. */
+//  137   return RX_TX_BUFFER_SIZE - buffer_used_space( head, tail ) - 1;
+        MOV     A,R2
+        CLR     C
+        SUBB    A,R4
+        MOV     R0,A
+        MOV     A,R3
+        SUBB    A,R5
+        MOV     R1,A
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??buffer_free_space_0
+        MOV     A,R0
+        ADD     A,#0x32
+        MOV     R0,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+??buffer_free_space_0:
+        MOV     A,#0x31
+        CLR     C
+        SUBB    A,R0
+        MOV     R2,A
+        CLR     A
+        SUBB    A,R1
+        MOV     R3,A
+        ANL     ?DPS,#0xfe
+        RET
+//  138   }
+//  139 
+//  140 /******************************************************************************
+//  141  * @fn          buffer_used_space
+//  142  *
+//  143  * @brief       Calculates amount of used space in buffer from <head> and <tail>
+//  144  *              addresses
+//  145  *
+//  146  * input parameters
+//  147  * @param   head       - pointer to buffer head
+//  148  * @param   tail       - pointer to buffer tail
+//  149  *
+//  150  * output parameters
+//  151  *
+//  152  * @return   Buffer used space count in bytes
+//  153  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  154 int buffer_used_space( unsigned char* head, unsigned char* tail )
+buffer_used_space:
+        CODE
+//  155   {
+        ; Saved register size: 0
+        ; Auto size: 0
+//  156   ptrdiff_t used;
+//  157   
+//  158   used = head - tail; /* get used count */
+        MOV     A,R2
+        CLR     C
+        SUBB    A,R4
+        MOV     R2,A
+        MOV     A,R3
+        SUBB    A,R5
+        MOV     R3,A
+//  159   if( used < 0 ) /* if the pointers were wrapped */
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??buffer_used_space_0
+//  160     used += RX_TX_BUFFER_SIZE; /* correct the count */
+        MOV     A,R2
+        ADD     A,#0x32
+        MOV     R2,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R3,A
+//  161   
+//  162   return used; /* return used count */
+??buffer_used_space_0:
+        ANL     ?DPS,#0xfe
+        RET
+//  163   }
+//  164 
+//  165 /******************************************************************************
+//  166  * @fn          push_buffer
+//  167  *
+//  168  * @brief       Pushes bytes of data onto the specified buffer. Assumes on 
+//  169  *              entry that <data>, <buff>, <tail>, and <head> are all valid 
+//  170  *              pointers
+//  171  *
+//  172  * input parameters
+//  173  * @param   tail       - pointer to buffer tail
+//  174  * @param   buff       - pointer to buffer (push target)
+//  175  * @param   data       - pointer to data to be pushed into buffer
+//  176  * @param   len        - length in bytes of data to be pushed
+//  177  *
+//  178  * output parameters
+//  179  * @param   head       - updated buffer head pointer
+//  180  *
+//  181  * @return   status of operation.
+//  182  *             true          Data successfully pushed into buffer
+//  183  *             false         Data not pushed into buffer
+//  184  */
+//  185 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  186 bool push_buffer( unsigned char** head, unsigned char* tail,
+push_buffer:
+        CODE
+//  187                   unsigned char* buff, unsigned char* data, int len )
+//  188   {
+        MOV     A,#-0xa
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 12
+        ; Auto size: 0
+        MOV     DPL,R2
+        MOV     DPH,R3
+        MOV     A,R4
+        MOV     R6,A
+        MOV     A,R5
+        MOV     R7,A
+        MOV     A,#0xc
+        LCALL   ?XSTACK_DISP1_8
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        MOV     R0,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R1,A
+        MOV     A,#0xe
+        LCALL   ?XSTACK_DISP1_8
+        MOVX    A,@DPTR/*1*/
+        MOV     R4,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R5,A
+        MOV     A,#0x10
+        LCALL   ?XSTACK_DISP1_8
+        MOVX    A,@DPTR/*1*/
+        MOV     ?V0 + 0,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     ?V0 + 1,A
+//  189   unsigned char* local_head;
+//  190   unsigned char* local_tail = tail;
+//  191 
+//  192   BSP_CRITICAL_STATEMENT( local_head = *head );
+        MOV     A,0xa8
+        MOV     ?V0 + 2,A
+        CLR     0xa8.7
+        MOV     ?DPL1,DPL
+        MOV     ?DPH1,DPH
+        MOVX    A,@DPTR/*1*/
+        MOV     R2,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R3,A
+        MOV     A,?V0 + 2
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  193   
+//  194   /* if no room in the buffer */
+//  195   if( buffer_free_space( local_head, local_tail ) < len )
+        MOV     A,R2
+        CLR     C
+        SUBB    A,R6
+        MOV     R6,A
+        MOV     A,R3
+        SUBB    A,R7
+        MOV     R7,A
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??push_buffer_0
+        MOV     A,R6
+        ADD     A,#0x32
+        MOV     R6,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     R7,A
+??push_buffer_0:
+        MOV     A,#0x31
+        CLR     C
+        SUBB    A,R6
+        MOV     R6,A
+        CLR     A
+        SUBB    A,R7
+        MOV     R7,A
+        CLR     C
+        MOV     A,R6
+        SUBB    A,?V0 + 0
+        MOV     A,R7
+        SUBB    A,?V0 + 1
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??push_buffer_1
+//  196     return false; /* indicate failure to enqueue message */
+        CLR     C
+        SJMP    ??push_buffer_2
+//  197   
+//  198   /* there is room for the data, put in the buffer */
+//  199   
+//  200   do /* put the data in the buffer */
+//  201     {
+//  202     if( local_head == buff + RX_TX_BUFFER_SIZE ) /* if wrapping around */
+??push_buffer_1:
+        MOV     A,R0
+        ADD     A,#0x32
+        MOV     R6,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R7,A
+        MOV     A,R2
+        XRL     A,R6
+        JNZ     ??push_buffer_3
+        MOV     A,R3
+        XRL     A,R7
+??push_buffer_3:
+        JNZ     ??push_buffer_4
+//  203       local_head = buff; /* reset pointer */
+        MOV     A,R0
+        MOV     R2,A
+        MOV     A,R1
+        MOV     R3,A
+//  204     
+//  205     *local_head++ = *data++; /* copy over this byte of data */
+??push_buffer_4:
+        MOV     ?DPL1,R4
+        MOV     ?DPH1,R5
+        MOVX    A,@DPTR/*1*/
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+        MOVX    @DPTR/*1*/,A
+        MOV     ?DPL1,R4
+        MOV     ?DPH1,R5
+        INC     DPTR/*1*/
+        MOV     R4,?DPL1
+        MOV     R5,?DPH1
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+        INC     DPTR/*1*/
+        MOV     R2,?DPL1
+        MOV     R3,?DPH1
+//  206     } while( --len > 0 ); /* copy all the data to the buffer */
+        MOV     A,?V0 + 0
+        ADD     A,#-0x1
+        MOV     ?V0 + 0,A
+        MOV     A,?V0 + 1
+        ADDC    A,#-0x1
+        MOV     ?V0 + 1,A
+        CLR     C
+        MOV     A,?V0 + 0
+        SUBB    A,#0x1
+        MOV     A,?V0 + 1
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??push_buffer_1
+//  207   
+//  208   BSP_CRITICAL_STATEMENT( *head = local_head ); /* update reference value */
+        MOV     A,0xa8
+        MOV     R0,A
+        CLR     0xa8.7
+        MOV     A,R2
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R3
+        MOVX    @DPTR,A
+        MOV     A,R0
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  209   
+//  210   return true;
+        SETB    C
+??push_buffer_2:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x3
+        LJMP    ?FUNC_LEAVE_XDATA
+        REQUIRE _A_IEN0
+//  211   }
+//  212 
+//  213 /******************************************************************************
+//  214  * @fn          pop_buffer
+//  215  *
+//  216  * @brief       Pops the specified number of bytes off of the specified buffer. 
+//  217  *              Assumes on entry that <data>, <buff>, <tail>, and <head> are 
+//  218  *              all valid pointers.
+//  219  *
+//  220  * input parameters
+//  221  * @param   head       - pointer to buffer head
+//  222  * @param   buff       - pointer to buffer (pop source)
+//  223  * @param   data       - pointer to location to store popped data
+//  224  * @param   len        - amount of bytes to be popped from buffer
+//  225  *
+//  226  * output parameters
+//  227  * @param   tail       - updated buffer tail pointer
+//  228  *
+//  229  * @return   number of bytes popped from buffer
+//  230  */
+//  231 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  232 int pop_buffer( unsigned char* head, unsigned char** tail,
+pop_buffer:
+        CODE
+//  233                 unsigned char* buff, unsigned char* data, int max_len )
+//  234   {
+        MOV     A,#-0xd
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 15
+        ; Auto size: 0
+        MOV     DPL,R4
+        MOV     DPH,R5
+        MOV     A,#0xf
+        LCALL   ?XSTACK_DISP1_8
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        MOV     R0,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R1,A
+        MOV     A,#0x11
+        LCALL   ?XSTACK_DISP1_8
+        MOVX    A,@DPTR/*1*/
+        MOV     R6,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R7,A
+        MOV     A,#0x13
+        LCALL   ?XSTACK_DISP1_8
+        MOVX    A,@DPTR/*1*/
+        MOV     ?V0 + 2,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     ?V0 + 3,A
+//  235   unsigned char* local_tail;
+//  236   unsigned char* local_head = head;
+//  237   int cnt = 0;
+        MOV     ?V0 + 0,#0x0
+        MOV     ?V0 + 1,#0x0
+//  238 
+//  239   BSP_CRITICAL_STATEMENT( local_tail = *tail );
+        MOV     A,0xa8
+        MOV     ?V0 + 4,A
+        CLR     0xa8.7
+        MOV     ?DPL1,DPL
+        MOV     ?DPH1,DPH
+        MOVX    A,@DPTR/*1*/
+        MOV     R4,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R5,A
+        MOV     A,?V0 + 4
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  240   
+//  241   /* if the buffer is empty or no data requested */
+//  242   if( local_tail == local_head || max_len <= 0 )
+        MOV     A,R2
+        XRL     A,R4
+        JNZ     ??pop_buffer_0
+        MOV     A,R3
+        XRL     A,R5
+??pop_buffer_0:
+        JZ      ??pop_buffer_1
+        CLR     C
+        MOV     A,?V0 + 2
+        SUBB    A,#0x1
+        MOV     A,?V0 + 3
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??pop_buffer_2
+//  243     return 0; /* indicate so */
+??pop_buffer_1:
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        SJMP    ??pop_buffer_3
+//  244   
+//  245   do /* retrieve the data from the buffer */
+//  246     {
+//  247     if( local_tail == buff + RX_TX_BUFFER_SIZE ) /* if wrapping around */
+??pop_buffer_2:
+        MOV     A,R0
+        ADD     A,#0x32
+        MOV     ?V0 + 4,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     ?V0 + 5,A
+        MOV     A,R4
+        XRL     A,?V0 + 4
+        JNZ     ??pop_buffer_4
+        MOV     A,R5
+        XRL     A,?V0 + 5
+??pop_buffer_4:
+        JNZ     ??pop_buffer_5
+//  248       local_tail = buff; /* reset pointer */
+        MOV     A,R0
+        MOV     R4,A
+        MOV     A,R1
+        MOV     R5,A
+//  249     
+//  250     *data++ = *local_tail++; /* copy data from buffer */
+??pop_buffer_5:
+        MOV     ?DPL1,R4
+        MOV     ?DPH1,R5
+        MOVX    A,@DPTR/*1*/
+        MOV     ?DPL1,R6
+        MOV     ?DPH1,R7
+        MOVX    @DPTR/*1*/,A
+        MOV     ?DPL1,R4
+        MOV     ?DPH1,R5
+        INC     DPTR/*1*/
+        MOV     R4,?DPL1
+        MOV     R5,?DPH1
+        MOV     ?DPL1,R6
+        MOV     ?DPH1,R7
+        INC     DPTR/*1*/
+        MOV     R6,?DPL1
+        MOV     R7,?DPH1
+//  251       
+//  252     /* while the user needs more data and there is data left in the fifo */
+//  253     } while( ++cnt < max_len && local_tail != local_head );
+        MOV     A,?V0 + 0
+        ADD     A,#0x1
+        MOV     ?V0 + 0,A
+        MOV     A,?V0 + 1
+        ADDC    A,#0x0
+        MOV     ?V0 + 1,A
+        CLR     C
+        MOV     A,?V0 + 0
+        SUBB    A,?V0 + 2
+        MOV     A,?V0 + 1
+        SUBB    A,?V0 + 3
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??pop_buffer_6
+        MOV     A,R2
+        XRL     A,R4
+        JNZ     ??pop_buffer_7
+        MOV     A,R3
+        XRL     A,R5
+??pop_buffer_7:
+        JNZ     ??pop_buffer_2
+//  254     
+//  255   BSP_CRITICAL_STATEMENT( *tail = local_tail ); /* update reference value */
+??pop_buffer_6:
+        MOV     A,0xa8
+        MOV     R0,A
+        CLR     0xa8.7
+        MOV     A,R4
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R5
+        MOVX    @DPTR,A
+        MOV     A,R0
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  256   
+//  257   return cnt; /* return number of characters retrieved from the buffer */
+        MOV     R2,?V0 + 0
+        MOV     R3,?V0 + 1
+??pop_buffer_3:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        REQUIRE ?Subroutine1
+        REQUIRE _A_IEN0
+        ; // Fall through to label ?Subroutine1
+//  258   }
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x6
+        LJMP    ?FUNC_LEAVE_XDATA
+//  259 
+//  260 
+//  261 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  262 bool console(const void* data)
+console:
+        CODE
+//  263 {
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        MOV     DPL,R2
+        MOV     DPH,R3
+//  264 	return tx_send_wait(data, strlen(data));
+        ; Setup parameters for call to function tx_send_wait
+        ; Setup parameters for call to function strlen
+        LCALL   strlen
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   tx_send_wait
+        LJMP    ?Subroutine0
+//  265 }
+//  266 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  267 bool tx_send_hex_wait(const uint8* data, uint8 len)
+tx_send_hex_wait:
+        CODE
+//  268 {
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 13
+        ; Auto size: 0
+        MOV     ?V0 + 1,R1
+//  269 	extern char logTemp[LOGTEMP_SIZE];
+//  270 	uint8 i;
+//  271 	if(len * 2 > LOGTEMP_SIZE) return false;
+        MOV     A,R1
+        CLR     C
+        RLC     A
+        MOV     R6,A
+        CLR     A
+        RLC     A
+        MOV     R7,A
+        MOV     A,R6
+        SUBB    A,#0x65
+        MOV     A,R7
+        SUBB    A,#0x0
+        CLR     C
+        XRL     A,PSW
+        RLC     A
+        JC      ??tx_send_hex_wait_0
+        CLR     C
+        SJMP    ??tx_send_hex_wait_1
+//  272 	for(i=0; i<len; i++)
+??tx_send_hex_wait_0:
+        MOV     ?V0 + 0,#0x0
+        MOV     A,R1
+        JZ      ??tx_send_hex_wait_2
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+//  273 	{
+//  274 		sprintf(logTemp + 2 * i, "%02x", data[i]);
+??tx_send_hex_wait_3:
+        ; Setup parameters for call to function sprintf
+        ; Selecting DPTR 1 by inc-method (DPSEL=x)
+        ORL     ?DPS,#0x1
+        MOVX    A,@DPTR/*1*/
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "%02x">` & 0xff
+        MOV     R5,#(`?<Constant "%02x">` >> 8) & 0xff
+        MOV     A,?V0 + 0
+        CLR     C
+        RLC     A
+        MOV     R0,A
+        CLR     A
+        RLC     A
+        MOV     R1,A
+        MOV     A,#logTemp & 0xff
+        ADD     A,R0
+        MOV     R2,A
+        MOV     A,#(logTemp >> 8) & 0xff
+        ADDC    A,R1
+        MOV     R3,A
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  275 	}
+        INC     ?V0 + 0
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        INC     DPTR/*1*/
+        MOV     A,?V0 + 0
+        CLR     C
+        SUBB    A,?V0 + 1
+        JC      ??tx_send_hex_wait_3
+//  276 	return tx_send_wait(logTemp, 2 * len);	
+??tx_send_hex_wait_2:
+        ; Setup parameters for call to function tx_send_wait
+        MOV     A,R6
+        MOV     R4,A
+        MOV     A,R7
+        MOV     R5,A
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   tx_send_wait
+        JNC     ??tx_send_hex_wait_4
+        SETB    B.0
+        SJMP    ??tx_send_hex_wait_5
+??tx_send_hex_wait_4:
+        CLR     B.0
+??tx_send_hex_wait_5:
+        MOV     C,B.0
+??tx_send_hex_wait_1:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+//  277 }
+//  278 /******************************************************************************
+//  279  * @fn          tx_send_wait
+//  280  *
+//  281  * @brief       Enqueue's the message bointed to by <data> which is of length 
+//  282  *              <len> and initiates its transfer across the UART.  This is a 
+//  283  *              blocking function in that if the transmit fifo doesn't have 
+//  284  *              enough room to enqueue the data in its entirety it will push 
+//  285  *              the data out a piece at a time as the room in the FIFO becomes 
+//  286  *              available.  The function returns true upon completion of moving 
+//  287  *              all the data into the FIFO and false if either a NULL pointer 
+//  288  *              or a length of zero was passed.
+//  289  *
+//  290  * input parameters
+//  291  * @param   data       - pointer to data to be sent
+//  292  * @param   len        - length in bytes of data to be sent
+//  293  *
+//  294  * output parameters
+//  295  *
+//  296  * @return   status of operation.
+//  297  *             true          Data successfully pushed into transmit buffer
+//  298  *             false         Invalid length or NULL data pointer
+//  299  */
+//  300 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  301 bool tx_send_wait( const void* data, size_t len )
+tx_send_wait:
+        CODE
+//  302   {
+        MOV     A,#-0xd
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 15
+        ; Auto size: 0
+        MOV     ?V0 + 0,R2
+        MOV     ?V0 + 1,R3
+        MOV     A,R4
+        MOV     R6,A
+        MOV     A,R5
+        MOV     R7,A
+//  303   if( len > 0 && data != NULL ) /* if the information looks viable */
+        MOV     A,R6
+        ORL     A,R7
+        JNZ     $+5
+        LJMP    ??tx_send_wait_0
+        MOV     A,R2
+        ORL     A,?V0 + 1
+        JNZ     $+5
+        LJMP    ??tx_send_wait_0
+//  304     {
+//  305     while( len > 0 )            /* while there is data left to transfer */
+//  306       {
+//  307       int sz = tx_peek( );      /* get free space in the fifo */
+??tx_send_wait_1:
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+        MOV     DPTR,#tx_head
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOV     DPTR/*1*/,#tx_tail
+        MOVX    A,@DPTR/*1*/
+        MOV     R0,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R1,A
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOVX    A,@DPTR
+        CLR     C
+        SUBB    A,R0
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        SUBB    A,R1
+        MOV     R1,A
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??tx_send_wait_2
+        MOV     A,R0
+        ADD     A,#0x32
+        MOV     R0,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+??tx_send_wait_2:
+        MOV     A,#0x31
+        CLR     C
+        SUBB    A,R0
+        MOV     ?V0 + 2,A
+        CLR     A
+        SUBB    A,R1
+        MOV     ?V0 + 3,A
+//  308 
+//  309       if( sz > 0 )              /* if there is room for at least some data */
+        CLR     C
+        MOV     A,?V0 + 2
+        SUBB    A,#0x1
+        MOV     A,?V0 + 3
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JC      ??tx_send_wait_1
+//  310         {
+//  311         if( sz > len )          /* if more room than required          */
+        CLR     C
+        MOV     A,R6
+        SUBB    A,?V0 + 2
+        MOV     A,R7
+        SUBB    A,?V0 + 3
+        JNC     ??tx_send_wait_3
+//  312           sz = len;             /* limit size to just the data to send */
+        MOV     ?V0 + 2,R6
+        MOV     ?V0 + 3,R7
+//  313 
+//  314         tx_send( data, sz );    /* send this portion of the information */
+??tx_send_wait_3:
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+        ; Setup parameters for call to function push_buffer
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 4,#tx_buff & 0xff
+        MOV     ?V0 + 5,#(tx_buff >> 8) & 0xff
+        MOV     R0,#?V0 + 4
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPTR,#tx_tail
+        MOVX    A,@DPTR
+        MOV     R4,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     R2,#tx_head & 0xff
+        MOV     R3,#(tx_head >> 8) & 0xff
+        LCALL   push_buffer
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+        JNC     ??tx_send_wait_4
+        ; Setup parameters for call to function uart_tx_message
+        MOV     R2,#tx_handler & 0xff
+        MOV     R3,#(tx_handler >> 8) & 0xff
+        LCALL   uart_tx_message
+//  315 
+//  316         data = (unsigned char*)data + sz; /* move the pointer */
+??tx_send_wait_4:
+        MOV     A,?V0 + 0
+        ADD     A,?V0 + 2
+        MOV     ?V0 + 0,A
+        MOV     A,?V0 + 1
+        ADDC    A,?V0 + 3
+        MOV     ?V0 + 1,A
+//  317 
+//  318         len -= sz;              /* adjust the count of remaining data to send */
+        CLR     C
+        MOV     A,R6
+        SUBB    A,?V0 + 2
+        MOV     R6,A
+        MOV     A,R7
+        SUBB    A,?V0 + 3
+        MOV     R7,A
+//  319         }
+//  320       #ifdef FREQUENCY_HOPPING
+//  321       // run the pll charge pump if frequency hopping active
+//  322       //   only send pump requests if there are still characters still to send
+//  323       nwk_pllBackgrounder( len == 0 );
+//  324       #endif
+//  325       }
+        MOV     A,R6
+        ORL     A,R7
+        JZ      $+5
+        LJMP    ??tx_send_wait_1
+//  326     
+//  327     return true; /* indicate success */
+        SETB    C
+        SJMP    ??tx_send_wait_5
+//  328     }
+//  329   
+//  330   return false; /* otherwise indicate failure */
+??tx_send_wait_0:
+        CLR     C
+??tx_send_wait_5:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LJMP    ?Subroutine1
+        REQUIRE _A_IEN0
+//  331   }
+//  332 
+//  333 /******************************************************************************
+//  334  * @fn          tx_send
+//  335  *
+//  336  * @brief       Enqueue's the message pointed to by <data> which is of length 
+//  337  *              <len> and initiates its transfer across the uart.  true is 
+//  338  *              returned if there was space in the FIFO to send the data, false 
+//  339  *              if the FIFO didn't have enough free space to enqueue the data. 
+//  340  *
+//  341  * input parameters
+//  342  * @param   data       - pointer to data to be sent
+//  343  * @param   len        - length in bytes of data to be sent
+//  344  *
+//  345  * output parameters
+//  346  *
+//  347  * @return   status of operation.
+//  348  *             true          Data successfully pushed into transmit buffer
+//  349  *             false         Data not successfully pushed into transmit buffer
+//  350  */
+//  351 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  352 bool tx_send( const void* data, size_t len )
+tx_send:
+        CODE
+//  353   {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+//  354   bool status;
+//  355   unsigned char* tail;
+//  356   
+//  357   /* get current state of tail pointer */
+//  358   BSP_CRITICAL_STATEMENT( tail = tx_tail );
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  359 
+//  360   /* put data into transmit buffer */
+//  361   status = push_buffer( &tx_head, tail, tx_buff, (unsigned char*)data, len );
+        ; Setup parameters for call to function push_buffer
+        MOV     ?V0 + 0,R4
+        MOV     ?V0 + 1,R5
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 0,R2
+        MOV     ?V0 + 1,R3
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 0,#tx_buff & 0xff
+        MOV     ?V0 + 1,#(tx_buff >> 8) & 0xff
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPTR,#tx_tail
+        MOVX    A,@DPTR
+        MOV     R4,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     R2,#tx_head & 0xff
+        MOV     R3,#(tx_head >> 8) & 0xff
+        LCALL   push_buffer
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     ?VB.0,C
+//  362 
+//  363   if( status != false ) /* if data was put in the buffer properly */
+        JNC     ??tx_send_0
+//  364     uart_tx_message( tx_handler ); /* notify the irq that data is ready to send */
+        ; Setup parameters for call to function uart_tx_message
+        MOV     R2,#tx_handler & 0xff
+        MOV     R3,#(tx_handler >> 8) & 0xff
+        LCALL   uart_tx_message
+//  365   
+//  366   return status; /* return status */
+??tx_send_0:
+        MOV     C,?VB.0
+        SJMP    ??Subroutine4_0
+        REQUIRE _A_IEN0
+//  367   }
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine2:
+        LCALL   ?DEALLOC_XSTACK8
+        REQUIRE ??Subroutine4_0
+        ; // Fall through to label ??Subroutine4_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine4_0:
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+//  368 
+//  369 /******************************************************************************
+//  370  * @fn          tx_peek
+//  371  *
+//  372  * @brief       Returns the number of bytes of free space in the transmit FIFO. 
+//  373  *
+//  374  * input parameters
+//  375  *
+//  376  * output parameters
+//  377  *
+//  378  * @return   Number of bytes of free space in the transmit FIFO
+//  379  */
+//  380 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  381 int tx_peek( void )
+tx_peek:
+        CODE
+//  382   {
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 10
+        ; Auto size: 0
+//  383   unsigned char* head;
+//  384   unsigned char* tail;
+//  385   
+//  386   BSP_CRITICAL_STATEMENT( head = tx_head; tail = tx_tail );
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  387   
+//  388   return buffer_free_space( head, tail );
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOV     DPTR/*1*/,#tx_head
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOV     DPTR,#tx_tail
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        CLR     C
+        SUBB    A,R0
+        MOV     R0,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        SUBB    A,R1
+        MOV     R1,A
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??tx_peek_0
+        MOV     A,R0
+        ADD     A,#0x32
+        MOV     R0,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+??tx_peek_0:
+        MOV     A,#0x31
+        CLR     C
+        SUBB    A,R0
+        MOV     R2,A
+        CLR     A
+        SUBB    A,R1
+        MOV     R3,A
+        REQUIRE ?Subroutine3
+        REQUIRE _A_IEN0
+        ; // Fall through to label ?Subroutine3
+//  389   }
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine3:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x1
+        LJMP    ?FUNC_LEAVE_XDATA
+//  390 
+//  391 /******************************************************************************
+//  392  * @fn          rx_peek
+//  393  *
+//  394  * @brief       Returns the number of bytes currently available to be read from
+//  395  *              the receive FIFO. 
+//  396  *
+//  397  * input parameters
+//  398  *
+//  399  * output parameters
+//  400  *
+//  401  * @return   Number of bytes of available in the receive FIFO
+//  402  */
+//  403 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  404 int rx_peek( void )
+rx_peek:
+        CODE
+//  405   {
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 10
+        ; Auto size: 0
+//  406   unsigned char* head;
+//  407   unsigned char* tail;
+//  408   
+//  409   BSP_CRITICAL_STATEMENT( head = rx_head; tail = rx_tail );
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  410   
+//  411   return buffer_used_space( head, tail );
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOV     DPTR/*1*/,#rx_head
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOV     DPTR,#rx_tail
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        CLR     C
+        SUBB    A,R0
+        MOV     R2,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        SUBB    A,R1
+        MOV     R3,A
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??rx_peek_0
+        MOV     A,R2
+        ADD     A,#0x32
+        MOV     R2,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R3,A
+??rx_peek_0:
+        SJMP    ?Subroutine3
+        REQUIRE _A_IEN0
+//  412   }
+//  413 
+//  414 /******************************************************************************
+//  415  * @fn          rx_receive
+//  416  *
+//  417  * @brief       Fills in the buffer <data> with data from the receive FIFO until
+//  418  *              either <max_len> bytes have been transferred into <data> or the 
+//  419  *              receive queue is emptied.  The actual number of bytes put into 
+//  420  *              <data> is returned. 
+//  421  *
+//  422  * input parameters
+//  423  * @param   data           - pointer to data to be sent
+//  424  * @param   max_len        - length in bytes of data to be sent
+//  425  *
+//  426  * output parameters
+//  427  *
+//  428  * @return   status of operation.
+//  429  *             true          Data successfully pushed into transmit buffer
+//  430  *             false         Data not successfully pushed into transmit buffer
+//  431  */
+//  432 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  433 int rx_receive( void* data, int max_len )
+rx_receive:
+        CODE
+//  434   {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+//  435   int cnt;
+//  436   unsigned char* head;
+//  437   
+//  438   /* get current state of head pointer */
+//  439   BSP_CRITICAL_STATEMENT( head = rx_head );
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  440   
+//  441   /* retrieve data from buffer */
+//  442   cnt = pop_buffer( head, &rx_tail, rx_buff, data, max_len );
+//  443 
+//  444 #if( defined UART_HARDWARE_HANDSHAKE_IN_SOFTWARE )
+//  445   /* if we need to hold off the remote transmitter */
+//  446   if( rx_peek( ) < RX_TX_BUFFER_THROTTLE_LIMIT )
+//  447      UART_ASSERT_RTS( UART_RTS_DEASSERTED ); /* deassert the RTS line */
+//  448 #endif
+//  449 
+//  450   return cnt; /* indicate the number of bytes retrieved from the buffer */
+        ; Setup parameters for call to function pop_buffer
+        MOV     ?V0 + 0,R4
+        MOV     ?V0 + 1,R5
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 0,R2
+        MOV     ?V0 + 1,R3
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 0,#rx_buff & 0xff
+        MOV     ?V0 + 1,#(rx_buff >> 8) & 0xff
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#rx_tail & 0xff
+        MOV     R5,#(rx_tail >> 8) & 0xff
+        MOV     DPTR,#rx_head
+        MOVX    A,@DPTR
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R3,A
+        LCALL   pop_buffer
+        MOV     A,#0x6
+        LJMP    ?Subroutine2
+        REQUIRE _A_IEN0
+//  451   }
+//  452 
+//  453 /******************************************************************************
+//  454  * @fn          uart_busy
+//  455  *
+//  456  * @brief       Returns true if there are characters in the receive FIFO or 
+//  457  *              transmit buffer and returns false if both FIFOs are empty. 
+//  458  *
+//  459  * input parameters
+//  460  *
+//  461  * output parameters
+//  462  *
+//  463  * @return   UART status
+//  464  *             true          Data in receive and/or transmit FIFO
+//  465  *             false         Both receive and transmit FIFOS empty
+//  466  */
+//  467 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  468 bool uart_busy( void )
+uart_busy:
+        CODE
+//  469   {
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 10
+        ; Auto size: 0
+//  470   int cnt;
+//  471   unsigned char* head;
+//  472   unsigned char* tail;
+//  473   
+//  474   /* get receive buffer count */
+//  475   BSP_CRITICAL_STATEMENT( head = rx_head; tail = rx_tail );
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  476   cnt = buffer_used_space( head, tail );
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOV     DPTR/*1*/,#rx_head
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOV     DPTR,#rx_tail
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        CLR     C
+        SUBB    A,R0
+        MOV     R2,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        SUBB    A,R1
+        MOV     R3,A
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??uart_busy_0
+        MOV     A,R2
+        ADD     A,#0x32
+        MOV     R2,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R3,A
+//  477   
+//  478   /* get transmit buffer count */
+//  479   BSP_CRITICAL_STATEMENT( head = tx_head; tail = tx_tail );
+??uart_busy_0:
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  480   cnt += buffer_used_space( head, tail );
+        MOV     DPTR/*1*/,#tx_head
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOV     DPTR,#tx_tail
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        CLR     C
+        SUBB    A,R0
+        MOV     R0,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        SUBB    A,R1
+        MOV     R1,A
+        CLR     C
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JNC     ??uart_busy_1
+        MOV     A,R0
+        ADD     A,#0x32
+        MOV     R0,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+//  481   
+//  482   return ( ( cnt == 0 ) ? false : true ); /* return status of uart */
+??uart_busy_1:
+        MOV     A,R2
+        ADD     A,R0
+        MOV     R0,A
+        MOV     A,R3
+        ADDC    A,R1
+        MOV     R1,A
+        MOV     A,R0
+        ORL     A,R1
+        JZ      ??uart_busy_2
+        SETB    B.0
+        SJMP    ??uart_busy_3
+??uart_busy_2:
+        CLR     B.0
+??uart_busy_3:
+        MOV     C,B.0
+        LJMP    ?Subroutine3
+        REQUIRE _A_IEN0
+//  483   }
+//  484 
+//  485 /******************************************************************************
+//  486  * @fn          tx_handler
+//  487  *
+//  488  * @brief       Called by UART transmit interrupt service routine. Pops a byte 
+//  489  *              off of the transmit FIFO and stores in <c>. The UART
+//  490  *              interrupt service routine will transmit the byte in <c> after
+//  491  *              calling this function. Returns true if there is still data left
+//  492  *              in the transmit FIFO and false if the FIFO has been emptied.
+//  493  *
+//  494  * input parameters
+//  495  * @param   c              - pointer to store byte to be sent
+//  496  *
+//  497  * output parameters
+//  498  *
+//  499  * @return   status of operation.
+//  500  *             true          Byte in <c> is NOT the last byte in the buffer
+//  501  *             false         Byte in <c> IS the last byte in the buffer
+//  502  */
+//  503 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  504 bool tx_handler( unsigned char* c )
+tx_handler:
+        CODE
+//  505   {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+//  506   bool status;
+//  507   unsigned char* head;
+//  508 
+//  509   /* get current state of head pointer */
+//  510   BSP_CRITICAL_STATEMENT( head = tx_head );
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  511 
+//  512   /* get data off of the transmit buffer */
+//  513   pop_buffer( head, &tx_tail, tx_buff, c, 1 );
+        ; Setup parameters for call to function pop_buffer
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 0,R2
+        MOV     ?V0 + 1,R3
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 0,#tx_buff & 0xff
+        MOV     ?V0 + 1,#(tx_buff >> 8) & 0xff
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#tx_tail & 0xff
+        MOV     R5,#(tx_tail >> 8) & 0xff
+        MOV     DPTR,#tx_head
+        MOVX    A,@DPTR
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R3,A
+        LCALL   pop_buffer
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+//  514   
+//  515   /* check status of buffer */
+//  516   BSP_CRITICAL_STATEMENT( status = tx_head != tx_tail );
+        MOV     C,0xa8.7
+        CLR     A
+        RLC     A
+        MOV     R2,A
+        CLR     0xa8.7
+        MOV     DPTR,#tx_head
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     DPTR,#tx_tail
+        MOVX    A,@DPTR
+        XRL     A,R0
+        JNZ     ??tx_handler_0
+        INC     DPTR
+        MOVX    A,@DPTR
+        XRL     A,R1
+??tx_handler_0:
+        JZ      ??tx_handler_1
+        SETB    B.0
+        SJMP    ??tx_handler_2
+??tx_handler_1:
+        CLR     B.0
+??tx_handler_2:
+        MOV     A,R2
+        MOV     C,0xE0 /* A   */.0
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  517   
+//  518   return status; /* indicate if this is the last byte in the buffer */
+        MOV     C,B.0
+        LJMP    ??Subroutine4_0
+        REQUIRE _A_IEN0
+//  519   }
+//  520 
+//  521 /******************************************************************************
+//  522  * @fn          rx_handler
+//  523  *
+//  524  * @brief       Called by UART receive interrupt service routine. Pushes byte 
+//  525  *              <c> into the receive FIFO <c>.
+//  526  *
+//  527  * input parameters
+//  528  * @param   c              - byte of data to be pushed onto receive FIFO
+//  529  *
+//  530  * output parameters
+//  531  *
+//  532  * @return   Always returns true
+//  533  */
+//  534 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  535 bool rx_handler( unsigned char c )
+rx_handler:
+        CODE
+//  536   {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 1
+        MOV     A,#-0x1
+        LCALL   ?ALLOC_XSTACK8
+        MOV     A,R1
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    @DPTR,A
+//  537   unsigned char* tail;
+//  538 
+//  539   /* get current state of tail pointer */
+//  540   BSP_CRITICAL_STATEMENT( tail = rx_tail );
+        MOV     A,0xa8
+        CLR     0xa8.7
+        MOV     C,0xE0 /* A   */.7
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+//  541   
+//  542   /* put data onto the receive buffer */
+//  543   push_buffer( &rx_head, tail, rx_buff, &c, 1 );
+        ; Setup parameters for call to function push_buffer
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOV     ?V0 + 0,DPL
+        MOV     ?V0 + 1,DPH
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 0,#rx_buff & 0xff
+        MOV     ?V0 + 1,#(rx_buff >> 8) & 0xff
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPTR,#rx_tail
+        MOVX    A,@DPTR
+        MOV     R4,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     R2,#rx_head & 0xff
+        MOV     R3,#(rx_head >> 8) & 0xff
+        LCALL   push_buffer
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+//  544 
+//  545 #if( defined UART_HARDWARE_HANDSHAKE_IN_SOFTWARE )
+//  546   /* if we need to hold off the remote transmitter */
+//  547   if( rx_peek( ) >= RX_TX_BUFFER_THROTTLE_LIMIT )
+//  548     UART_ASSERT_RTS( UART_RTS_ASSERTED ); /* assert the RTS line */
+//  549 #endif
+//  550   
+//  551   return true; /* always accept data received from the uart */
+        SETB    C
+        MOV     A,#0x1
+        LJMP    ?Subroutine2
+        REQUIRE _A_IEN0
+//  552   }
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "%02x">>`:
+        DB "%02x"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for rx_head>`:
+        DATA16
+        DW rx_buff
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for rx_tail>`:
+        DATA16
+        DW rx_buff
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for tx_head>`:
+        DATA16
+        DW tx_buff
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for tx_tail>`:
+        DATA16
+        DW tx_buff
+
+        END
+// 
+// 1 671 bytes in segment NEAR_CODE
+//     1 byte  in segment SFR_AN
+//    13 bytes in segment XDATA_I
+//    13 bytes in segment XDATA_ID
+//   100 bytes in segment XDATA_Z
+// 
+// 1 684 bytes of CODE  memory
+//     0 bytes of DATA  memory (+ 1 byte shared)
+//   113 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none
