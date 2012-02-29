@@ -1,0 +1,663 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        26/Feb/2012  22:48:24 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\simpliciti\nwk\nwk_globals.c                  /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          -DTHIS_DEVICE_ADDRESS={0x1} -DEND_DEVICE          /
+//                          -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK) -f          /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\Configuration\s /
+//                          mpl_nwk_config.dat" (-DMAX_HOPS=3                 /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DEXTENDED_API -DxSMPL_SECURE                     /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\simpl /
+//                          iciti\nwk\nwk_globals.c" -D                       /
+//                          "MCU_H=\"ioCC1110.h\"" -D MRFI_CC1110 -lB         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\L /
+//                          ist\" -o "C:\Texas Instruments\SimpliciTI-IAR-1.2 /
+//                          .0\Projects\Examples\SRF04\UART_Bridge\IAR\CC1110 /
+//                          -LinkTo\Obj\" -e --debug --core=plain             /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -I       /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\ApplicationFramwork\" -Ohs             /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\nwk_globals.s51                                /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME nwk_globals
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?DPS
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSTACK_DISP0_8
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC getMyAddress
+        PUBLIC nwk_getAPAddress
+        PUBLIC nwk_getBCastAddress
+        PUBLIC nwk_getFWVersion
+        PUBLIC nwk_getMyAddress
+        PUBLIC nwk_getProtocolVersion
+        PUBLIC nwk_globalsInit
+        PUBLIC nwk_setAPAddress
+        PUBLIC nwk_setMyAddress
+
+        EXTERN memset
+        EXTERN memcpy
+        EXTERN memcmp
+        EXTERN mrfiBroadcastAddr
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\simpliciti\nwk\nwk_globals.c
+//    1 /**************************************************************************************************
+//    2   Filename:       nwk_globals.c
+//    3   Revised:        $Date: 2009-10-27 20:48:11 -0700 (Tue, 27 Oct 2009) $
+//    4   Revision:       $Revision: 20995 $
+//    5 
+//    6   Description:    This file manages global NWK data.
+//    7 
+//    8   Copyright 2007-2009 Texas Instruments Incorporated. All rights reserved.
+//    9 
+//   10   IMPORTANT: Your use of this Software is limited to those specific rights granted under
+//   11   the terms of a software license agreement between the user who downloaded the software,
+//   12   his/her employer (which must be your employer) and Texas Instruments Incorporated (the
+//   13   "License"). You may not use this Software unless you agree to abide by the terms of the
+//   14   License. The License limits your use, and you acknowledge, that the Software may not be
+//   15   modified, copied or distributed unless embedded on a Texas Instruments microcontroller
+//   16   or used solely and exclusively in conjunction with a Texas Instruments radio frequency
+//   17   transceiver, which is integrated into your product. Other than for the foregoing purpose,
+//   18   you may not use, reproduce, copy, prepare derivative works of, modify, distribute,
+//   19   perform, display or sell this Software and/or its documentation for any purpose.
+//   20 
+//   21   YOU FURTHER ACKNOWLEDGE AND AGREE THAT THE SOFTWARE AND DOCUMENTATION ARE PROVIDED “AS IS?  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION, ANY
+//   22   WARRANTY OF MERCHANTABILITY, TITLE, NON-INFRINGEMENT AND FITNESS FOR A PARTICULAR PURPOSE.
+//   23   IN NO EVENT SHALL TEXAS INSTRUMENTS OR ITS LICENSORS BE LIABLE OR OBLIGATED UNDER CONTRACT,
+//   24   NEGLIGENCE, STRICT LIABILITY, CONTRIBUTION, BREACH OF WARRANTY, OR OTHER LEGAL EQUITABLE
+//   25   THEORY ANY DIRECT OR INDIRECT DAMAGES OR EXPENSES INCLUDING BUT NOT LIMITED TO ANY
+//   26   INCIDENTAL, SPECIAL, INDIRECT, PUNITIVE OR CONSEQUENTIAL DAMAGES, LOST PROFITS OR LOST
+//   27   DATA, COST OF PROCUREMENT OF SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY
+//   28   THIRD PARTIES (INCLUDING BUT NOT LIMITED TO ANY DEFENSE THEREOF), OR OTHER SIMILAR COSTS.
+//   29 
+//   30   Should you have any questions regarding your right to use this Software,
+//   31   contact Texas Instruments Incorporated at www.TI.com.
+//   32 **************************************************************************************************/
+//   33 
+//   34 
+//   35 /******************************************************************************
+//   36  * INCLUDES
+//   37  */
+//   38 #include <string.h>
+//   39 #include "bsp.h"
+//   40 #include "mrfi.h"
+//   41 #include "nwk_types.h"
+//   42 #include "nwk_globals.h"
+//   43 
+//   44 /******************************************************************************
+//   45  * MACROS
+//   46  */
+//   47 
+//   48 /******************************************************************************
+//   49  * CONSTANTS AND DEFINES
+//   50  */
+//   51 
+//   52 /******************************************************************************
+//   53  * TYPEDEFS
+//   54  */
+//   55 
+//   56 /******************************************************************************
+//   57  * LOCAL VARIABLES
+//   58  */
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+//   59 static const addr_t   sMyROMAddress = THIS_DEVICE_ADDRESS;
+sMyROMAddress:
+        DS 1
+        REQUIRE `?<Initializer for sMyROMAddress>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   60 static addr_t         sAPAddress;
+sAPAddress:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   61 static addr_t         sMyRAMAddress;
+sMyRAMAddress:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   62 static uint8_t        sRAMAddressIsSet = 0;
+sRAMAddressIsSet:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+//   63 
+//   64 /* Version number set as a 4 byte quantity. Each byte is a revision number
+//   65  * in the form w.x.y.z. The subfields are each limited to values 0x0-0xFF.
+//   66  */
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+//   67 static const smplVersionInfo_t sVersionInfo = {
+sVersionInfo:
+        DS 5
+        REQUIRE `?<Initializer for sVersionInfo>`
+        REQUIRE __INIT_XDATA_I
+//   68                                                 0x02,  /* protocol version */
+//   69                                                 0x01,  /* major revision number */
+//   70                                                 0x01,  /* minor revision number */
+//   71                                                 0x01,  /* maintenance release number */
+//   72                                                 0x00   /* special release */
+//   73                                                };
+//   74 
+//   75 /******************************************************************************
+//   76  * LOCAL FUNCTIONS
+//   77  */
+//   78 
+//   79 /******************************************************************************
+//   80  * GLOBAL VARIABLES
+//   81  */
+//   82 
+//   83 /******************************************************************************
+//   84  * GLOBAL FUNCTIONS
+//   85  */
+//   86 
+//   87 /******************************************************************************
+//   88  * @fn          nwk_globalsInit
+//   89  *
+//   90  * @brief       Initialization of global symbols
+//   91  *
+//   92  * input parameters
+//   93  *
+//   94  * output parameters
+//   95  *
+//   96  * @return   void
+//   97  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   98 void nwk_globalsInit(void)
+nwk_globalsInit:
+        CODE
+//   99 {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+//  100 
+//  101   memset(&sAPAddress, 0x00, sizeof(addr_t));
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  102 
+//  103   /* populate RAM address from ROM default if it hasn't laready been set
+//  104    * using the IOCTL interface.
+//  105    */
+//  106   if (!sRAMAddressIsSet)
+        MOV     DPTR,#sRAMAddressIsSet
+        MOVX    A,@DPTR
+        JNZ     ??nwk_globalsInit_0
+//  107   {
+//  108     memcpy(&sMyRAMAddress, &sMyROMAddress, sizeof(addr_t));
+        ; Setup parameters for call to function memcpy
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#sMyROMAddress & 0xff
+        MOV     R5,#(sMyROMAddress >> 8) & 0xff
+        MOV     R2,#sMyRAMAddress & 0xff
+        MOV     R3,#(sMyRAMAddress >> 8) & 0xff
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  109     sRAMAddressIsSet = 1;  /* RAM address is now valid */
+        MOV     DPTR,#sRAMAddressIsSet
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+//  110   }
+//  111 
+//  112   return;
+??nwk_globalsInit_0:
+        SJMP    ??Subroutine2_0
+//  113 }
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        LCALL   ?DEALLOC_XSTACK8
+        REQUIRE ??Subroutine2_0
+        ; // Fall through to label ??Subroutine2_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine2_0:
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+//  114 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  115 uint8 getMyAddress(void)
+getMyAddress:
+        CODE
+//  116 {
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+//  117 	addr_t const* addr = nwk_getMyAddress();
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        MOV     DPTR,#sRAMAddressIsSet
+        MOVX    A,@DPTR
+        JZ      ??getMyAddress_0
+        MOV     DPL,#sMyRAMAddress & 0xff
+        MOV     DPH,#(sMyRAMAddress >> 8) & 0xff
+        SJMP    ??getMyAddress_1
+??getMyAddress_0:
+        MOV     DPL,#sMyROMAddress & 0xff
+        MOV     DPH,#(sMyROMAddress >> 8) & 0xff
+//  118 	return addr->addr[0];
+??getMyAddress_1:
+        MOVX    A,@DPTR
+        MOV     R1,A
+        REQUIRE ?Subroutine1
+        ; // Fall through to label ?Subroutine1
+//  119 }
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        POP     DPH
+        POP     DPL
+        RET
+//  120 /******************************************************************************
+//  121  * @fn          nwk_getMyAddress
+//  122  *
+//  123  * @brief       Return a pointer to my address. It comes either from ROM as
+//  124  *              set in the configuration file or it was set using the IOCTL
+//  125  *              interface -- probably from random bytes.
+//  126  *
+//  127  * input parameters
+//  128  *
+//  129  * output parameters
+//  130  *
+//  131  * @return   pointer to a constant address type object.
+//  132  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  133 addr_t const *nwk_getMyAddress(void)
+nwk_getMyAddress:
+        CODE
+//  134 {
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+//  135   /* This call supports returning a valid pointer before either the
+//  136    * initialization or external setting of the address. But caller needs
+//  137    * to be careful -- if this routine is called immediately it will return
+//  138    * the ROM address. If the application then sets the address using the
+//  139    * IOCTL before doing the SMPL_Init() the original pointer is no longer
+//  140    * valid as it points to the wrong address.
+//  141    */
+//  142   return sRAMAddressIsSet ? &sMyRAMAddress : &sMyROMAddress;
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        MOV     DPTR,#sRAMAddressIsSet
+        MOVX    A,@DPTR
+        JZ      ??nwk_getMyAddress_0
+        MOV     R2,#sMyRAMAddress & 0xff
+        MOV     R3,#(sMyRAMAddress >> 8) & 0xff
+        SJMP    ??nwk_getMyAddress_1
+??nwk_getMyAddress_0:
+        MOV     R2,#sMyROMAddress & 0xff
+        MOV     R3,#(sMyROMAddress >> 8) & 0xff
+??nwk_getMyAddress_1:
+        SJMP    ?Subroutine1
+//  143 }
+//  144 
+//  145 /******************************************************************************
+//  146  * @fn          nwk_getFWVersion
+//  147  *
+//  148  * @brief       Return a pointer to the current firmware version string.
+//  149  *
+//  150  * input parameters
+//  151  *
+//  152  * output parameters
+//  153  *
+//  154  * @return   pointer to a constant uint16_t object.
+//  155  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  156 uint8_t const *nwk_getFWVersion()
+nwk_getFWVersion:
+        CODE
+//  157 {
+        ; Saved register size: 0
+        ; Auto size: 0
+//  158   return sVersionInfo.fwVerString;
+        MOV     R2,#(sVersionInfo + 1) & 0xff
+        MOV     R3,#((sVersionInfo + 1) >> 8) & 0xff
+        ANL     ?DPS,#0xfe
+        RET
+//  159 }
+//  160 
+//  161 /******************************************************************************
+//  162  * @fn          nwk_getProtocolVersion
+//  163  *
+//  164  * @brief       Return the current protocol version.
+//  165  *
+//  166  * input parameters
+//  167  *
+//  168  * output parameters
+//  169  *
+//  170  * @return   Protocol version.
+//  171  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  172 uint8_t nwk_getProtocolVersion(void)
+nwk_getProtocolVersion:
+        CODE
+//  173 {
+        ; Saved register size: 0
+        ; Auto size: 0
+//  174   return sVersionInfo.protocolVersion;
+        MOV     R1,#0x2
+        ANL     ?DPS,#0xfe
+        RET
+//  175 }
+//  176 
+//  177 /******************************************************************************
+//  178  * @fn          nwk_setMyAddress
+//  179  *
+//  180  * @brief       Set my address object if it hasn't already been set. This call
+//  181  *              is referenced by the IOCTL support used to change the device
+//  182  *              address. It is effective only if the address has not already
+//  183  *              been set.
+//  184  *
+//  185  * input parameters
+//  186  *
+//  187  * @param   addr  - pointer to the address object to be used to set my address.
+//  188  *
+//  189  * output parameters
+//  190  *
+//  191  * @return   Returns non-zero if request is respected, otherwise returns 0.
+//  192  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  193 uint8_t nwk_setMyAddress(addr_t *addr)
+nwk_setMyAddress:
+        CODE
+//  194 {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+//  195   uint8_t rc = 0;
+        MOV     R1,#0x0
+//  196 
+//  197   if (!sRAMAddressIsSet)
+        MOV     DPTR,#sRAMAddressIsSet
+        MOVX    A,@DPTR
+        JNZ     ??nwk_setMyAddress_0
+//  198   {
+//  199     memcpy(&sMyRAMAddress, addr, sizeof(addr_t));
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,R1
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     R2,#sMyRAMAddress & 0xff
+        MOV     R3,#(sMyRAMAddress >> 8) & 0xff
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  200     sRAMAddressIsSet = 1;  /* RAM address is now valid */
+        MOV     DPTR,#sRAMAddressIsSet
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+//  201     rc = 1;
+        MOV     R1,A
+//  202   }
+//  203 
+//  204   return rc;
+??nwk_setMyAddress_0:
+        SJMP    ??Subroutine2_0
+//  205 }
+//  206 
+//  207 /******************************************************************************
+//  208  * @fn          nwk_setAPAddress
+//  209  *
+//  210  * @brief       Set the AP's address. Called after the AP address is gleaned
+//  211  *              from the Join reply.
+//  212  *
+//  213  * input parameters
+//  214  *
+//  215  * output parameters
+//  216  *
+//  217  * @return   void
+//  218  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  219 void nwk_setAPAddress(addr_t *addr)
+nwk_setAPAddress:
+        CODE
+//  220 {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+//  221 
+//  222   memcpy((void *)&sAPAddress, (void *)addr, NET_ADDR_SIZE);
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+        LCALL   memcpy
+        MOV     A,#0x2
+        LJMP    ?Subroutine0
+//  223 
+//  224   return;
+//  225 }
+//  226 
+//  227 /******************************************************************************
+//  228  * @fn          nwk_getAPAddress
+//  229  *
+//  230  * @brief       Get the AP's address.
+//  231  *
+//  232  * input parameters
+//  233  *
+//  234  * output parameters
+//  235  *
+//  236  * @return   Pointer to a constant address object or null if the address has not
+//  237  *           yet been set.
+//  238  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  239 addr_t const *nwk_getAPAddress(void)
+nwk_getAPAddress:
+        CODE
+//  240 {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 1
+        MOV     A,#-0x1
+        LCALL   ?ALLOC_XSTACK8
+//  241   addr_t addr;
+//  242 
+//  243   memset(&addr, 0x0, sizeof(addr));
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  244 
+//  245   return !memcmp(&sAPAddress, &addr, NET_ADDR_SIZE) ? 0 : &sAPAddress;
+        ; Setup parameters for call to function memcmp
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOV     R4,DPL
+        MOV     R5,DPH
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+        LCALL   memcmp
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     ?V0 + 1,R3
+        MOV     A,R2
+        ORL     A,?V0 + 1
+        JNZ     ??nwk_getAPAddress_0
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        SJMP    ??nwk_getAPAddress_1
+??nwk_getAPAddress_0:
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+??nwk_getAPAddress_1:
+        MOV     A,#0x1
+        LJMP    ?Subroutine0
+//  246 }
+//  247 
+//  248 /******************************************************************************
+//  249  * @fn          nwk_getBCastAddress
+//  250  *
+//  251  * @brief       Get the network broadcast address.
+//  252  *
+//  253  * input parameters
+//  254  *
+//  255  * output parameters
+//  256  *
+//  257  * @return   Pointer to a constant address object.
+//  258  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  259 addr_t const *nwk_getBCastAddress(void)
+nwk_getBCastAddress:
+        CODE
+//  260 {
+        ; Saved register size: 0
+        ; Auto size: 0
+//  261   return (addr_t const *)mrfiBroadcastAddr;
+        MOV     R2,#mrfiBroadcastAddr & 0xff
+        MOV     R3,#(mrfiBroadcastAddr >> 8) & 0xff
+        ANL     ?DPS,#0xfe
+        RET
+//  262 }
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for sMyROMAddress>`:
+        DATA8
+        DB 1
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for sVersionInfo>`:
+        DATA8
+        DB 2
+        DB 1
+        DB 1
+        DB 1
+        DB 0
+
+        END
+// 
+// 326 bytes in segment NEAR_CODE
+//   6 bytes in segment XDATA_I
+//   6 bytes in segment XDATA_ID
+//   3 bytes in segment XDATA_Z
+// 
+// 332 bytes of CODE  memory
+//   9 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

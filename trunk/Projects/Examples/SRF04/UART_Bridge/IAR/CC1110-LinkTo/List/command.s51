@@ -1,0 +1,199 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        26/Feb/2012  11:21:54 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\ApplicationFramwork\command.c                 /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          "-DTHIS_DEVICE_ADDRESS={0x79, 0x56, 0x34, 0x12}"  /
+//                          -DEND_DEVICE -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK /
+//                          ) -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\P /
+//                          rojects\Examples\SRF04\UART_Bridge\IAR\Configurat /
+//                          ion\smpl_nwk_config.dat" (-DMAX_HOPS=3            /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\Appli /
+//                          cationFramwork\command.c" -D                      /
+//                          "MCU_H=\"ioCC1110.h\"" -D MRFI_CC1110 -lB         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\L /
+//                          ist\" -o "C:\Texas Instruments\SimpliciTI-IAR-1.2 /
+//                          .0\Projects\Examples\SRF04\UART_Bridge\IAR\CC1110 /
+//                          -LinkTo\Obj\" -e --debug --core=plain             /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -Ohs     /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\command.s51                                    /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME command
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC commands
+        PUBLIC registerCommand
+
+        EXTERN sprintf
+        EXTERN log
+        EXTERN logTemp
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\ApplicationFramwork\command.c
+//    1 #include "framework.h"
+//    2 
+//    3 
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//    4 struct command commands[COMMAND_SIZE];
+commands:
+        DS 30
+        REQUIRE __INIT_XDATA_Z
+//    5 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//    6 void registerCommand(uint8 port, void (*taskFunction)(struct _appFrame *appInFrame, struct _appFrame* appOutFrame))
+registerCommand:
+        CODE
+//    7 {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        MOV     A,R1
+        MOV     R6,A
+//    8 	if(port >= COMMAND_SIZE)
+        MOV     DPL,R6
+        MOV     ?V0 + 0,DPL
+        MOV     ?V0 + 1,#0x0
+        CLR     C
+        SUBB    A,#0xa
+        JC      ??registerCommand_0
+//    9 	{
+//   10 		sprintf(logTemp, "Register command, error port %d\n", port); 
+        ; Setup parameters for call to function sprintf
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "Register command, err...">` & 0xff
+        MOV     R5,#(`?<Constant "Register command, err...">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//   11 		log(ERROR, logTemp);
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x0
+        LCALL   log
+//   12 		return;
+        SJMP    ??registerCommand_1
+//   13 	}
+//   14 	commands[port].port = port;
+??registerCommand_0:
+        MOV     A,R1
+        MOV     B,#0x3
+        MUL     AB
+        MOV     ?V0 + 0,A
+        MOV     A,B
+        MOV     ?V0 + 1,A
+        MOV     A,#commands & 0xff
+        ADD     A,?V0 + 0
+        MOV     DPL,A
+        MOV     A,#(commands >> 8) & 0xff
+        ADDC    A,?V0 + 1
+        MOV     DPH,A
+        MOV     A,R6
+        MOVX    @DPTR,A
+//   15 	commands[port].taskFunction = taskFunction;
+        INC     DPTR
+        MOV     A,R2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R3
+        MOVX    @DPTR,A
+//   16 	return;
+??registerCommand_1:
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+//   17 }
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Register command,`:
+        DB "Register command, error port %d\012"
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Register command, err...">`:
+        DS 33
+        REQUIRE `?<Initializer for <Constant "Register command,`
+        REQUIRE __INIT_XDATA_I
+
+        END
+// 
+// 88 bytes in segment NEAR_CODE
+// 33 bytes in segment XDATA_I
+// 33 bytes in segment XDATA_ID
+// 30 bytes in segment XDATA_Z
+// 
+// 121 bytes of CODE  memory
+//  63 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

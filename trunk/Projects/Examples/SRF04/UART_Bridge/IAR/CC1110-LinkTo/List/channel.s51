@@ -1,0 +1,314 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        27/Feb/2012  21:21:03 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\Applications\channel.c                        /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          -DTHIS_DEVICE_ADDRESS={0x1} -DEND_DEVICE          /
+//                          -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK) -f          /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\Configuration\s /
+//                          mpl_nwk_config.dat" (-DMAX_HOPS=3                 /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DEXTENDED_API -DxSMPL_SECURE                     /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\Appli /
+//                          cations\channel.c" -D "MCU_H=\"ioCC1110.h\"" -D   /
+//                          MRFI_CC1110 -lB "C:\Texas                         /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\CC1110-LinkTo\List\" -o   /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\O /
+//                          bj\" -e --debug --core=plain                      /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -I       /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\ApplicationFramwork\" -Ohs             /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\channel.s51                                    /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME channel
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ADD_XSTACK_DISP0_8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?DPH1
+        EXTERN ?DPL1
+        EXTERN ?DPS
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?XSP
+        EXTERN ?XSTACK_RESTORE_DPTRS_1
+        EXTERN ?XSTACK_SAVE_DPTRS_1
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC channel
+        PUBLIC channelHandle
+
+        EXTERN SMPL_Ioctl
+        EXTERN log
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\Applications\channel.c
+//    1 /*************************************
+//    2  * change or get channel
+//    3  *
+//    4  * Create date: 2011/11/22 
+//    5  * Author: yongfa.zhou, email: zyfa2008@163.com
+//    6  * bupt fop laboratory
+//    7  */
+//    8 
+//    9 #include "framework.h"
+//   10 
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   11 freqEntry_t channel;
+channel:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+//   12 
+//   13 /* channel handle
+//   14  * if appInFrame->msg[0] == 0x00, then get current channel
+//   15  * if is 0x01, then set current channel
+//   16  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   17 void channelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
+channelHandle:
+        CODE
+//   18 {
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 10
+        ; Auto size: 0
+        MOV     DPL,R4
+        MOV     DPH,R5
+//   19 	if(appInFrame->len == 0) return;
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R0,A
+        JZ      ??channelHandle_0
+//   20 	if(appInFrame->msg[0] == GET)
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     R1,A
+        JNZ     ??channelHandle_1
+//   21 	{
+//   22 		SMPL_Ioctl(IOCTL_OBJ_FREQ, IOCTL_ACT_GET, &channel);
+        ; Setup parameters for call to function SMPL_Ioctl
+        MOV     R4,#channel & 0xff
+        MOV     R5,#(channel >> 8) & 0xff
+        MOV     R2,#0x1
+        MOV     R1,#0x0
+        LCALL   SMPL_Ioctl
+//   23 		appOutFrame->msg[0] = (channel.logicalChan);
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOV     DPTR/*1*/,#channel
+        MOVX    A,@DPTR/*1*/
+        MOV     ?DPL1,DPL
+        MOV     ?DPH1,DPH
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        MOVX    @DPTR/*1*/,A
+//   24 		appOutFrame->len = 1;
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+//   25 		log(INFO, "Send channel");
+        ; Setup parameters for call to function log
+        MOV     R2,#`?<Constant "Send channel">` & 0xff
+        MOV     R3,#(`?<Constant "Send channel">` >> 8) & 0xff
+        SJMP    ??channelHandle_2
+//   26 	}
+//   27 	else
+//   28 	{
+//   29 		if(appInFrame->msg[0] == SET && appInFrame->len >= 2)
+??channelHandle_1:
+        MOV     A,#0x1
+        XRL     A,R1
+        JNZ     ??channelHandle_0
+        MOV     A,R0
+        CLR     C
+        SUBB    A,#0x2
+        JC      ??channelHandle_0
+//   30 		{
+//   31 			channel.logicalChan =  appInFrame->msg[1];
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     DPTR/*1*/,#channel
+        MOVX    @DPTR/*1*/,A
+//   32 			SMPL_Ioctl( IOCTL_OBJ_FREQ, IOCTL_ACT_SET, &channel);
+        ; Setup parameters for call to function SMPL_Ioctl
+        MOV     R4,#channel & 0xff
+        MOV     R5,#(channel >> 8) & 0xff
+        MOV     R2,#0x0
+        MOV     R1,#0x0
+        LCALL   SMPL_Ioctl
+//   33 			appOutFrame->len = 0;
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        CLR     A
+        MOVX    @DPTR,A
+//   34 			
+//   35 			log(INFO, "Set channel");
+        ; Setup parameters for call to function log
+        MOV     R2,#`?<Constant "Set channel">` & 0xff
+        MOV     R3,#(`?<Constant "Set channel">` >> 8) & 0xff
+??channelHandle_2:
+        MOV     R1,#0x2
+        LCALL   log
+??channelHandle_0:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x1
+        LJMP    ?FUNC_LEAVE_XDATA
+//   36 		}
+//   37 	}	
+//   38 
+//   39 	return;	
+//   40 }
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Send channel">>`:
+        DB "Send channel"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Set channel">>`:
+        DB "Set channel"
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Send channel">`:
+        DS 13
+        REQUIRE `?<Initializer for <Constant "Send channel">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Set channel">`:
+        DS 12
+        REQUIRE `?<Initializer for <Constant "Set channel">>`
+        REQUIRE __INIT_XDATA_I
+
+        END
+//   41 
+// 
+// 180 bytes in segment NEAR_CODE
+//  25 bytes in segment XDATA_I
+//  25 bytes in segment XDATA_ID
+//   1 byte  in segment XDATA_Z
+// 
+// 205 bytes of CODE  memory
+//  26 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

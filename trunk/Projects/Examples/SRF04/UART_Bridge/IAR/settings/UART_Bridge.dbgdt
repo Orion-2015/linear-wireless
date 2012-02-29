@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Project>
+  <Desktop>
+    <Static>
+      <Debug-Log>
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1861</ColumnWidth1></Debug-Log>
+      <Build>
+        
+        
+        
+        
+      <ColumnWidth0>20</ColumnWidth0><ColumnWidth1>1395</ColumnWidth1><ColumnWidth2>372</ColumnWidth2><ColumnWidth3>93</ColumnWidth3></Build>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>321</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+      <Disassembly>
+        
+        
+        
+      <PreferedWindows><Position>2</Position><ScreenPosX>0</ScreenPosX><ScreenPosY>0</ScreenPosY><Windows/></PreferedWindows><MixedMode>1</MixedMode><CodeCovShow>1</CodeCovShow><InstrProfShow>1</InstrProfShow></Disassembly>
+    <Watch><Format><struct_types/><watch_formats/></Format><Column0>100</Column0><Column1>100</Column1><Column2>100</Column2><Column3>100</Column3></Watch></Static>
+    <Windows>
+      
+      
+      
+    <Wnd3>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-7117-21556</Identity>
+            <TabName>Debug Log</TabName>
+            <Factory>Debug-Log</Factory>
+            <Session/>
+          </Tab>
+          <Tab>
+            <Identity>TabID-6595-21566</Identity>
+            <TabName>Build</TabName>
+            <Factory>Build</Factory>
+            <Session/>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd3><Wnd4>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-17866-21559</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>UART_Bridge</ExpandedNode><ExpandedNode>UART_Bridge/ApplicationFramework</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd4><Wnd5><Tabs><Tab><Identity>TabID-2399-5438</Identity><TabName>Watch</TabName><Factory>Watch</Factory><Session><Expressions><Expression><Expression>len</Expression></Expression><Expression><Expression>data[0]</Expression></Expression><Expression><Expression>frame</Expression></Expression></Expressions><TabId>0</TabId><Column0>100</Column0><Column1>100</Column1><Column2>100</Column2><Column3>100</Column3></Session></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd5></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\mrfi\smartrf\CC1110\smartrf_CC1110.h</Filename><XPos>0</XPos><YPos>6</YPos><SelStart>1132</SelStart><SelEnd>1132</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\boards\SRF04EB\bsp_external\mrfi_board_defs.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\..\..\Program Files\IAR Systems\Embedded Workbench 6.0 Evaluation\8051\inc\clib\stdlib.h</Filename><XPos>0</XPos><YPos>201</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_globals.h</Filename><XPos>0</XPos><YPos>9</YPos><SelStart>2799</SelStart><SelEnd>2799</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\mrfi\mrfi_defs.h</Filename><XPos>0</XPos><YPos>85</YPos><SelStart>5381</SelStart><SelEnd>5381</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\drivers\code\bsp_leds.c</Filename><XPos>0</XPos><YPos>24</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\ApplicationFramwork\applications.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>643</SelStart><SelEnd>643</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\Applications\test.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>546</SelStart><SelEnd>546</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\drivers\uart_intfc.h</Filename><XPos>0</XPos><YPos>12</YPos><SelStart>2417</SelStart><SelEnd>2417</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\..\..\Program Files\IAR Systems\Embedded Workbench 6.0 Evaluation\8051\inc\clib\stddef.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>343</SelStart><SelEnd>343</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\ApplicationFramwork\route.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>483</SelStart><SelEnd>483</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\boards\SRF04EB\bsp_led_defs.h</Filename><XPos>0</XPos><YPos>54</YPos><SelStart>3663</SelStart><SelEnd>3663</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\drivers\bsp_buttons.h</Filename><XPos>0</XPos><YPos>36</YPos><SelStart>3470</SelStart><SelEnd>3470</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\drivers\code\bsp_generic_buttons.h</Filename><XPos>0</XPos><YPos>50</YPos><SelStart>4302</SelStart><SelEnd>4302</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\boards\SRF04EB\bsp_button_defs.h</Filename><XPos>0</XPos><YPos>54</YPos><SelStart>4195</SelStart><SelEnd>4195</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\ApplicationFramwork\log.c</Filename><XPos>0</XPos><YPos>9</YPos><SelStart>766</SelStart><SelEnd>766</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_frame.c</Filename><XPos>0</XPos><YPos>241</YPos><SelStart>9866</SelStart><SelEnd>9866</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\Applications\stationData.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>663</SelStart><SelEnd>663</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\mrfi\mrfi.c</Filename><XPos>0</XPos><YPos>26</YPos><SelStart>3264</SelStart><SelEnd>3264</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\mrfi\mrfi.h</Filename><XPos>0</XPos><YPos>98</YPos><SelStart>6360</SelStart><SelEnd>6360</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\drivers\code\uart_intfc.c</Filename><XPos>0</XPos><YPos>230</YPos><SelStart>9752</SelStart><SelEnd>9752</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\Applications\main_UART_Bridge.c</Filename><XPos>0</XPos><YPos>46</YPos><SelStart>3211</SelStart><SelEnd>3211</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Configuration\LinkTo\smpl_config.dat</Filename><XPos>0</XPos><YPos>33</YPos><SelStart>3938</SelStart><SelEnd>3938</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Configuration\smpl_nwk_config.dat</Filename><XPos>0</XPos><YPos>27</YPos><SelStart>2961</SelStart><SelEnd>2961</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\ApplicationFramwork\radio.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>564</SelStart><SelEnd>564</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\Applications\surplusCharge.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>202</SelStart><SelEnd>202</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_link.c</Filename><XPos>0</XPos><YPos>47</YPos><SelStart>3213</SelStart><SelEnd>3226</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_types.h</Filename><XPos>0</XPos><YPos>305</YPos><SelStart>9078</SelStart><SelEnd>9078</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_globals.c</Filename><XPos>0</XPos><YPos>236</YPos><SelStart>8414</SelStart><SelEnd>8414</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_api.h</Filename><XPos>0</XPos><YPos>12</YPos><SelStart>2656</SelStart><SelEnd>2656</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_link.h</Filename><XPos>0</XPos><YPos>21</YPos><SelStart>2586</SelStart><SelEnd>2586</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Configuration\LinkListen\smpl_config.dat</Filename><XPos>0</XPos><YPos>33</YPos><SelStart>3938</SelStart><SelEnd>3938</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\Applications\channel.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>649</SelStart><SelEnd>649</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\Applications\logHandle.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>223</SelStart><SelEnd>223</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\Applications\logLevel.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>446</SelStart><SelEnd>446</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\ApplicationFramwork\framework.h</Filename><XPos>0</XPos><YPos>2</YPos><SelStart>398</SelStart><SelEnd>398</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_api.c</Filename><XPos>0</XPos><YPos>195</YPos><SelStart>8027</SelStart><SelEnd>8027</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\mrfi\radios\family2\mrfi_radio.c</Filename><XPos>0</XPos><YPos>1943</YPos><SelStart>68844</SelStart><SelEnd>68844</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\bsp.h</Filename><XPos>0</XPos><YPos>106</YPos><SelStart>5624</SelStart><SelEnd>5624</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\mcus\bsp_8051_defs.h</Filename><XPos>0</XPos><YPos>97</YPos><SelStart>5654</SelStart><SelEnd>5654</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\boards\SRF04EB\bsp_board_defs.h</Filename><XPos>0</XPos><YPos>55</YPos><SelStart>4139</SelStart><SelEnd>4139</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\drivers\bsp_leds.h</Filename><XPos>0</XPos><YPos>49</YPos><SelStart>3888</SelStart><SelEnd>3888</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\drivers\code\bsp_generic_leds.h</Filename><XPos>0</XPos><YPos>80</YPos><SelStart>5840</SelStart><SelEnd>5840</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\ApplicationFramwork\framework.c</Filename><XPos>0</XPos><YPos>225</YPos><SelStart>5049</SelStart><SelEnd>5049</SelEnd></Tab><ActiveTab>43</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00450f20><key>iaridepm.enu1</key></Toolbar-00450f20></Sizes></Row0><Row1><Sizes><Toolbar-073bb400><key>debuggergui.enu1</key></Toolbar-073bb400></Sizes></Row1></Top><Left><Row0><Sizes><Wnd4><Rect><Top>-2</Top><Left>-2</Left><Bottom>731</Bottom><Right>395</Right><x>-2</x><y>-2</y><xscreen>200</xscreen><yscreen>200</yscreen><sizeHorzCX>104167</sizeHorzCX><sizeHorzCY>200401</sizeHorzCY><sizeVertCX>206771</sizeVertCX><sizeVertCY>734469</sizeVertCY></Rect></Wnd4></Sizes></Row0></Left><Right><Row0><Sizes><Wnd5><Rect><Top>-2</Top><Left>-2</Left><Bottom>731</Bottom><Right>276</Right><x>-2</x><y>-2</y><xscreen>200</xscreen><yscreen>200</yscreen><sizeHorzCX>104167</sizeHorzCX><sizeHorzCY>200401</sizeHorzCY><sizeVertCX>144792</sizeVertCX><sizeVertCY>734469</sizeVertCY></Rect></Wnd5></Sizes></Row0></Right><Bottom><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>198</Bottom><Right>1922</Right><x>-2</x><y>-2</y><xscreen>1924</xscreen><yscreen>200</yscreen><sizeHorzCX>1002083</sizeHorzCX><sizeHorzCY>200401</sizeHorzCY><sizeVertCX>104167</sizeVertCX><sizeVertCY>200401</sizeVertCY></Rect></Wnd3></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Project>
+
+

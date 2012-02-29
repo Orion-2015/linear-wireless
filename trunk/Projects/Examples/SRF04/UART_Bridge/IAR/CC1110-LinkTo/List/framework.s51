@@ -1,0 +1,1438 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        27/Feb/2012  21:29:52 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\ApplicationFramwork\framework.c               /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          -DTHIS_DEVICE_ADDRESS={0x1} -DEND_DEVICE          /
+//                          -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK) -f          /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\Configuration\s /
+//                          mpl_nwk_config.dat" (-DMAX_HOPS=3                 /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DEXTENDED_API -DxSMPL_SECURE                     /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\Appli /
+//                          cationFramwork\framework.c" -D                    /
+//                          "MCU_H=\"ioCC1110.h\"" -D MRFI_CC1110 -lB         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\L /
+//                          ist\" -o "C:\Texas Instruments\SimpliciTI-IAR-1.2 /
+//                          .0\Projects\Examples\SRF04\UART_Bridge\IAR\CC1110 /
+//                          -LinkTo\Obj\" -e --debug --core=plain             /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -I       /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\ApplicationFramwork\" -Ohs             /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\framework.s51                                  /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME framework
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ADD_XSTACK_DISP0_8
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?CALL_IND
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?DPH1
+        EXTERN ?DPL1
+        EXTERN ?DPS
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSP
+        EXTERN ?XSTACK_DISP0_8
+        EXTERN ?XSTACK_RESTORE_DPTRS_1
+        EXTERN ?XSTACK_SAVE_DPTRS_1
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBWEAK _A_P1
+        PUBLIC checkButton
+        PUBLIC checkRF
+        PUBLIC checkUART
+        PUBLIC consoleAP
+        PUBLIC fowardFrame
+        PUBLIC handleRF
+        PUBLIC initOS
+        PUBLIC main
+        PUBLIC pInframe
+        PUBLIC registerTask
+        PUBLIC runOS
+        PUBLIC send2Computer
+        PUBLIC sendTest2AP
+
+        EXTERN send
+        EXTERN receive
+        EXTERN getMyAddress
+        EXTERN console
+        EXTERN sprintf
+        EXTERN putchar
+        EXTERN tx_send_wait
+        EXTERN log
+        EXTERN strlen
+        EXTERN rx_receive
+        EXTERN tx_send_hex_wait
+        EXTERN memcpy
+        EXTERN BSP_Init
+        EXTERN SMPL_Init
+        EXTERN uart_intfc_init
+        EXTERN SMPL_Ioctl
+        EXTERN channelHandle
+        EXTERN getLogHandle
+        EXTERN getStationDataHandle
+        EXTERN getSurplusChargeHandle
+        EXTERN getTestHandle
+        EXTERN logLevelHandle
+        EXTERN logTemp
+        EXTERN rx
+        EXTERN tx
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\ApplicationFramwork\framework.c
+//    1 /*************************************
+//    2 * distribute network frame to application
+//    3 *
+//    4 * zyfa2008@163.com
+//    5 * bupt fop laboratory
+//    6 */
+//    7 
+//    8 #include "framework.h"
+
+        ASEGN SFR_AN:DATA:NOROOT,090H
+// union <unnamed> volatile __sfr _A_P1
+_A_P1:
+        DATA8
+        DS 1
+//    9 
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+//   10 static struct _task taskList[COMMAND_SIZE];
+taskList:
+        DS 30
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA16
+//   11 struct AppFrame* pInframe; /* used for application */
+pInframe:
+        DS 2
+        REQUIRE __INIT_XDATA_Z
+//   12 
+//   13 
+//   14 
+//   15 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   16 BOOL registerTask(uint8 port, void (*taskFunction)(struct AppFrame *pAppInFrame, struct AppFrame* pAppOutFrame))
+registerTask:
+        CODE
+//   17 {
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        MOV     A,R1
+        MOV     R5,A
+//   18 	if(port >= COMMAND_SIZE)
+        CLR     C
+        SUBB    A,#0xa
+        JC      ??registerTask_0
+//   19 	{
+//   20 		return FALSE;
+        MOV     R1,#0x0
+        SJMP    ??registerTask_1
+//   21 	}
+//   22 	taskList[port].taskFunction = taskFunction;
+??registerTask_0:
+        MOV     A,R5
+        MOV     B,#0x3
+        MUL     AB
+        MOV     R0,A
+        MOV     R1,B
+        MOV     A,#(taskList + 1) & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#((taskList + 1) >> 8) & 0xff
+        ADDC    A,R1
+        MOV     DPH,A
+        MOV     A,R2
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R3
+        MOVX    @DPTR,A
+//   23 	return TRUE;	 
+        MOV     R1,#0x1
+??registerTask_1:
+        POP     DPH
+        POP     DPL
+        ANL     ?DPS,#0xfe
+        RET
+//   24 }
+//   25 
+//   26 /* forware frame to next device */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   27 smplStatus_t fowardFrame(struct AppFrame* pAppFrame)
+fowardFrame:
+        CODE
+//   28 {	
+        ; Saved register size: 0
+        ; Auto size: 0
+//   29 	smplStatus_t result = send(pAppFrame, sizeof(struct AppFrame));
+//   30 	return result;
+        ; Setup parameters for call to function send
+        MOV     R1,#0xe
+        LJMP    send
+//   31 }
+//   32 
+//   33 /* init os 
+//   34 * register os task and other work
+//   35 */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   36 void initOS(void)
+initOS:
+        CODE
+//   37 {
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 10
+        ; Auto size: 0
+//   38 	uint8 i;
+//   39 	for(i=0; i<COMMAND_SIZE; i++)
+        MOV     ?DPL1,#(taskList + 1) & 0xff
+        MOV     ?DPH1,#((taskList + 1) >> 8) & 0xff
+//   40 	{
+//   41 		taskList[i].taskFunction = NULL;
+??initOS_0:
+        MOV     DPL,?DPL1
+        MOV     DPH,?DPH1
+        CLR     A
+        ; Selecting DPTR 0 by inc-method (DPSEL=x)
+        ANL     ?DPS,#0xfe
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    @DPTR,A
+//   42 	}
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        INC     DPTR/*1*/
+        MOV     A,?DPL1
+        CJNE    A,#(taskList + 31) & 0xff,??initOS_1
+        MOV     A,?DPH1
+        XRL     A,#((taskList + 31) >> 8) & 0xff
+??initOS_1:
+        JNZ     ??initOS_0
+//   43 	
+//   44 	registerTask(GETSURPLUSCHARGE, getSurplusChargeHandle);
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOV     DPTR,#taskList + 1
+        MOV     A,#getSurplusChargeHandle & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(getSurplusChargeHandle >> 8) & 0xff
+        MOVX    @DPTR,A
+//   45 	registerTask(GETSTATIONDATA, getStationDataHandle);
+        MOV     DPTR,#taskList + 4
+        MOV     A,#getStationDataHandle & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(getStationDataHandle >> 8) & 0xff
+        MOVX    @DPTR,A
+//   46 	registerTask(GETLOG, getLogHandle);
+        MOV     DPTR,#taskList + 7
+        MOV     A,#getLogHandle & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(getLogHandle >> 8) & 0xff
+        MOVX    @DPTR,A
+//   47 	registerTask(GETTEST, getTestHandle);
+        MOV     DPTR,#taskList + 10
+        MOV     A,#getTestHandle & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(getTestHandle >> 8) & 0xff
+        MOVX    @DPTR,A
+//   48 	registerTask(CHANNELHANDLE, channelHandle);
+        MOV     DPTR,#taskList + 13
+        MOV     A,#channelHandle & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(channelHandle >> 8) & 0xff
+        MOVX    @DPTR,A
+//   49 	registerTask(LOGLEVELHANDLE, logLevelHandle);
+        MOV     DPTR,#taskList + 16
+        MOV     A,#logLevelHandle & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(logLevelHandle >> 8) & 0xff
+        MOVX    @DPTR,A
+//   50 	
+//   51 }
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x1
+        LJMP    ?FUNC_LEAVE_XDATA
+//   52 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   53 void runOS(void)
+runOS:
+        CODE
+//   54 {
+        PUSH    ?V0 + 0
+        PUSH    ?V0 + 1
+        ; Saved register size: 2
+        ; Auto size: 0
+//   55 	while(1)
+//   56 	{
+//   57 		checkRF();
+??runOS_0:
+        ; Setup parameters for call to function receive
+        LCALL   receive
+        MOV     A,R2
+        ORL     A,R3
+        JZ      ??runOS_1
+        ; Setup parameters for call to function handleRF
+        MOV     R1,#0x0
+        LCALL   handleRF
+//   58 		if(getMyAddress() == APADDRESS)
+??runOS_1:
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        XRL     A,#0x1
+        JNZ     ??runOS_0
+//   59 		{
+//   60 			checkUART();
+        ; Setup parameters for call to function checkUART
+        LCALL   checkUART
+//   61 			checkButton();
+        MOV     C,0x90.2
+        JC      ??runOS_2
+        XRL     0x90,#0x1
+        ; Setup parameters for call to function sendTest2AP
+        LCALL   sendTest2AP
+??runOS_2:
+        MOV     C,0x90.3
+        JC      ??runOS_0
+        XRL     0x90,#0x2
+        ; Setup parameters for call to function sendTest2AP
+        LCALL   sendTest2AP
+        SJMP    ??runOS_0
+        REQUIRE _A_P1
+//   62 		}
+//   63 	}
+//   64 }
+//   65 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   66 void checkButton(void)
+checkButton:
+        CODE
+//   67 {
+        ; Saved register size: 0
+        ; Auto size: 0
+//   68 	if(BSP_BUTTON1())
+        MOV     C,0x90.2
+        JC      ??checkButton_0
+//   69 	{
+//   70 		BSP_TOGGLE_LED1();
+        XRL     0x90,#0x1
+//   71 		sendTest2AP();
+        ; Setup parameters for call to function sendTest2AP
+        LCALL   sendTest2AP
+//   72 	}
+//   73 	if(BSP_BUTTON2())
+??checkButton_0:
+        MOV     C,0x90.3
+        JC      ??checkButton_1
+//   74 	{
+//   75 		BSP_TOGGLE_LED2();
+        XRL     0x90,#0x2
+//   76 		sendTest2AP();
+        ; Setup parameters for call to function sendTest2AP
+        LCALL   sendTest2AP
+//   77 	}
+//   78 }
+??checkButton_1:
+        ANL     ?DPS,#0xfe
+        RET
+        REQUIRE _A_P1
+//   79 
+//   80 
+//   81 /* if dstAddr is APADDRESS, then send data to computer software by uart
+//   82  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   83 void send2Computer(struct AppFrame* pFrame)
+send2Computer:
+        CODE
+//   84 {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     ?DPL1,R2
+        MOV     ?DPH1,R3
+//   85 	console("Receive new message\n");
+        ; Setup parameters for call to function console
+        MOV     R2,#`?<Constant "Receive new message\\n">` & 0xff
+        MOV     R3,#(`?<Constant "Receive new message\\n">` >> 8) & 0xff
+        LCALL   console
+//   86 	sprintf(logTemp, "port is %d\ncontent is ", pFrame->port);
+        ; Setup parameters for call to function sprintf
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        MOV     ?V0 + 0,A
+        MOV     ?V0 + 1,#0x0
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "port is %d\\ncontent is ">` & 0xff
+        MOV     R5,#(`?<Constant "port is %d\\ncontent is ">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//   87 	console(logTemp);
+        ; Setup parameters for call to function console
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   console
+//   88 	if(pFrame->numUnits != 1)
+        MOV     DPL,?DPL1
+        MOV     DPH,?DPH1
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JZ      ??send2Computer_0
+//   89 	{
+//   90 		putchar(pFrame->numUnits);
+        ; Setup parameters for call to function putchar
+        MOV     R2,?V0 + 0
+        MOV     R3,#0x0
+        LCALL   putchar
+//   91 		putchar(pFrame->currentUnit);
+        ; Setup parameters for call to function putchar
+        MOV     DPL,?DPL1
+        MOV     DPH,?DPH1
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     R3,#0x0
+        LCALL   putchar
+//   92 	}
+//   93 	tx_send_wait((char*)pFrame->msg, pFrame->len);
+??send2Computer_0:
+        ; Setup parameters for call to function tx_send_wait
+        MOV     DPL,?DPL1
+        MOV     DPH,?DPH1
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R4,A
+        MOV     R5,#0x0
+        MOV     A,?DPL1
+        ADD     A,#0x8
+        MOV     R2,A
+        MOV     A,?DPH1
+        ADDC    A,#0x0
+        MOV     R3,A
+        LCALL   tx_send_wait
+//   94 	return;
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        REQUIRE ?Subroutine1
+        ; // Fall through to label ?Subroutine1
+//   95 }
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+//   96 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//   97 void sendTest2AP(void)
+sendTest2AP:
+        CODE
+//   98 {
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+//   99 	uint8 myAddr;
+//  100 	smplStatus_t rc;
+//  101 	myAddr = getMyAddress();
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+//  102 	struct AppFrame* appFrame = (struct AppFrame*)tx;
+//  103 	appFrame->srcAddr = myAddr;
+        MOV     DPTR,#tx + 3
+        MOVX    @DPTR,A
+//  104 	appFrame->originalAddr = myAddr;
+        MOV     DPTR,#tx + 2
+        MOVX    @DPTR,A
+//  105 	appFrame->finnalDstAddr = 2;
+        MOV     DPTR,#tx + 1
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+//  106 	appFrame->port = 0x00;
+        MOV     DPTR,#tx
+        CLR     A
+        MOVX    @DPTR,A
+//  107 	appFrame->msg[0] = 0x00;
+        MOV     DPTR,#tx + 8
+        MOVX    @DPTR,A
+//  108 	appFrame->len = 1;
+        MOV     DPTR,#tx + 7
+        INC     A
+        MOVX    @DPTR,A
+//  109 	
+//  110 	/* send frame */
+//  111 	rc = send(appFrame, sizeof(struct AppFrame));
+//  112 	if(rc != SMPL_SUCCESS)
+        ; Setup parameters for call to function send
+        MOV     R1,#0xe
+        MOV     R2,#tx & 0xff
+        MOV     R3,#(tx >> 8) & 0xff
+        LCALL   send
+        MOV     A,R1
+        JZ      ??sendTest2AP_0
+//  113 	{
+//  114 		log(ERROR, "Send Test2AP failed");
+        ; Setup parameters for call to function log
+        MOV     R2,#`?<Constant "Send Test2AP failed">` & 0xff
+        MOV     R3,#(`?<Constant "Send Test2AP failed">` >> 8) & 0xff
+        MOV     R1,#0x0
+        LCALL   log
+//  115 	}
+//  116 }
+??sendTest2AP_0:
+        REQUIRE ?Subroutine0
+        ; // Fall through to label ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        POP     DPH
+        POP     DPL
+        RET
+//  117 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  118 void checkRF(void)
+checkRF:
+        CODE
+//  119 {
+        ; Saved register size: 2
+        ; Auto size: 0
+//  120 	struct AppFrame *appFrame;
+//  121 	appFrame = receive();
+        ; Setup parameters for call to function receive
+        LCALL   receive
+//  122 	if(appFrame == NULL) return;
+        MOV     A,R2
+        ORL     A,R3
+        JZ      ??checkRF_0
+//  123 	handleRF(appFrame, FALSE);
+        ; Setup parameters for call to function handleRF
+        MOV     R1,#0x0
+        LCALL   handleRF
+//  124 	return;
+??checkRF_0:
+        RET
+//  125 }
+//  126 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  127 void handleRF(struct AppFrame* pInframe, BOOL fromUART)
+handleRF:
+        CODE
+//  128 {
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        MOV     A,#-0x2
+        LCALL   ?ADD_XSTACK_DISP0_8
+        LCALL   ?XSTACK_SAVE_DPTRS_1
+        ; Saved register size: 13
+        ; Auto size: 0
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     ?V0 + 0,R1
+//  129 	uint8_t myAddr;
+//  130 	smplStatus_t rc;
+//  131 	
+//  132 	struct AppFrame* pOutFrame;
+//  133 	
+//  134 	myAddr = getMyAddress();
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        MOV     R0,A
+//  135 	
+//  136 	pOutFrame = (struct AppFrame*)tx;
+//  137 	
+//  138 	if(pInframe->finnalDstAddr != myAddr)
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        MOVX    A,@DPTR
+        XRL     A,R0
+        JZ      ??handleRF_0
+//  139 	{
+//  140 		rc = fowardFrame(pInframe);
+//  141 		if(rc == SMPL_SUCCESS)
+        ; Setup parameters for call to function send
+        MOV     R1,#0xe
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   send
+        MOV     A,R1
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        JNZ     ??handleRF_1
+//  142 		{
+//  143 			sprintf(logTemp, "Forward to %d success\n", pInframe->dstAddr);			
+        ; Setup parameters for call to function sprintf
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "Forward to %d success\\n">` & 0xff
+        MOV     R5,#(`?<Constant "Forward to %d success\\n">` >> 8) & 0xff
+??handleRF_2:
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  144 			log(INFO, logTemp);
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x2
+        LJMP    ??handleRF_3
+//  145 		}
+//  146 		else
+//  147 		{
+//  148 			sprintf(logTemp, "Forward to %d failed\n", pInframe->dstAddr);			
+??handleRF_1:
+        ; Setup parameters for call to function sprintf
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "Forward to %d failed\\n">` & 0xff
+        MOV     R5,#(`?<Constant "Forward to %d failed\\n">` >> 8) & 0xff
+        SJMP    ??handleRF_2
+//  149 			log(INFO, logTemp);
+//  150 		}		
+//  151 	}
+//  152 	else
+//  153 	{
+//  154 		if(pInframe->port < COMMAND_SIZE)
+??handleRF_0:
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        MOV     R1,A
+        CLR     C
+        SUBB    A,#0xa
+        JC      $+5
+        LJMP    ??handleRF_4
+//  155 		{
+//  156 			/* if dstAddress is ap address, then send data to computer by uart */
+//  157 			if(myAddr == APADDRESS)
+        MOV     A,#0x1
+        XRL     A,R0
+        JZ      $+5
+        LJMP    ??handleRF_5
+//  158 			{
+//  159 				if(fromUART)
+        MOV     A,?V0 + 0
+        JNZ     $+5
+        LJMP    ??handleRF_6
+        MOV     A,R1
+        MOV     B,#0x3
+        MUL     AB
+        MOV     R0,A
+        MOV     R1,B
+        MOV     A,#(taskList + 1) & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#((taskList + 1) >> 8) & 0xff
+        ADDC    A,R1
+        MOV     DPH,A
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,R0
+        ORL     A,R1
+        JNZ     $+5
+        LJMP    ??handleRF_7
+//  160 				{
+//  161 					if(taskList[pInframe->port].taskFunction != NULL)
+//  162 					{
+//  163 						taskList[pInframe->port].taskFunction(pInframe, pOutFrame);
+        ; Setup parameters for indirect call
+        MOV     R4,#tx & 0xff
+        MOV     R5,#(tx >> 8) & 0xff
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        MOV     DPL,R0
+        MOV     DPH,R1
+        LCALL   ?CALL_IND
+//  164 						if(pOutFrame->len != 0)
+        MOV     DPTR,#tx + 7
+        MOVX    A,@DPTR
+        JNZ     $+5
+        LJMP    ??handleRF_7
+//  165 						{
+//  166 							pOutFrame->port = pInframe->port;
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        MOV     DPTR,#tx
+        MOVX    @DPTR,A
+//  167 							pOutFrame->numUnits = 1;
+        MOV     DPTR,#tx + 5
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+//  168 							pOutFrame->currentUnit = 1;
+        INC     DPTR
+        MOVX    @DPTR,A
+//  169 							send2Computer(pOutFrame);
+        ; Setup parameters for call to function console
+        MOV     R2,#`?<Constant "Receive new message\\n">` & 0xff
+        MOV     R3,#(`?<Constant "Receive new message\\n">` >> 8) & 0xff
+        LCALL   console
+        ; Setup parameters for call to function sprintf
+        MOV     DPTR,#tx
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "port is %d\\ncontent is ">` & 0xff
+        MOV     R5,#(`?<Constant "port is %d\\ncontent is ">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function console
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   console
+        MOV     DPTR,#tx + 5
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     A,#0x1
+        XRL     A,?V0 + 2
+        JZ      ??handleRF_8
+        ; Setup parameters for call to function putchar
+        MOV     R2,?V0 + 2
+        MOV     R3,#0x0
+        LCALL   putchar
+        ; Setup parameters for call to function putchar
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     R3,#0x0
+        LCALL   putchar
+??handleRF_8:
+        ; Setup parameters for call to function tx_send_wait
+        MOV     DPTR,#tx + 7
+        MOVX    A,@DPTR
+        MOV     R4,A
+        MOV     R5,#0x0
+        MOV     R2,#(tx + 8) & 0xff
+        MOV     R3,#((tx + 8) >> 8) & 0xff
+??handleRF_9:
+        LCALL   tx_send_wait
+//  170 						}
+//  171 					}					
+//  172 				}
+        LJMP    ??handleRF_7
+//  173 				else
+//  174 				{
+//  175 					send2Computer(pInframe);
+??handleRF_6:
+        ; Setup parameters for call to function console
+        MOV     R2,#`?<Constant "Receive new message\\n">` & 0xff
+        MOV     R3,#(`?<Constant "Receive new message\\n">` >> 8) & 0xff
+        LCALL   console
+        ; Setup parameters for call to function sprintf
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "port is %d\\ncontent is ">` & 0xff
+        MOV     R5,#(`?<Constant "port is %d\\ncontent is ">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function console
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   console
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     A,#0x1
+        XRL     A,?V0 + 2
+        JZ      ??handleRF_10
+        ; Setup parameters for call to function putchar
+        MOV     R2,?V0 + 2
+        MOV     R3,#0x0
+        LCALL   putchar
+        ; Setup parameters for call to function putchar
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     R3,#0x0
+        LCALL   putchar
+??handleRF_10:
+        ; Setup parameters for call to function tx_send_wait
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R4,A
+        MOV     R5,#0x0
+        MOV     A,R6
+        ADD     A,#0x8
+        MOV     R2,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     R3,A
+        SJMP    ??handleRF_9
+//  176 				}
+//  177 			}
+//  178 			/* else call user callback function to handle request */
+//  179 			else
+//  180 			{
+//  181 				if(taskList[pInframe->port].taskFunction != NULL)
+??handleRF_5:
+        MOV     A,R1
+        MOV     B,#0x3
+        MUL     AB
+        MOV     R0,A
+        MOV     R1,B
+        MOV     A,#(taskList + 1) & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#((taskList + 1) >> 8) & 0xff
+        ADDC    A,R1
+        MOV     DPH,A
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,R0
+        ORL     A,R1
+        JNZ     $+5
+        LJMP    ??handleRF_7
+//  182 				{
+//  183 					pOutFrame->len = 0; /* to avoid application does not set msg point */
+        MOV     DPTR,#tx + 7
+        CLR     A
+        MOVX    @DPTR,A
+//  184 					taskList[pInframe->port].taskFunction(pInframe, pOutFrame);
+        ; Setup parameters for indirect call
+        MOV     R4,#tx & 0xff
+        MOV     R5,#(tx >> 8) & 0xff
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        MOV     B,#0x3
+        MUL     AB
+        MOV     R0,A
+        MOV     ?V0 + 1,B
+        MOV     R1,?V0 + 1
+        MOV     A,#(taskList + 1) & 0xff
+        ADD     A,R0
+        MOV     ?DPL1,A
+        MOV     A,#((taskList + 1) >> 8) & 0xff
+        ADDC    A,R1
+        MOV     ?DPH1,A
+        ; Selecting DPTR 1 by inc-method (DPSEL=0)
+        INC     ?DPS
+        MOVX    A,@DPTR/*1*/
+        MOV     DPL,A
+        INC     DPTR/*1*/
+        MOVX    A,@DPTR/*1*/
+        MOV     DPH,A
+        ; Selecting DPTR 0 by inc-method (DPSEL=1)
+        INC     ?DPS
+        LCALL   ?CALL_IND
+//  185 					
+//  186 					pOutFrame->port = pInframe->port;
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        MOV     DPTR,#tx
+        MOVX    @DPTR,A
+//  187 					pOutFrame->finnalDstAddr = pInframe->originalAddr;
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     DPTR,#tx + 1
+        MOVX    @DPTR,A
+//  188 					pOutFrame->originalAddr = getMyAddress();
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        INC     DPTR
+        MOVX    @DPTR,A
+//  189 					pOutFrame->srcAddr = getMyAddress();
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        INC     DPTR
+        MOVX    @DPTR,A
+//  190 					if(pOutFrame->len != 0)
+        MOV     DPTR,#tx + 7
+        MOVX    A,@DPTR
+        JZ      ??handleRF_7
+//  191 					{
+//  192 						rc = send(pOutFrame, sizeof(struct AppFrame));
+//  193 						sprintf(logTemp, "Send result: %d\n", rc);
+        ; Setup parameters for call to function sprintf
+        ; Setup parameters for call to function send
+        MOV     R1,#0xe
+        MOV     R2,#tx & 0xff
+        MOV     R3,#(tx >> 8) & 0xff
+        LCALL   send
+        MOV     A,R1
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "Send result: %d\\n">` & 0xff
+        MOV     R5,#(`?<Constant "Send result: %d\\n">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  194 						consoleAP(logTemp);
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        XRL     A,#0x1
+        JNZ     ??handleRF_7
+        ; Setup parameters for call to function tx_send_wait
+        ; Setup parameters for call to function strlen
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   strlen
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LJMP    ??handleRF_9
+//  195 					}
+//  196 				}
+//  197 			}
+//  198 		}
+//  199 		else
+//  200 		{
+//  201 			log(ERROR, "Error port");
+??handleRF_4:
+        ; Setup parameters for call to function log
+        MOV     R2,#`?<Constant "Error port">` & 0xff
+        MOV     R3,#(`?<Constant "Error port">` >> 8) & 0xff
+        MOV     R1,#0x0
+??handleRF_3:
+        LCALL   log
+//  202 		}
+//  203 	}
+//  204 }
+??handleRF_7:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        LCALL   ?XSTACK_RESTORE_DPTRS_1
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+//  205 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  206 bool consoleAP(const void* data)
+consoleAP:
+        CODE
+//  207 {
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        MOV     DPL,R2
+        MOV     DPH,R3
+//  208 	if(getMyAddress() != APADDRESS) return false;
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        XRL     A,#0x1
+        JZ      ??consoleAP_0
+        CLR     C
+        SJMP    ??consoleAP_1
+//  209 	return tx_send_wait(data, strlen(data));
+??consoleAP_0:
+        ; Setup parameters for call to function tx_send_wait
+        ; Setup parameters for call to function strlen
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   strlen
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   tx_send_wait
+??consoleAP_1:
+        LJMP    ?Subroutine0
+//  210 }
+//  211 
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  212 void checkUART(void)
+checkUART:
+        CODE
+//  213 {
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 21
+        MOV     A,#-0x15
+        LCALL   ?ALLOC_XSTACK8
+//  214 	struct AppFrame *pInFrame = (struct AppFrame *)rx;
+//  215 	struct UartCommand cmd;
+//  216 	
+//  217 	/* holds length of current message */
+//  218 	uint8_t len; 
+//  219 	len = rx_receive( &cmd, MAX_APP_PAYLOAD );
+        ; Setup parameters for call to function rx_receive
+        MOV     R4,#0x14
+        MOV     R5,#0x0
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   rx_receive
+        MOV     A,R2
+        MOV     R6,A
+//  220 	if( len != 0 )
+        JZ      ??checkUART_0
+//  221 	{
+//  222 #ifdef	SEND_UART_ECHO
+//  223 		console("Get command: ");
+        ; Setup parameters for call to function console
+        MOV     R2,#`?<Constant "Get command: ">` & 0xff
+        MOV     R3,#(`?<Constant "Get command: ">` >> 8) & 0xff
+        LCALL   console
+//  224 		tx_send_hex_wait((const uint8*)&cmd, len);
+        ; Setup parameters for call to function tx_send_hex_wait
+        MOV     A,R6
+        MOV     R1,A
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   tx_send_hex_wait
+//  225 		console(",waiting for result\n");
+        ; Setup parameters for call to function console
+        MOV     R2,#`?<Constant ",waiting for result\\n">` & 0xff
+        MOV     R3,#(`?<Constant ",waiting for result\\n">` >> 8) & 0xff
+        LCALL   console
+//  226 #endif
+//  227 				
+//  228 		/* simulate rf frame */
+//  229 		pInFrame->finnalDstAddr = cmd.finnalDstAddr;
+        MOV     A,#0x1
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     DPTR,#rx + 1
+        MOVX    @DPTR,A
+//  230 		pInFrame->srcAddr = APADDRESS; /* from to myself */
+        MOV     DPTR,#rx + 3
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+//  231 		pInFrame->originalAddr = APADDRESS;
+        MOV     DPTR,#rx + 2
+        MOVX    @DPTR,A
+//  232 		pInFrame->dstAddr = getMyAddress();
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        MOV     DPTR,#rx + 4
+        MOVX    @DPTR,A
+//  233 		pInFrame->port = cmd.port;
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    A,@DPTR
+        MOV     DPTR,#rx
+        MOVX    @DPTR,A
+//  234 		pInFrame->len = len - UARTCOMMANDHEADSIZE;
+        MOV     A,#-0x3
+        ADD     A,R6
+        MOV     DPTR,#rx + 7
+        MOVX    @DPTR,A
+//  235 		
+//  236 		memcpy(pInFrame->msg, cmd.msg, cmd.len); 
+        ; Setup parameters for call to function memcpy
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,#0x5
+        LCALL   ?XSTACK_DISP0_8
+        MOV     R4,DPL
+        MOV     R5,DPH
+        MOV     R2,#(rx + 8) & 0xff
+        MOV     R3,#((rx + 8) >> 8) & 0xff
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+//  237 		
+//  238 		if(pInFrame->dstAddr == APADDRESS)
+        MOV     DPTR,#rx + 4
+        MOVX    A,@DPTR
+        XRL     A,#0x1
+        JNZ     ??checkUART_0
+//  239 		{
+//  240 			handleRF(pInFrame, TRUE);
+        ; Setup parameters for call to function handleRF
+        MOV     R1,#0x1
+        MOV     R2,#rx & 0xff
+        MOV     R3,#(rx >> 8) & 0xff
+        LCALL   handleRF
+//  241 		}	
+//  242 	}	
+//  243 }
+??checkUART_0:
+        MOV     A,#0x15
+        LJMP    ?Subroutine1
+//  244 
+//  245 
+//  246 /* framwork entry */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//  247 void main (void)
+main:
+        CODE
+//  248 {
+        ; Auto size: 0
+//  249 	
+//  250 	BSP_Init( );
+        ; Setup parameters for call to function BSP_Init
+        LCALL   BSP_Init
+//  251 	
+//  252 	SMPL_Init( NULL );
+        ; Setup parameters for call to function SMPL_Init
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        LCALL   SMPL_Init
+//  253 	
+//  254 	uart_intfc_init( );
+        ; Setup parameters for call to function uart_intfc_init
+        LCALL   uart_intfc_init
+//  255 	
+//  256 	/* turn on the radio so we are always able to receive data asynchronously */
+//  257 	SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, NULL );
+        ; Setup parameters for call to function SMPL_Ioctl
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#0x8
+        MOV     R1,#0x3
+        LCALL   SMPL_Ioctl
+//  258 	
+//  259 	/* turn on LED. */
+//  260 	BSP_TURN_ON_LED1( );
+        CLR     0x90.0
+//  261 	BSP_TURN_ON_LED2( );
+        CLR     0x90.1
+//  262 	console( "Start iwsn system...\n" );
+        ; Setup parameters for call to function console
+        MOV     R2,#`?<Constant "Start iwsn system...\\n">` & 0xff
+        MOV     R3,#(`?<Constant "Start iwsn system...\\n">` >> 8) & 0xff
+        LCALL   console
+//  263 	
+//  264 	initOS();
+        ; Setup parameters for call to function initOS
+        LCALL   initOS
+//  265 	runOS();
+        ; Setup parameters for call to function runOS
+        LCALL   runOS
+//  266 	
+//  267 	/* but in case we do... */
+//  268 	while (1) ;
+??main_0:
+        SJMP    ??main_0
+        REQUIRE _A_P1
+//  269 }
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Receive new messa`:
+        DB "Receive new message\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "port is %d\\nconte`:
+        DB "port is %d\012content is "
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Send Test2AP fail`:
+        DB "Send Test2AP failed"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Forward to %d suc`:
+        DB "Forward to %d success\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Forward to %d fai`:
+        DB "Forward to %d failed\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Send result: %d\\n`:
+        DB "Send result: %d\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Error port">>`:
+        DB "Error port"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Get command: ">>`:
+        DB "Get command: "
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant ",waiting for resu`:
+        DB ",waiting for result\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Start iwsn system`:
+        DB "Start iwsn system...\012"
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Receive new message\\n">`:
+        DS 21
+        REQUIRE `?<Initializer for <Constant "Receive new messa`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "port is %d\\ncontent is ">`:
+        DS 23
+        REQUIRE `?<Initializer for <Constant "port is %d\\nconte`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Send Test2AP failed">`:
+        DS 20
+        REQUIRE `?<Initializer for <Constant "Send Test2AP fail`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Forward to %d success\\n">`:
+        DS 23
+        REQUIRE `?<Initializer for <Constant "Forward to %d suc`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Forward to %d failed\\n">`:
+        DS 22
+        REQUIRE `?<Initializer for <Constant "Forward to %d fai`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Send result: %d\\n">`:
+        DS 17
+        REQUIRE `?<Initializer for <Constant "Send result: %d\\n`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Error port">`:
+        DS 11
+        REQUIRE `?<Initializer for <Constant "Error port">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Get command: ">`:
+        DS 14
+        REQUIRE `?<Initializer for <Constant "Get command: ">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant ",waiting for result\\n">`:
+        DS 21
+        REQUIRE `?<Initializer for <Constant ",waiting for resu`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Start iwsn system...\\n">`:
+        DS 22
+        REQUIRE `?<Initializer for <Constant "Start iwsn system`
+        REQUIRE __INIT_XDATA_I
+
+        END
+//  270 
+// 
+// 1 344 bytes in segment NEAR_CODE
+//     1 byte  in segment SFR_AN
+//   194 bytes in segment XDATA_I
+//   194 bytes in segment XDATA_ID
+//    32 bytes in segment XDATA_Z
+// 
+// 1 538 bytes of CODE  memory
+//     0 bytes of DATA  memory (+ 1 byte shared)
+//   226 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

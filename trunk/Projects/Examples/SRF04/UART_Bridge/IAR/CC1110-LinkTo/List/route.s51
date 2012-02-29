@@ -1,0 +1,195 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        27/Feb/2012  21:21:02 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  2,separate,16,inc                                 /
+//    Source file        =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Compone /
+//                          nts\ApplicationFramwork\route.c                   /
+//    Command line       =  -f "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\Configuratio /
+//                          n\LinkTo\smpl_config.dat" (-DNUM_CONNECTIONS=2    /
+//                          -DSIZE_INFRAME_Q=2 -DSIZE_OUTFRAME_Q=2            /
+//                          -DTHIS_DEVICE_ADDRESS={0x1} -DEND_DEVICE          /
+//                          -DLINK_TO -DxNWK_PLL_REFERENCE_CLOCK) -f          /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\Configuration\s /
+//                          mpl_nwk_config.dat" (-DMAX_HOPS=3                 /
+//                          -DMAX_HOPS_FROM_ME=3 -DCOMMAND_SIZE=10            /
+//                          -DLOGTEMP_SIZE=100 -DMAX_HOPS_FROM_AP=1           /
+//                          -DMAX_NWK_PAYLOAD=34 -DMAX_APP_PAYLOAD=20         /
+//                          -DDEFAULT_LINK_TOKEN=0x01020304                   /
+//                          -DDEFAULT_JOIN_TOKEN=0x05060708                   /
+//                          -DxFREQUENCY_AGILITY -DxAPP_AUTO_ACK              /
+//                          -DEXTENDED_API -DxSMPL_SECURE                     /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DBSP_TIMER_USED=1           /
+//                          -DNWK_PLL_SHOW_LOCATION_INDICATORS                /
+//                          -DUART_NUMBER=UART_NUMBER_0                       /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=9600 -DUART_FLOW_CONTROL=UART_FL /
+//                          OW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NON /
+//                          E -DUART_STOP_BITS=UART_1_STOP_BIT) "C:\Texas     /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Components\Appli /
+//                          cationFramwork\route.c" -D                        /
+//                          "MCU_H=\"ioCC1110.h\"" -D MRFI_CC1110 -lB         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\L /
+//                          ist\" -o "C:\Texas Instruments\SimpliciTI-IAR-1.2 /
+//                          .0\Projects\Examples\SRF04\UART_Bridge\IAR\CC1110 /
+//                          -LinkTo\Obj\" -e --debug --core=plain             /
+//                          --dptr=16,2,separate,inc --data_model=large       /
+//                          --code_model=near --calling_convention=xdata_reen /
+//                          trant --place_constants=data --nr_virtual_regs 8  /
+//                          -I "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Pro /
+//                          jects\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\ /
+//                          ..\Components\bsp\" -I "C:\Texas                  /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\drivers\" -I "C:\Texas                       /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \bsp\boards\SRF04EB\" -I "C:\Texas                /
+//                          Instruments\SimpliciTI-IAR-1.2.0\Projects\Example /
+//                          s\SRF04\UART_Bridge\IAR\..\..\..\..\..\Components /
+//                          \mrfi\" -I "C:\Texas Instruments\SimpliciTI-IAR-1 /
+//                          .2.0\Projects\Examples\SRF04\UART_Bridge\IAR\..\. /
+//                          .\..\..\..\Components\SimpliciTI\nwk\" -I         /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\SimpliciTI\nwk_applications\" -I       /
+//                          "C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Projec /
+//                          ts\Examples\SRF04\UART_Bridge\IAR\..\..\..\..\..\ /
+//                          Components\ApplicationFramwork\" -Ohs             /
+//    List file          =  C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Project /
+//                          s\Examples\SRF04\UART_Bridge\IAR\CC1110-LinkTo\Li /
+//                          st\route.s51                                      /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME route
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?V0
+
+        PUBLIC getNextAddress
+
+        EXTERN getMyAddress
+
+// C:\Texas Instruments\SimpliciTI-IAR-1.2.0\Components\ApplicationFramwork\route.c
+//    1 #include "framework.h"
+//    2 
+//    3 /* index is 1,2 or 3
+//    4  */
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+//    5 uint8 getNextAddress(uint8 originalAddr, uint8 finnalDstAddr, uint8 index)
+getNextAddress:
+        CODE
+//    6 {
+        MOV     A,#-0xe
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 14
+        ; Auto size: 0
+        MOV     ?V0 + 6,R1
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+//    7 	uint8 myAddr;
+//    8 	myAddr = getMyAddress();
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        MOV     A,R1
+        MOV     R0,A
+//    9 	/* if originalAddr < myAddr < finnalDstAddr */
+//   10 	if(myAddr >= originalAddr && myAddr + index <= finnalDstAddr)
+        CLR     C
+        SUBB    A,?V0 + 6
+        JC      ??getNextAddress_0
+        MOV     ?V0 + 2,R7
+        MOV     A,R0
+        ADD     A,?V0 + 2
+        MOV     R2,A
+        CLR     A
+        ADDC    A,#0x0
+        MOV     R3,A
+        MOV     A,R6
+        SUBB    A,R2
+        CLR     A
+        SUBB    A,R3
+        CLR     C
+        XRL     A,PSW
+        RLC     A
+        JC      ??getNextAddress_0
+//   11 	{
+//   12 		return myAddr + index;
+        MOV     A,R0
+        ADD     A,R7
+??getNextAddress_1:
+        MOV     R1,A
+        SJMP    ??getNextAddress_2
+//   13 	}
+//   14 	
+//   15 	/* if finnalDstAddr < myAddr < originalAddr */
+//   16 	if(myAddr <= originalAddr && myAddr - index >= finnalDstAddr)
+??getNextAddress_0:
+        MOV     A,?V0 + 6
+        CLR     C
+        SUBB    A,R0
+        JC      ??getNextAddress_3
+        MOV     ?V0 + 0,R7
+        MOV     A,R0
+        CLR     C
+        SUBB    A,?V0 + 0
+        MOV     R2,A
+        SUBB    A,0xE0 /* A   */
+        MOV     R3,A
+        MOV     ?V0 + 0,R6
+        CLR     C
+        MOV     A,R2
+        SUBB    A,?V0 + 0
+        MOV     A,R3
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JC      ??getNextAddress_3
+//   17 	{
+//   18 		return myAddr - index;
+        MOV     A,R0
+        CLR     C
+        SUBB    A,R7
+        SJMP    ??getNextAddress_1
+//   19 	}
+//   20 	
+//   21 	/* other wise */
+//   22 	return 0;
+??getNextAddress_3:
+        MOV     R1,#0x0
+??getNextAddress_2:
+        MOV     R7,#0x7
+        LJMP    ?FUNC_LEAVE_XDATA
+//   23 }
+
+        END
+// 
+// 90 bytes in segment NEAR_CODE
+// 
+// 90 bytes of CODE memory
+//
+//Errors: none
+//Warnings: none
