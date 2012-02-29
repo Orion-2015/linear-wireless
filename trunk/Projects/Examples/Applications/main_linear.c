@@ -32,6 +32,7 @@
   contact Texas Instruments Incorporated at www.TI.com.
 **************************************************************************************************/
 
+
 #include "bsp.h"
 #include "mrfi.h"
 #include "nwk_types.h"
@@ -41,6 +42,9 @@
 #include "nwk.h"
 #include "nwk_pll.h"
 #include "uart_intfc.h"
+#include "framework.h"
+
+addr_t   sMyROMAddress = { 3 };
 
 static void startSystem(void);
 
@@ -59,34 +63,29 @@ static void start2Babble(void);
 
 void main (void)
 {
-  BSP_Init();
-
-  /* This call will fail because the join will fail since there is no Access Point
-   * in this scenario. but we don't care -- just use the default link token later.
-   * we supply a callback pointer to handle the message returned by the peer.
-   */
-  SMPL_Init(0);
+	
+	BSP_Init( );
+	
+	SMPL_Init( NULL );
+	
 	uart_intfc_init( );
 	
-  /* turn on LEDs. */
-  if (!BSP_LED2_IS_ON())
-  {
-    toggleLED(2);
-  }
-  if (!BSP_LED1_IS_ON())
-  {
-    toggleLED(1);
-  }
-
-	console("Start system\n");
+	/* turn on the radio so we are always able to receive data asynchronously */
+	SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, NULL );
+	
+	/* turn on LED. */
+	BSP_TURN_ON_LED1( );
+	BSP_TURN_ON_LED2( );
+	console( "Start iwsn system...\n" );
+	
   /* never coming back... */
-  startSystem();
+  framework_entry();
 
   /* but in case we do... */
   while (1) ;
 }
 
-static void startSystem()
+static void startSystem(void)
 {
   uint8_t msg[1], len;
 
@@ -94,8 +93,7 @@ static void startSystem()
    * The other LED will toggle when bad news message is sent.
    */
 
-  /* start the radio */
-  SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, 0);
+
 
   while (1)
   {

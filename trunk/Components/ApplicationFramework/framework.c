@@ -216,6 +216,8 @@ void checkUART(void)
 	
 	/* holds length of current message */
 	uint8_t len; 
+	MRFI_DelayMs(5); /* for sure we have receive all the message from uart */
+	
 	len = rx_receive( &cmd, MAX_APP_PAYLOAD );
 	if( len != 0 )
 	{
@@ -246,20 +248,6 @@ void checkUART(void)
 /* framwork entry */
 void framework_entry (void)
 {
-	
-	BSP_Init( );
-	
-	SMPL_Init( NULL );
-	
-	uart_intfc_init( );
-	
-	/* turn on the radio so we are always able to receive data asynchronously */
-	SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, NULL );
-	
-	/* turn on LED. */
-	BSP_TURN_ON_LED1( );
-	BSP_TURN_ON_LED2( );
-	console( "Start iwsn system...\n" );
 	
 	initOS();
 	runOS();

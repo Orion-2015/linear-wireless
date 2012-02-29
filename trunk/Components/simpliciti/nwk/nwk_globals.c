@@ -56,7 +56,7 @@
 /******************************************************************************
  * LOCAL VARIABLES
  */
-static const addr_t   sMyROMAddress = THIS_DEVICE_ADDRESS;
+extern addr_t   			sMyROMAddress;
 static addr_t         sAPAddress;
 static addr_t         sMyRAMAddress;
 static uint8_t        sRAMAddressIsSet = 0;

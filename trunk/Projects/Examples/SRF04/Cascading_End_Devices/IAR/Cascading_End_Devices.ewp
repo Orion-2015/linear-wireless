@@ -437,7 +437,6 @@
         <option>
           <name>Compiler Extra Options Edit</name>
           <state>-f"$PROJ_DIR$\Configuration\End_Device\smpl_config.dat"</state>
-          <state>-f"$PROJ_DIR$\Configuration\End_Device\nwk_address1.dat"</state>
           <state>-f"$PROJ_DIR$\Configuration\smpl_nwk_config.dat"</state>
         </option>
         <option>
@@ -448,6 +447,7 @@
           <state>$PROJ_DIR$\..\..\..\..\..\Components\mrfi</state>
           <state>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk</state>
           <state>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications</state>
+          <state>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework</state>
         </option>
         <option>
           <name>CCStdIncCheck</name>
@@ -4161,22 +4161,22 @@
   <group>
     <name>ApplicationFramework</name>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramwork\applications.h</name>
+      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\applications.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramwork\framework.c</name>
+      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\framework.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramwork\framework.h</name>
+      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\framework.h</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramwork\log.c</name>
+      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\log.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramwork\radio.c</name>
+      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\radio.c</name>
     </file>
     <file>
-      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramwork\route.c</name>
+      <name>$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\route.c</name>
     </file>
   </group>
   <group>
@@ -4309,6 +4309,15 @@
       <group>
         <name>End Device</name>
         <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\channel.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\logHandle.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\logLevel.c</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\..\Applications\main_babble.c</name>
           <excluded>
             <configuration>CC1110-EndDevice</configuration>
@@ -4318,24 +4327,21 @@
         <file>
           <name>$PROJ_DIR$\..\..\..\Applications\main_linear.c</name>
         </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\stationData.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\surplusCharge.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\test.c</name>
+        </file>
       </group>
     </group>
     <group>
       <name>Configuration</name>
       <group>
         <name>End Device</name>
-        <file>
-          <name>$PROJ_DIR$\Configuration\End_Device\nwk_address1.dat</name>
-          <excluded>
-            <configuration>CC1110-EndDevice2</configuration>
-          </excluded>
-        </file>
-        <file>
-          <name>$PROJ_DIR$\Configuration\End_Device\nwk_address2.dat</name>
-          <excluded>
-            <configuration>CC1110-EndDevice</configuration>
-          </excluded>
-        </file>
         <file>
           <name>$PROJ_DIR$\Configuration\End_Device\smpl_config.dat</name>
         </file>
