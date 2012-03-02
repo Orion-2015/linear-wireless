@@ -4328,6 +4328,9 @@
           <name>$PROJ_DIR$\..\..\..\Applications\main_linear.c</name>
         </file>
         <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\scan.c</name>
+        </file>
+        <file>
           <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\stationData.c</name>
         </file>
         <file>

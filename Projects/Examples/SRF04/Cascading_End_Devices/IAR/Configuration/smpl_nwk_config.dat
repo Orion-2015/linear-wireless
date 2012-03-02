@@ -53,7 +53,7 @@
 -DMAX_NWK_PAYLOAD=34
 
 /* Maximum size of application payload */
--DMAX_APP_PAYLOAD=30
+-DMAX_APP_PAYLOAD=160
 
 /* default Link token */
 -DDEFAULT_LINK_TOKEN=0x01020304

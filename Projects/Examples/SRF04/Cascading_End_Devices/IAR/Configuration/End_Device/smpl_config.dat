@@ -37,7 +37,7 @@
  * communication.  Access Points and Range Extenders can set this to 0 if they
  * do not host End Device objects
  */
--DNUM_CONNECTIONS=3
+-DNUM_CONNECTIONS=2
 
 /*  ***  Size of low level queues for sent and received frames. Affects RAM usage  ***  */
 
@@ -53,7 +53,7 @@
  * frames in this case are held here. In that case the output frame queue should 
  * be bigger. 
  */
--DSIZE_OUTFRAME_Q=2
+-DSIZE_OUTFRAME_Q=1
 
 
 

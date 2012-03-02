@@ -44,7 +44,7 @@
 #include "uart_intfc.h"
 #include "framework.h"
 
-addr_t   sMyROMAddress = { 3 };
+addr_t   sMyROMAddress = { 2 };
 
 static void startSystem(void);
 
