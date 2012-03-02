@@ -13,13 +13,14 @@ struct AppFrame* pInframe; /* used for application */
 
 
 
-BOOL registerTask(uint8 port, void (*taskFunction)(struct AppFrame *pAppInFrame, struct AppFrame* pAppOutFrame))
+BOOL registerTask(uint8 port, void (*taskFunction)(struct AppFrame *pAppInFrame, struct AppFrame* pAppOutFrame), uint8 options)
 {
 	if(port >= COMMAND_SIZE)
 	{
 		return FALSE;
 	}
 	taskList[port].taskFunction = taskFunction;
+	taskList[port].options = options;
 	return TRUE;	 
 }
 
@@ -41,12 +42,13 @@ void initOS(void)
 		taskList[i].taskFunction = NULL;
 	}
 	
-	registerTask(GETSURPLUSCHARGE, getSurplusChargeHandle);
-	registerTask(GETSTATIONDATA, getStationDataHandle);
-	registerTask(GETLOG, getLogHandle);
-	registerTask(GETTEST, getTestHandle);
-	registerTask(CHANNELHANDLE, channelHandle);
-	registerTask(LOGLEVELHANDLE, logLevelHandle);
+	registerTask(GETSURPLUSCHARGE, getSurplusChargeHandle, 0);
+	registerTask(GETSTATIONDATA, getStationDataHandle, 0);
+	registerTask(GETLOG, getLogHandle, 0);
+	registerTask(GETTEST, getTestHandle, 0);
+	registerTask(CHANNELHANDLE, channelHandle, 0);
+	registerTask(LOGLEVELHANDLE, logLevelHandle, 0);
+	registerTask(SCAN, scan, 0x01);
 	
 }
 
@@ -137,6 +139,15 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 	
 	if(pInframe->finnalDstAddr != myAddr)
 	{
+		/* append information to frame if append flag is true */
+		if(pInframe->finnalDstAddr < myAddr && (taskList[pInframe->port].options & 0x01))
+		{
+			if(taskList[pInframe->port].taskFunction != NULL)
+			{
+				taskList[pInframe->port].taskFunction(pInframe, NULL);
+			}
+		}
+		
 		rc = fowardFrame(pInframe);
 		if(rc == SMPL_SUCCESS)
 		{
