@@ -18,7 +18,7 @@ uint8 logLevel = INFO;
  */
 void log(uint8 logType, char* logContent)
 {
-	uint8 myAddr;
+
 	if(logType <= logLevel)
 	{
 		if(logIndex + strlen(logContent) + 1 > LOGBUFFERLEN)
@@ -29,11 +29,14 @@ void log(uint8 logType, char* logContent)
 		memcpy(logBuffer + logIndex, logContent, strlen(logContent) + 1);
 		logIndex += (strlen(logContent) + 1);
 		
+#ifdef COMDEBUG2		
+		uint8 myAddr;
 		myAddr = getMyAddress();
 		if(myAddr == APADDRESS)
 		{
 			console(logContent);
 		}
+#endif	
 	}
 }
 

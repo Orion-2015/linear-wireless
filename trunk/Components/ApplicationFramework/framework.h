@@ -11,12 +11,7 @@
 #include "nwk_globals.h"
 #include "bsp_leds.h"
 #include "bsp_buttons.h"
-
-#ifdef MRFI_CC430
-#include "uart_intfc_cc430.h"
-#else
-#include "uart_intfc.h"
-#endif
+#include "uart.h"
 
 
 enum LOGTYPE { ERROR, WARN, INFO, TRACE};
@@ -25,7 +20,9 @@ enum LOGTYPE { ERROR, WARN, INFO, TRACE};
 #define APADDRESS	1
 #define SEND_UART_ECHO
 #define APPHEADSIZE 8
-#define MSGMAXLEN	(MAX_APP_PAYLOAD - APPHEADSIZE)
+//#define MSGMAXLEN	(MAX_APP_PAYLOAD - APPHEADSIZE)
+
+#define MSGMAXLEN	10
 
 struct AppFrame
 {
@@ -75,7 +72,9 @@ void framework_entry (void);
 smplStatus_t send(struct AppFrame* data, uint8 len);
 uint8 getNextAddress(uint8 originalAddr, uint8 finnalDstAddr, uint8 index);
 void sendTest2AP(void);
-bool consoleAP(const void* data);
+void consoleAP(char* data);
+
+void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutframe);
 
 #include "applications.h"
 

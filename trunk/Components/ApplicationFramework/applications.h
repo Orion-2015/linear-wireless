@@ -11,6 +11,7 @@
 #define CHANNELHANDLE			4
 #define LOGLEVELHANDLE  	5
 #define SCAN					  	6
+#define DETECT  			  	7
 
 void getSurplusChargeHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 void getStationDataHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
@@ -19,5 +20,5 @@ void getTestHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 void channelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 void logLevelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 void scan(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
-
+void detect(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 #endif
