@@ -49,6 +49,7 @@ void initOS(void)
 	registerTask(CHANNELHANDLE, channelHandle, 0);
 	registerTask(LOGLEVELHANDLE, logLevelHandle, 0);
 	registerTask(SCAN, scan, 0x01);
+	registerTask(DETECT, detect, 0);
 	
 }
 
@@ -84,15 +85,18 @@ void checkButton(void)
  */
 void send2Computer(struct AppFrame* pFrame)
 {
-	console("Receive new message\n");
-	sprintf(logTemp, "port is %d\ncontent is ", pFrame->port);
-	console(logTemp);
+#ifdef COMDEBUG
+	printf("Receive new message\n");
+	printf("port is %d\ncontent is ", pFrame->port);
 	if(pFrame->numUnits != 1)
 	{
 		putchar(pFrame->numUnits);
 		putchar(pFrame->currentUnit);
 	}
-	tx_send_wait((char*)pFrame->msg, pFrame->len);
+#endif	
+	printf("startdata");
+	putstr((uint8*)pFrame->msg, pFrame->len);	
+	printf("bupt");
 	return;
 }
 
@@ -151,13 +155,22 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 		rc = fowardFrame(pInframe);
 		if(rc == SMPL_SUCCESS)
 		{
-			sprintf(logTemp, "Forward to %d success\n", pInframe->dstAddr);			
+			sprintf((char*)logTemp, "Forward to %d success\n", pInframe->dstAddr);			
 			log(INFO, logTemp);
 		}
 		else
 		{
-			sprintf(logTemp, "Forward to %d failed\n", pInframe->dstAddr);			
-			log(INFO, logTemp);
+			/* if forward failed and is scan application, then go back route */
+			if(SCAN == pInframe->port)
+			{
+				callApplication(pInframe, pOutFrame);
+				log(INFO, "Scan back\n");
+			}
+			else
+			{
+				sprintf((char*)logTemp, "Forward to %d failed\n", pInframe->dstAddr);			
+				log(INFO, logTemp);
+			}
 		}		
 	}
 	else
@@ -189,22 +202,7 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 			/* else call user callback function to handle request */
 			else
 			{
-				if(taskList[pInframe->port].taskFunction != NULL)
-				{
-					pOutFrame->len = 0; /* to avoid application does not set msg point */
-					taskList[pInframe->port].taskFunction(pInframe, pOutFrame);
-					
-					pOutFrame->port = pInframe->port;
-					pOutFrame->finnalDstAddr = pInframe->originalAddr;
-					pOutFrame->originalAddr = getMyAddress();
-					pOutFrame->srcAddr = getMyAddress();
-					if(pOutFrame->len != 0)
-					{
-						rc = send(pOutFrame, sizeof(struct AppFrame));
-						sprintf(logTemp, "Send result: %d\n", rc);
-						consoleAP(logTemp);
-					}
-				}
+				callApplication(pInframe, pOutFrame);
 			}
 		}
 		else
@@ -214,39 +212,60 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 	}
 }
 
-bool consoleAP(const void* data)
+void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 {
-	if(getMyAddress() != APADDRESS) return false;
-	return tx_send_wait(data, strlen(data));
+	smplStatus_t rc;
+	if(taskList[pInframe->port].taskFunction != NULL)
+	{
+		pOutFrame->len = 0; /* to avoid application does not set msg point */
+		taskList[pInframe->port].taskFunction(pInframe, pOutFrame);
+		
+		pOutFrame->port = pInframe->port;
+		pOutFrame->finnalDstAddr = pInframe->originalAddr;
+		pOutFrame->originalAddr = getMyAddress();
+		pOutFrame->srcAddr = getMyAddress();
+		if(pOutFrame->len != 0)
+		{
+			rc = send(pOutFrame, sizeof(struct AppFrame));
+			sprintf(logTemp, "Send result: %d\n", rc);
+			consoleAP(logTemp);
+		}
+	}
+}
+void consoleAP(char* data)
+{
+	if(getMyAddress() != APADDRESS) return;
+	putstr((uint8*)data, strlen((char*)data));
+	return;
 }
 
 void checkUART(void)
 {
 	struct AppFrame *pInFrame = (struct AppFrame *)rx;
-	struct UartCommand cmd;
+	struct UartCommand *cmd;
 	
 	/* holds length of current message */
-	uint8_t len; 
-	MRFI_DelayMs(5); /* for sure we have receive all the message from uart */
+	int8 len; 
 	
-	len = rx_receive( &cmd, MAX_APP_PAYLOAD );
-	if( len != 0 )
+	len = rx_receive_line( (uint8**)&cmd, MAX_APP_PAYLOAD );
+	len -= 2; /* remove 0x0d0a end with symbol */
+	if( len >= 3 )
 	{
-#ifdef	SEND_UART_ECHO
-		console("Get command: ");
-		tx_send_hex_wait((const uint8*)&cmd, len);
-		console(",waiting for result\n");
+#ifdef	COMDEBUG
+		printf("Get command: ");
+		puthex((uint8*)cmd, len);
+		printf(",waiting for result\n");
 #endif
 				
 		/* simulate rf frame */
-		pInFrame->finnalDstAddr = cmd.finnalDstAddr;
+		pInFrame->finnalDstAddr = cmd->finnalDstAddr;
 		pInFrame->srcAddr = APADDRESS; /* from to myself */
 		pInFrame->originalAddr = APADDRESS;
 		pInFrame->dstAddr = getMyAddress();
-		pInFrame->port = cmd.port;
+		pInFrame->port = cmd->port;
 		pInFrame->len = len - UARTCOMMANDHEADSIZE;
 		
-		memcpy(pInFrame->msg, cmd.msg, cmd.len); 
+		memcpy(pInFrame->msg, cmd->msg, cmd->len); 
 		
 		if(pInFrame->dstAddr == APADDRESS)
 		{

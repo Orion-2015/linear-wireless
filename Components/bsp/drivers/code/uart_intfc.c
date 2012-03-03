@@ -450,6 +450,20 @@ int rx_receive( void* data, int max_len )
   return cnt; /* indicate the number of bytes retrieved from the buffer */
   }
 
+/* receive a command from uart, end with 0x0d0a */
+int rx_receive_line( uint8* data, int max_len )
+{
+	uint8 cnt = 0;
+	while(cnt <= max_len)
+	{
+		cnt += rx_receive((uint8*)(data + cnt), max_len - cnt);
+		if(cnt >= 2 && data[cnt - 2] == 0x0d && data[cnt - 1] == 0x0a)
+		{
+			break;
+		}
+	}
+	return cnt;
+}
 /******************************************************************************
  * @fn          uart_busy
  *

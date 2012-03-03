@@ -41,15 +41,11 @@
 #include "bsp_buttons.h"
 #include "nwk.h"
 #include "nwk_pll.h"
-#include "uart_intfc.h"
 #include "framework.h"
+#include "uart.h"
 
-addr_t   sMyROMAddress = { 2 };
+addr_t   sMyROMAddress = { 3 };
 
-static void startSystem(void);
-
-void toggleLED(uint8_t);
-static void start2Babble(void);
 
 /* For FHSS systems, calls to NWK_DELAY() will also call nwk_pllBackgrounder()
  * during the delay time so if you use the system delay mechanism in a loop,
@@ -66,9 +62,10 @@ void main (void)
 	
 	BSP_Init( );
 	
-	SMPL_Init( NULL );
+	SET_MAIN_CLOCK_SOURCE(CRYSTAL);   
+  initUART();
 	
-	uart_intfc_init( );
+	SMPL_Init( NULL );
 	
 	/* turn on the radio so we are always able to receive data asynchronously */
 	SMPL_Ioctl( IOCTL_OBJ_RADIO, IOCTL_ACT_RADIO_RXON, NULL );
@@ -76,78 +73,11 @@ void main (void)
 	/* turn on LED. */
 	BSP_TURN_ON_LED1( );
 	BSP_TURN_ON_LED2( );
-	console( "Start iwsn system...\n" );
+	printf( "Start iwsn system...\n" );
 	
   /* never coming back... */
   framework_entry();
 
   /* but in case we do... */
   while (1) ;
-}
-
-static void startSystem(void)
-{
-  uint8_t msg[1], len;
-
-  /* Turn off LEDs. Check for bad news will toggle one LED. 
-   * The other LED will toggle when bad news message is sent.
-   */
-
-
-
-  while (1)
-  {
-    //toggleLED(1);
-    /* check "sensor" to see if we need to send an alert */
-    if (BSP_BUTTON1() || BSP_BUTTON2())
-    {
-      /* sensor activated. start babbling. */
-      start2Babble();
-    }
-
-    /* got message? */
-    if (SMPL_SUCCESS == SMPL_Receive(SMPL_LINKID_LINEAR, msg, &len))
-    {
-      /* got something. is it bad news? */
-      if (len && (msg[0] == BAD_NEWS))
-      {
-        /* Yep. start babbling. If there is a filtering token make
-         * sure the token matches the expected value.
-         */
-        //start2Babble();
-				console("New message\n");
-      }
-    }
-  }
-}
-
-
-void toggleLED(uint8_t which)
-{
-  if (1 == which)
-  {
-    BSP_TOGGLE_LED1();
-  }
-  else if (2 == which)
-  {
-    BSP_TOGGLE_LED2();
-  }
-  return;
-}
-
-
-static void start2Babble()
-{
-  uint8_t msg[1];
-
-  /* Send the bad news message. To prevent confusion with different "networks"
-   * such as neighboring smoke alarm arrays send a token controlled by a DIP 
-   * switch, for example, and filter in this token. 
-   */
-  msg[0] = BAD_NEWS;
-
-	/* babble... */
-	SMPL_Send_Linear(0x01, msg, sizeof(msg));
-	toggleLED(2);
-  
 }

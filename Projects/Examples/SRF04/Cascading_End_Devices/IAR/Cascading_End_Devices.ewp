@@ -4193,10 +4193,13 @@
         <name>$PROJ_DIR$\..\..\..\..\..\Components\bsp\bsp_macros.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\bsp\drivers\code\uart.c</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\bsp\Hal.h</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\bsp\drivers\code\uart_intfc.c</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\bsp\uart.c</name>
+      </file>
+      <file>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\bsp\uart.h</name>
       </file>
     </group>
     <group>
@@ -4310,6 +4313,9 @@
         <name>End Device</name>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\channel.c</name>
+        </file>
+        <file>
+          <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\detect.c</name>
         </file>
         <file>
           <name>$PROJ_DIR$\..\..\..\..\..\Components\Applications\logHandle.c</name>

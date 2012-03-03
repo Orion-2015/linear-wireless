@@ -76,5 +76,5 @@ int rx_receive( void* data, int max_len );
 bool uart_busy( void );
 bool console(const void* data);
 bool tx_send_hex_wait(const uint8* data, uint8 len);
-
+int rx_receive_line( uint8* data, int max_len );
 #endif
