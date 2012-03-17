@@ -849,7 +849,7 @@ static uint8_t map_lid2idx(linkID_t lid, uint8_t *idx)
 {
   uint8_t     i;
   connInfo_t *ptr = sPersistInfo.connStruct;
-
+/*find compare ED's  index in map*/
   for (i=0; i<SYS_NUM_CONNECTIONS; ++i, ++ptr)
   {
     if ((CONNSTATE_CONNECTED == ptr->connState) && (ptr->thisLinkID == lid))

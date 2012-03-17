@@ -143,12 +143,12 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 	
 	if(pInframe->finnalDstAddr != myAddr)
 	{
-		/* append information to frame if append flag is true */
+		/* append information to frame if append flag is true ,options~~scan,control sequence*/
 		if(pInframe->finnalDstAddr < myAddr && (taskList[pInframe->port].options & 0x01))
 		{
 			if(taskList[pInframe->port].taskFunction != NULL)
 			{
-				taskList[pInframe->port].taskFunction(pInframe, NULL);
+				taskList[pInframe->port].taskFunction(pInframe, NULL);  /*scan,pOutFrame=NULL*/
 			}
 		}
 		

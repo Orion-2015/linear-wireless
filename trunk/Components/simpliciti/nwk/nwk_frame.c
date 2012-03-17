@@ -444,7 +444,7 @@ static void dispatchFrame(frameInfo_t *fiPtr)
     return;
   }
 
-  /* Make sure encyrption bit conforms to our security support context. */
+  /* Make sure encryption bit conforms to our security support context. */
 #if defined(SMPL_SECURE)
   if (!(GET_FROM_FRAME(MRFI_P_PAYLOAD(&fiPtr->mrfiPkt), F_ENCRYPT_OS)))
   {

@@ -64,7 +64,7 @@
  * terminate after some amount of time. The intention is that this guard be
  * the exception. The intention of the SimpliciTI design is that the
  * temporal contiguity between the listen and the reception of the link frame
- * from the peer be very tight. The SMPL_LinkListen() should be termninated
+ * from the peer be very tight. The SMPL_LinkListen() should be terminated
  * by the reception of the link frame. But in case it does not receive the frame
  * the support below allows intervention by the application.
  */
@@ -266,7 +266,7 @@ smplStatus_t SMPL_Send(linkID_t lid, uint8_t *msg, uint8_t len)
 
 smplStatus_t SMPL_Send_Linear(uint8 addr, uint8_t *msg, uint8_t len)
 {
-	connInfo_t   *pCInfo = nwk_getConnInfo(SMPL_LINKID_LINEAR);
+	connInfo_t   *pCInfo = nwk_getConnInfo(SMPL_LINKID_LINEAR);/*delete?*/
 	pCInfo->peerAddr[0] = addr;	
   return SMPL_SendOpt(SMPL_LINKID_LINEAR, msg, len, SMPL_TXOPTION_NONE);
 }
@@ -307,7 +307,7 @@ smplStatus_t SMPL_SendOpt(linkID_t lid, uint8_t *msg, uint8_t len, txOpt_t optio
   uint8_t  loc;
 #endif
 
-  /* we have the connection info for this Link ID. make sure it is valid. */
+  /* we have the connection info for this Link ID. make sure it is valid.(check for connectstate and port) */
    if (!pCInfo || ((rc=nwk_checkConnInfo(pCInfo, CHK_TX)) != SMPL_SUCCESS))
   {
     return rc;
@@ -393,7 +393,7 @@ smplStatus_t SMPL_SendOpt(linkID_t lid, uint8_t *msg, uint8_t len, txOpt_t optio
 
   NWK_CHECK_FOR_SETRX(radioState);
   NWK_REPLY_DELAY();
-  NWK_CHECK_FOR_RESTORE_STATE(radioState);
+  NWK_CHECK_FOR_RESTORE_STATE(radioState);  /*MRFI_RX_ON_&_IDLE*/
 
   {
     bspIState_t intState;
