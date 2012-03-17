@@ -74,7 +74,7 @@
   #define MRFI_RSSI_VALID_DELAY_US    1300
 
 #else
-  #error "ERROR: RSSI Offset value not defined for this radio.
+  #error "ERROR: RSSI Offset value not defined for this radio."
 #endif
 
 

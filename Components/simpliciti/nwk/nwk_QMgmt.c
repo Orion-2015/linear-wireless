@@ -180,7 +180,7 @@ frameInfo_t *nwk_QfindSlot(uint8_t which)
     }
   }
 
-  /* did we find anything? */
+  /* did we find anything(available)? */
   if (!newFI)
   {
     /* queue was full. cast-out happens here...unless... */

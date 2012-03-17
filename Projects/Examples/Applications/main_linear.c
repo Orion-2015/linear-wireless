@@ -63,7 +63,7 @@ void main (void)
 	BSP_Init( );
 	
 	SET_MAIN_CLOCK_SOURCE(CRYSTAL);   
-  initUART();
+       initUART();
 	
 	SMPL_Init( NULL );
 	
