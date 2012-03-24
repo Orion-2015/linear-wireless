@@ -4220,13 +4220,13 @@
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_api.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_api.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_api.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_app.h</name>
@@ -4235,13 +4235,13 @@
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_frame.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_frame.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_frame.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_globals.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_globals.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_globals.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_QMgmt.c</name>
@@ -4259,37 +4259,37 @@
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_freq.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_freq.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_freq.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_ioctl.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_ioctl.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_ioctl.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_join.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_join.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_join.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_link.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_link.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_link.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_mgmt.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_mgmt.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_mgmt.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_ping.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_ping.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_ping.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_pll.c</name>
@@ -4301,7 +4301,7 @@
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_security.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_security.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_security.h</name>
       </file>
     </group>
   </group>

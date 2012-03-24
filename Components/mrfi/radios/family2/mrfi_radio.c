@@ -1984,7 +1984,7 @@ void MRFI_DelayMs(uint16_t milliseconds)
 void MRFI_ReplyDelay()
 {
   bspIState_t s;
-  uint16_t    milliseconds = sReplyDelayScalar;
+  uint16_t    milliseconds = sReplyDelayScalar * 2;
 
   BSP_ENTER_CRITICAL_SECTION(s);
   sReplyDelayContext = 1;

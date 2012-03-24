@@ -268,7 +268,7 @@ smplStatus_t SMPL_Send_Linear(uint8 addr, uint8_t *msg, uint8_t len)
 {
 	connInfo_t   *pCInfo = nwk_getConnInfo(SMPL_LINKID_LINEAR);/*delete?*/
 	pCInfo->peerAddr[0] = addr;	
-  return SMPL_SendOpt(SMPL_LINKID_LINEAR, msg, len, SMPL_TXOPTION_NONE);
+  return SMPL_SendOpt(SMPL_LINKID_LINEAR, msg, len, SMPL_TXOPTION_ACKREQ);
 }
 
 

@@ -270,6 +270,8 @@ frameInfo_t *nwk_buildAckReqFrame(uint8_t port, uint8_t *msg, uint8_t len, uint8
  *
  * @return      void
  */
+
+extern char roomFlag = 1;
 void MRFI_RxCompleteISR()
 {
   frameInfo_t  *fInfoPtr;
@@ -284,6 +286,7 @@ void MRFI_RxCompleteISR()
 	else
 	{
 		fInfoPtr = NULL;
+		roomFlag = 0;
 	}
 
   return;

@@ -18,6 +18,40 @@ struct AppFrame* receive(void)
 	}
 }
 
+char* getErrorText(smplStatus_t rc)
+{
+	switch(rc)
+	{
+	case SMPL_SUCCESS:
+		return "SMPL_SUCCESS";
+	case SMPL_TIMEOUT:
+		return "SMPL_TIMEOUT";
+	case SMPL_BAD_PARAM:
+		return "SMPL_BAD_PARAM";
+	case SMPL_NOMEM:
+		return "SMPL_NOMEM";
+	case SMPL_NO_FRAME:
+		return "SMPL_NO_FRAME";
+	case SMPL_NO_LINK:
+		return "SMPL_NO_LINK";
+	case SMPL_NO_JOIN:
+		return "SMPL_NO_JOIN";
+	case SMPL_NO_CHANNEL:
+		return "SMPL_NO_CHANNEL";
+	case SMPL_NO_PEER_UNLINK:
+		return "SMPL_NO_PEER_UNLINK";
+	case SMPL_TX_CCA_FAIL:
+		return "SMPL_TX_CCA_FAIL";
+	case SMPL_NO_PAYLOAD:
+		return "SMPL_NO_PAYLOAD";
+	case SMPL_NO_AP_ADDRESS:
+		return "SMPL_NO_AP_ADDRESS";
+	case SMPL_NO_ACK:
+		return "SMPL_NO_ACK";
+	default:
+		return "Unknown rc";
+	}
+}
 smplStatus_t send(struct AppFrame* data, uint8 len)
 {
 	smplStatus_t 	rc;
@@ -27,7 +61,17 @@ smplStatus_t send(struct AppFrame* data, uint8 len)
 	{
 		data->dstAddr = nextAddr;
 		rc = SMPL_Send_Linear(data->dstAddr, (uint8_t*)data, len);
-		BSP_TOGGLE_LED1();
+    if(rc == SMPL_SUCCESS)
+		{
+			BSP_TOGGLE_LED1();	
+			sprintf((char*)logTemp, "Send to %d success\n", data->dstAddr);			
+			log(ERROR, logTemp);
+		}
+		else
+		{
+			sprintf((char*)logTemp, "Send to %d failed:%s\n", data->dstAddr, getErrorText(rc));			
+			log(ERROR, logTemp);			
+		}
 		return rc;
 	}
 	return 	SMPL_NO_LINK;

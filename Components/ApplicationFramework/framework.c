@@ -10,8 +10,21 @@
 static struct _task taskList[COMMAND_SIZE];
 struct AppFrame* pInframe; /* used for application */
 
-
-
+extern char roomFlag;
+extern char getAckFlag;
+void checkFlag()
+{
+		if(roomFlag == 0)
+		{
+			printf("no room in last receive------------------\n");
+			roomFlag = 1;
+		}
+		if(getAckFlag == 1)
+		{
+			printf("i get ack-------------------------\n");
+			getAckFlag = 0;
+		}
+}
 
 BOOL registerTask(uint8 port, void (*taskFunction)(struct AppFrame *pAppInFrame, struct AppFrame* pAppOutFrame), uint8 options)
 {
@@ -61,7 +74,7 @@ void runOS(void)
 		if(getMyAddress() == APADDRESS)
 		{
 			checkUART();
-			checkButton();
+			//checkButton();
 		}
 	}
 }
@@ -126,6 +139,7 @@ void checkRF(void)
 	struct AppFrame *appFrame;
 	appFrame = receive();
 	if(appFrame == NULL) return;
+	checkFlag();
 	handleRF(appFrame, FALSE);
 	return;
 }
@@ -226,17 +240,27 @@ void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 		pOutFrame->srcAddr = getMyAddress();
 		if(pOutFrame->len != 0)
 		{
+			MRFI_DelayMs(50);
 			rc = send(pOutFrame, sizeof(struct AppFrame));
+			if(rc == SMPL_SUCCESS)
+			{
 			sprintf(logTemp, "Send result: %d\n", rc);
 			consoleAP(logTemp);
+			}			
 		}
 	}
 }
+
+void debug(char* data)
+{
+	putstr((uint8*)data, strlen((char*)data));
+	return;
+}
+
 void consoleAP(char* data)
 {
 	if(getMyAddress() != APADDRESS) return;
-	putstr((uint8*)data, strlen((char*)data));
-	return;
+	debug(data);
 }
 
 void checkUART(void)
@@ -249,10 +273,11 @@ void checkUART(void)
 	
 	len = rx_receive_line( (uint8**)&cmd, MAX_APP_PAYLOAD );
 	len -= 2; /* remove 0x0d0a end with symbol */
-	if( len >= 3 )
+	if( len >= UARTCOMMANDMINSIZE )
 	{
+		checkFlag();
 #ifdef	COMDEBUG
-		printf("Get command: ");
+		printf("\nGet command: ");
 		puthex((uint8*)cmd, len);
 		printf(",waiting for result\n");
 #endif
