@@ -53,7 +53,7 @@
 -DMAX_NWK_PAYLOAD=34
 
 /* Maximum size of application payload */
--DMAX_APP_PAYLOAD=100
+-DMAX_APP_PAYLOAD=50
 
 /* default Link token */
 -DDEFAULT_LINK_TOKEN=0x01020304
@@ -65,7 +65,7 @@
 -DxFREQUENCY_AGILITY
 
 /* Remove 'x' corruption to enable application autoacknowledge support. Requires extended API as well */
--DxAPP_AUTO_ACK
+-DAPP_AUTO_ACK
 
 /* Remove 'x' corruption to enable Extended API */
 -DxEXTENDED_API

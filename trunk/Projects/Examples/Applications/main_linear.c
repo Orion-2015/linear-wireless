@@ -44,7 +44,7 @@
 #include "framework.h"
 #include "uart.h"
 
-addr_t   sMyROMAddress = { 3 };
+addr_t   sMyROMAddress = { 2 };
 
 
 /* For FHSS systems, calls to NWK_DELAY() will also call nwk_pllBackgrounder()
@@ -63,7 +63,7 @@ void main (void)
 	BSP_Init( );
 	
 	SET_MAIN_CLOCK_SOURCE(CRYSTAL);   
-       initUART();
+ 	initUART();
 	
 	SMPL_Init( NULL );
 	

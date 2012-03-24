@@ -29,13 +29,8 @@ void log(uint8 logType, char* logContent)
 		memcpy(logBuffer + logIndex, logContent, strlen(logContent) + 1);
 		logIndex += (strlen(logContent) + 1);
 		
-#ifdef COMDEBUG2		
-		uint8 myAddr;
-		myAddr = getMyAddress();
-		if(myAddr == APADDRESS)
-		{
-			console(logContent);
-		}
+#ifdef COMDEBUG		
+		debug(logContent);
 #endif	
 	}
 }

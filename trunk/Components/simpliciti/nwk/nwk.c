@@ -597,6 +597,7 @@ smplStatus_t nwk_checkConnInfo(connInfo_t *ptr, uint8_t which)
  *
  * @return   0 if connection specified in frame is not valid, otherwise non-zero.
  */
+volatile char getAckFlag = 0;
 uint8_t nwk_isConnectionValid(mrfiPacket_t *frame, linkID_t *lid)
 {
   uint8_t       i;
@@ -641,6 +642,7 @@ uint8_t nwk_isConnectionValid(mrfiPacket_t *frame, linkID_t *lid)
               if (ptr->ackTID == GET_FROM_FRAME(MRFI_P_PAYLOAD(frame), F_TRACTID_OS))
               {
                 ptr->ackTID = 0;
+								getAckFlag = 1;								
               }
               /* This causes the frame to be dropped. All ack frames are
                * dropped.
