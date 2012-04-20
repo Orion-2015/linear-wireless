@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<project>
+  <fileVersion>2</fileVersion>
+  <fileChecksum>2573267243</fileChecksum>
+  <configuration>
+    <name>Debug</name>
+    <outputs>
+      <file>$PROJ_DIR$\Debug\Obj\main.r51</file>
+      <file>$PROJ_DIR$\drivers\bsp_buttons.c</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stddef.h</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdbool.h</file>
+      <file>$TOOLKIT_DIR$\inc\clib\sysmac.h</file>
+      <file>$PROJ_DIR$\drivers\bsp.h</file>
+      <file>$PROJ_DIR$\drivers\bsp_board_defs.h</file>
+      <file>$PROJ_DIR$\drivers\bsp_8051_defs.h</file>
+      <file>$PROJ_DIR$\drivers\pp_utils.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\bsp.r51</file>
+      <file>$PROJ_DIR$\drivers\bsp_leds.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\bsp.pbi</file>
+      <file>$PROJ_DIR$\drivers\bsp_drivers.c</file>
+      <file>$PROJ_DIR$\drivers\bsp_board.c</file>
+      <file>$PROJ_DIR$\drivers\bsp_driver_defs.h</file>
+      <file>$PROJ_DIR$\drivers\bsp_led_defs.h</file>
+      <file>$PROJ_DIR$\drivers\bsp_generic_leds.h</file>
+      <file>$PROJ_DIR$\drivers\bsp_buttons.h</file>
+      <file>$PROJ_DIR$\drivers\bsp_button_defs.h</file>
+      <file>$PROJ_DIR$\drivers\Hal.h</file>
+      <file>$TOOLKIT_DIR$\inc\ioCC1110.h</file>
+      <file>$PROJ_DIR$\drivers\bsp_macros.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\rf.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\rf.r51</file>
+      <file>$PROJ_DIR$\Debug\Obj\nwk.r51</file>
+      <file>$PROJ_DIR$\Debug\Obj\nwk.pbi</file>
+      <file>$PROJ_DIR$\Debug\Obj\test.r51</file>
+      <file>$PROJ_DIR$\Debug\Obj\test.pbi</file>
+      <file>$PROJ_DIR$\drivers\bsp_leds.c</file>
+      <file>$PROJ_DIR$\Debug\Obj\uart.pbi</file>
+      <file>$PROJ_DIR$\uart.c</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdarg.h</file>
+      <file>$PROJ_DIR$\drivers\includes.h</file>
+      <file>$TOOLKIT_DIR$\inc\clib\string.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\wireless.pbd</file>
+      <file>$PROJ_DIR$\Debug\Exe\wireless.d51</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdio.h</file>
+      <file>$TOOLKIT_DIR$\inc\clib\stdlib.h</file>
+      <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+      <file>$PROJ_DIR$\drivers\bsp_generic_buttons.h</file>
+      <file>$TOOLKIT_DIR$\config\devices\Texas Instruments\lnk51ew_cc1110F32.xcl</file>
+      <file>$TOOLKIT_DIR$\lib\clib\cl-pli-nlxd-1e16x01.r51</file>
+      <file>$PROJ_DIR$\Debug\Obj\uart.r51</file>
+      <file>$PROJ_DIR$\uart.h</file>
+      <file>$PROJ_DIR$\drivers\uart.h</file>
+      <file>$PROJ_DIR$\rf.c</file>
+      <file>$PROJ_DIR$\rf.h</file>
+      <file>$PROJ_DIR$\nwk.c</file>
+      <file>$PROJ_DIR$\nwk.h</file>
+      <file>$PROJ_DIR$\drivers\bsp.c</file>
+      <file>$PROJ_DIR$\application.h</file>
+      <file>$PROJ_DIR$\test.c</file>
+      <file>$PROJ_DIR$\drivers\uart.c</file>
+      <file>$PROJ_DIR$\main.c</file>
+    </outputs>
+    <file>
+      <name>$PROJ_DIR$\uart.c</name>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 43 3 2 4</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 43 3 2 4</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Obj\wireless.pbd</name>
+      <inputs>
+        <tool>
+          <name>BILINK</name>
+          <file> 11 38 25 22 27 29</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\Debug\Exe\wireless.d51</name>
+      <inputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 40 9 0 24 23 26 42 41</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\rf.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 23</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 22</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 44 19 20 3 5 6 7 8 21 48 33 4</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 48 33 4</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\nwk.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 24</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 25</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 48 5 6 7 8 20 21 46</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 48 46</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\drivers\bsp.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 9</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 11</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 5 6 7 8 20 21 14 13 12 10 15 16 17 18 39 28 1</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 5 6 7 8 21 14</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\test.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 26</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 27</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 50 48 5 6 7 8 20 21</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 50 48</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\drivers\uart.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 42</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 29</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 5 6 7 8 20 21 32 3 33 4 36 31 37 19 44</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 5 6 7 8 21 32 20 3 33 4 36 31 37 19 44</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>$PROJ_DIR$\main.c</name>
+      <outputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 0</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 38</file>
+        </tool>
+      </outputs>
+      <inputs>
+        <tool>
+          <name>ICC8051</name>
+          <file> 5 6 7 8 20 21 10 15 16 44 19 3 46 48 50</file>
+        </tool>
+        <tool>
+          <name>BICOMP</name>
+          <file> 46 48 50</file>
+        </tool>
+      </inputs>
+    </file>
+    <file>
+      <name>[ROOT_NODE]</name>
+      <outputs>
+        <tool>
+          <name>XLINK</name>
+          <file> 35</file>
+        </tool>
+      </outputs>
+    </file>
+  </configuration>
+  <configuration>
+    <name>Release</name>
+    <outputs/>
+    <forcedrebuild>
+      <name>[MULTI_TOOL]</name>
+      <tool>XLINK</tool>
+    </forcedrebuild>
+  </configuration>
+</project>
+
+
