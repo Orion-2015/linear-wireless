@@ -150,6 +150,15 @@ void send2Computer(struct AppFrame* pFrame)
 		printf("failTimes is %d\n", failTimes);
 		printf("successTimes is %d\n", successTimes);
 	}	
+	else if(pFrame->port == GETLOG)
+	{
+		uint8 msgIndex = 0;
+		while(msgIndex<=pFrame->len)
+		{		
+			getLogInfor(&(pFrame->msg[msgIndex]));
+			msgIndex += (pFrame->msg[0]+1);		
+		}	
+	}
 	else
 	{
 		putstr((uint8*)pFrame->msg, pFrame->len);
@@ -175,17 +184,30 @@ void sendTest2AP(void)
 	appFrame->len = strlen(logTemp);
 	/* send frame */
 	rc = send(appFrame, sizeof(struct AppFrame));
-	if(rc != SMPL_SUCCESS)
+	if(rc == SMPL_SUCCESS)
 	{
+		logTemp[0] = 2;/* the length of logTemp*/
+		//logTemp[1] = INFO_SEND;
+		logTemp[1] = SEND_TEST_2AP_SUCCESSED;
+		log(INFO_SEND, logTemp);
+	}
+	else
+	{
+		logTemp[0] = 3;/* the length of logTemp*/
+		//logTemp[1] = ERROR_SEND;
+		logTemp[1] = SEND_TEST_2AP_FAILED;
+		logTemp[2] = rc;
+		log(ERROR_SEND, logTemp);
+	}
+/*	{
 #ifdef LOGINFO
 		sprintf((char*)logTemp, "ST2ApF:%d\n", rc);			
 		log(ERROR, logTemp);
 #else
 		log(ERROR, "Send Test2AP failed");
 #endif
-	}
+	}*/
 }
-
 
 void checkRF(void)
 {
@@ -224,12 +246,20 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 		rc = fowardFrame(pInframe);
 		if(rc == SMPL_SUCCESS)
 		{
-#ifndef LOGINFO
+			logTemp[0] = 3;/* the length of logTemp*/
+			//logTemp[1] = INFO_SEND;
+			logTemp[1] = FORWARD_SUCCESSED;
+			logTemp[2] = pInframe->dstAddr;
+			log(INFO_SEND, logTemp);
+
+/*#ifndef LOGINFO
 			sprintf((char*)logTemp, "Forward to %d success\n", pInframe->dstAddr);
 #else
 			sprintf((char*)logTemp, "FT %dS\n", pInframe->dstAddr);
-#endif
 			log(INFO, logTemp);
+#endif
+		*/
+			
 		}
 		else
 		{
@@ -237,20 +267,35 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 			if(SCAN == pInframe->port && pInframe->finnalDstAddr > myAddr)
 			{
 				callApplication(pInframe, pOutFrame);
+				logTemp[0] = 2;/* the length of logTemp*/
+				//logTemp[1] = INFO_OTHER;
+				logTemp[1] = SCAN_BACK;
+				log(INFO_OTHER, logTemp);
+/*
 #ifndef LOGINFO
 				log(INFO, "Scan back\n");
 #else				
 				log(INFO, "SB\n");
-#endif				
+#endif	
+*/
 			}
 			else
 			{
+				logTemp[0] = 4;/* the length of logTemp*/
+				//logTemp[1] = ERROR_SEND;
+				logTemp[1] = FORWARD_FAILED;
+				logTemp[2] = pInframe->dstAddr;
+				logTemp[3] = rc;
+				log(ERROR_SEND, logTemp);
+			
+			/*
 #ifndef LOGINFO				
 				sprintf((char*)logTemp, "Forward to %d failed\n", pInframe->dstAddr);	
 #else
 				sprintf((char*)logTemp, "FT %d F\n", pInframe->dstAddr);	
 #endif		
 				log(INFO, logTemp);
+*/
 			}
 		}		
 	}
@@ -299,7 +344,11 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 		}
 		else
 		{
-			log(ERROR, "Error port");
+			  logTemp[0] = 2;/* the length of logTemp*/
+				//logTemp[1] = ERROR_OTHER;
+				logTemp[1] = ERROR_PORT;
+				log(ERROR_OTHER, logTemp);
+			//log(ERROR, "Error port");
 		}
 	}
 }
@@ -311,7 +360,7 @@ void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 	{
 		pOutFrame->len = 0; /* to avoid application does not set msg point */
 		taskList[pInframe->port].taskFunction(pInframe, pOutFrame);
-		
+	//	if(pInframe->port == GETLOG)
 		pOutFrame->port = pInframe->port;
 		pOutFrame->finnalDstAddr = pInframe->originalAddr;
 		pOutFrame->originalAddr = getMyAddress();
@@ -324,27 +373,13 @@ void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 			}
 			else
 			{
-				MRFI_DelayMs(50);
+				//MRFI_DelayMs(50);
 				rc = send(pOutFrame, sizeof(struct AppFrame));
 				//if(rc == SMPL_SUCCESS)
 				{
-					sprintf((char*)logTemp, "Send result: %s\n", getErrorText(rc));
+					sprintf((char*)logTemp, "Send result: %s\n", getRcText(rc));
 					consoleAP(logTemp);
 				}
-				/*
-				else
-				{
-					uint8 i = MAXRESENDTIMES;
-					while(i)
-					{
-						rc = send(pOutFrame, sizeof(struct AppFrame));
-						if(rc == SMPL_SUCCESS)
-							break;
-						MRFI_DelayMs(100);
-						i--;
-					}
-				}
-			*/
 			}
 			
 		}
@@ -354,14 +389,14 @@ void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 void debug(char* data)
 {
 	/* only ap node have uart */
-	//if(getMyAddress() != APADDRESS) return;		
+	if(getMyAddress() != APADDRESS) return;		
 	putstr((uint8*)data, strlen((char*)data));
 	return;
 }
 
 void consoleAP(char* data)
 {
-	//if(getMyAddress() != APADDRESS) return;
+	if(getMyAddress() != APADDRESS) return;
 	debug(data);
 }
 
@@ -388,12 +423,13 @@ void checkUART(void)
 #endif
 				
 		/* simulate rf frame */
-		pInFrame->finnalDstAddr = cmd->finnalDstAddr;
-		pInFrame->srcAddr = APADDRESS; /* from to myself */
-		pInFrame->originalAddr = APADDRESS;
-		pInFrame->dstAddr = getMyAddress();
-		pInFrame->port = cmd->port;
-		pInFrame->len = len - UARTCOMMANDHEADSIZE;
+		
+			pInFrame->finnalDstAddr = cmd->finnalDstAddr;
+			pInFrame->srcAddr = APADDRESS; /* from to myself */
+			pInFrame->originalAddr = APADDRESS;
+			pInFrame->dstAddr = getMyAddress();
+			pInFrame->port = cmd->port;
+			pInFrame->len = len - UARTCOMMANDHEADSIZE;
 		
 		memcpy(pInFrame->msg, cmd->msg, cmd->len); 
 		
@@ -416,3 +452,58 @@ void framework_entry (void)
 	while (1) ;
 }
 
+void getLogInfor(char* log_Infor)
+{
+	switch(log_Infor[1])
+	{
+	case SEND_SUCCESSED:
+		printf("INFO_SEND:SEND_SUCCESSED, dstAddr: d%;\n",log_Infor[2]);
+		return;
+	case SEND_FAILED:
+		printf("ERROR_SEND:SEND_FAILED, dstAddr: d%, rc: d%, failed times:d%;\n", log_Infor[2],log_Infor[3], log_Infor[4]);
+		return;
+	case SEND_TEST_2AP_SUCCESSED:
+		printf("INFO_SEND:SEND_TEST_2AP_SUCCESSED;\n");
+		return;
+	case SEND_TEST_2AP_FAILED:
+		printf("ERROR_SEND:SEND_TEST_2AP_FAILED, rc: d%;\n",log_Infor[2]);
+		return;
+	case FORWARD_SUCCESSED:
+		printf("INFO_SEND:FORWARD_SUCCESSED, dstAddr: d%;\n",log_Infor[2]);
+		return;
+	case FORWARD_FAILED:
+		printf("ERROR_SEND:FORWARD_FAILED, dstAddr: d%, rc: d%;\n",log_Infor[2], log_Infor[3]);
+		return;
+	case SEND_STATION_DATE:
+		return;
+	case ERROR_PORT:
+		printf("ERROR_OTHER:ERROR_PORT;\n");
+		return;
+	case SEND_CHANNEL:
+		printf("INFO_OTHER:SEND_CHANNEL;\n");
+		return;
+	case SET_CHANNEL:
+		printf("INFO_OTHER:SET_CHANNEL;\n");
+		return;
+	case SEND_LOG:
+		printf("INFO_OTHER:SEND_LOG;\n");
+		return;
+	case NO_LOG:
+		printf("INFO_OTHER:NO_LOG;\n");
+		return;
+	case LOG_LEVEL_ERROR_INFRAME:
+		printf("ERROR_OTHER:LOG_LEVEL_ERROR_INFRAME;\n");
+		return;
+	case SET_LOGLEVEL_SIZE_ERROR:
+		printf("ERROR_OTHER:SET_LOGLEVEL_SIZE_ERROR;\n");
+		return;
+	case SCAN_BACK:
+		printf("INFO_OTHER:SCAN_BACK;\n");
+		return;
+	case SCAN_SIZEOUT:
+		printf("ERROR_OTHER:SCAN_SIZEOUT;\n");
+		return;
+	default:
+		return;
+	}
+}

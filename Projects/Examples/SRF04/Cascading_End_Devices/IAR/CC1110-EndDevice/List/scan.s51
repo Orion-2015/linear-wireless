@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:23 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  16:32:57 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -77,12 +77,12 @@
         EXTERN ?FUNC_ENTER_XDATA
         EXTERN ?FUNC_LEAVE_XDATA
         EXTERN ?V0
-        EXTERN __INIT_XDATA_I
 
         PUBLIC scan
 
         EXTERN getMyAddress
         EXTERN log
+        EXTERN logTemp
 
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
@@ -110,7 +110,7 @@ scan:
         INC     DPTR
         INC     DPTR
         INC     DPTR
-        MOV     A,#0x28
+        MOV     A,#0x32
         MOVX    @DPTR,A
         MOV     DPL,R4
         MOV     DPH,R5
@@ -153,17 +153,23 @@ scan:
         ADDC    A,#0x0
         MOV     R1,A
         MOV     A,R0
-        SUBB    A,#0x28
+        SUBB    A,#0x32
         MOV     A,R1
         SUBB    A,#0x0
         CLR     C
         XRL     A,PSW
         RLC     A
         JC      ??scan_2
+        MOV     DPTR,#logTemp
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#0xf
+        MOVX    @DPTR,A
         ; Setup parameters for call to function log
-        MOV     R2,#`?<Constant "SSIO\\n">` & 0xff
-        MOV     R3,#(`?<Constant "SSIO\\n">` >> 8) & 0xff
-        MOV     R1,#0x0
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x1
         LCALL   log
         SJMP    ??scan_3
 ??scan_2:
@@ -195,25 +201,11 @@ scan:
         MOV     R7,#0x2
         LJMP    ?FUNC_LEAVE_XDATA
 
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "SSIO\\n">>`:
-        DB "SSIO\012"
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
-`?<Constant "SSIO\\n">`:
-        DS 6
-        REQUIRE `?<Initializer for <Constant "SSIO\\n">>`
-        REQUIRE __INIT_XDATA_I
-
         END
 // 
-// 141 bytes in segment NEAR_CODE
-//   6 bytes in segment XDATA_I
-//   6 bytes in segment XDATA_ID
+// 151 bytes in segment NEAR_CODE
 // 
-// 147 bytes of CODE  memory
-//   6 bytes of XDATA memory
+// 151 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

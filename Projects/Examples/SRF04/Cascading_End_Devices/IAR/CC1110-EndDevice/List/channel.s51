@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:19 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  16:32:57 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -78,7 +78,6 @@
         EXTERN ?FUNC_ENTER_XDATA
         EXTERN ?FUNC_LEAVE_XDATA
         EXTERN ?V0
-        EXTERN __INIT_XDATA_I
         EXTERN __INIT_XDATA_Z
 
         PUBLIC channel
@@ -86,6 +85,7 @@
 
         EXTERN SMPL_Ioctl
         EXTERN log
+        EXTERN logTemp
 
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
@@ -114,7 +114,8 @@ channelHandle:
         INC     DPTR
         MOVX    A,@DPTR
         MOV     R0,A
-        JZ      ??channelHandle_0
+        JNZ     $+5
+        LJMP    ??channelHandle_0
         MOV     DPL,R2
         MOV     DPH,R3
         INC     DPTR
@@ -158,9 +159,11 @@ channelHandle:
         MOV     DPH,R7
         MOV     A,#0x1
         MOVX    @DPTR,A
-        ; Setup parameters for call to function log
-        MOV     R2,#`?<Constant "Send channel">` & 0xff
-        MOV     R3,#(`?<Constant "Send channel">` >> 8) & 0xff
+        MOV     DPTR,#logTemp
+        INC     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#0x8
         SJMP    ??channelHandle_2
 ??channelHandle_1:
         MOV     A,#0x1
@@ -194,47 +197,29 @@ channelHandle:
         MOV     DPH,R7
         CLR     A
         MOVX    @DPTR,A
-        ; Setup parameters for call to function log
-        MOV     R2,#`?<Constant "Set channel">` & 0xff
-        MOV     R3,#(`?<Constant "Set channel">` >> 8) & 0xff
+        MOV     DPTR,#logTemp
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#0x9
 ??channelHandle_2:
-        MOV     R1,#0x2
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x4
         LCALL   log
 ??channelHandle_0:
         MOV     R7,#0x2
         LJMP    ?FUNC_LEAVE_XDATA
 
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "Send channel">>`:
-        DB "Send channel"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "Set channel">>`:
-        DB "Set channel"
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
-`?<Constant "Send channel">`:
-        DS 13
-        REQUIRE `?<Initializer for <Constant "Send channel">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
-`?<Constant "Set channel">`:
-        DS 12
-        REQUIRE `?<Initializer for <Constant "Set channel">>`
-        REQUIRE __INIT_XDATA_I
-
         END
 // 
-// 152 bytes in segment NEAR_CODE
-//  25 bytes in segment XDATA_I
-//  25 bytes in segment XDATA_ID
+// 169 bytes in segment NEAR_CODE
 //   1 byte  in segment XDATA_Z
 // 
-// 177 bytes of CODE  memory
-//  26 bytes of XDATA memory
+// 169 bytes of CODE  memory
+//   1 byte  of XDATA memory
 //
 //Errors: none
 //Warnings: none

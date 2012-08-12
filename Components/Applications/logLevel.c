@@ -17,7 +17,10 @@ void logLevelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 
 	if(appInFrame->len == 0)
 	{
-		log(ERROR, "log level error inframe");
+		logTemp[0] = 2;/* the length of logTemp*/
+		logTemp[1] = LOG_LEVEL_ERROR_INFRAME;
+		log(ERROR_OTHER, logTemp);
+		//log(ERROR, "log level error inframe");
 	}
 	else
 	{
@@ -36,7 +39,10 @@ void logLevelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 			}
 			else
 			{
-				log(ERROR, "Set LogLevel size error");
+				logTemp[0] = 2;/* the length of logTemp*/
+				logTemp[1] = SET_LOGLEVEL_SIZE_ERROR;
+				log(ERROR_OTHER, logTemp);
+				//log(ERROR, "Set LogLevel size error");
 			}
 		}
 	}

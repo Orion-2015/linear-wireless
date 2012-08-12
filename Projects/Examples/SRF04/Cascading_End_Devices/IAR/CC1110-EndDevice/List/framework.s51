@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:46:36 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  18:09:35 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -103,6 +103,7 @@
         PUBLIC debug
         PUBLIC fowardFrame
         PUBLIC framework_entry
+        PUBLIC getLogInfor
         PUBLIC handleRF
         PUBLIC initOS
         PUBLIC pInframe
@@ -121,8 +122,7 @@
         EXTERN memcpy
         EXTERN log
         EXTERN receive
-        EXTERN MRFI_DelayMs
-        EXTERN getErrorText
+        EXTERN getRcText
         EXTERN rx_receive_line
         EXTERN puthex
         EXTERN channelHandle
@@ -269,7 +269,7 @@ fowardFrame:
         ; Saved register size: 0
         ; Auto size: 0
         ; Setup parameters for call to function send
-        MOV     R1,#0x30
+        MOV     R1,#0x3a
         LJMP    send
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
@@ -306,28 +306,28 @@ initOS:
         MOV     R2,#getSurplusChargeHandle & 0xff
         MOV     R3,#(getSurplusChargeHandle >> 8) & 0xff
         MOV     R1,#0x0
-        LCALL   ?Subroutine13
-??CrossCallReturnLabel_21:
+        LCALL   ?Subroutine11
+??CrossCallReturnLabel_14:
         MOV     R2,#getStationDataHandle & 0xff
         MOV     R3,#(getStationDataHandle >> 8) & 0xff
         MOV     R1,#0x1
-        LCALL   ?Subroutine13
-??CrossCallReturnLabel_22:
+        LCALL   ?Subroutine11
+??CrossCallReturnLabel_15:
         MOV     R2,#getLogHandle & 0xff
         MOV     R3,#(getLogHandle >> 8) & 0xff
         MOV     R1,#0x2
-        LCALL   ?Subroutine13
-??CrossCallReturnLabel_23:
+        LCALL   ?Subroutine11
+??CrossCallReturnLabel_16:
         MOV     R2,#getTestHandle & 0xff
         MOV     R3,#(getTestHandle >> 8) & 0xff
         MOV     R1,#0x3
-        LCALL   ?Subroutine13
-??CrossCallReturnLabel_24:
+        LCALL   ?Subroutine11
+??CrossCallReturnLabel_17:
         MOV     R2,#channelHandle & 0xff
         MOV     R3,#(channelHandle >> 8) & 0xff
         MOV     R1,#0x4
-        LCALL   ?Subroutine13
-??CrossCallReturnLabel_25:
+        LCALL   ?Subroutine11
+??CrossCallReturnLabel_18:
         MOV     R2,#logLevelHandle & 0xff
         MOV     R3,#(logLevelHandle >> 8) & 0xff
         MOV     R1,#0x5
@@ -337,8 +337,8 @@ initOS:
         MOV     R2,#scan & 0xff
         MOV     R3,#(scan >> 8) & 0xff
         MOV     R1,#0x6
-        LCALL   ?Subroutine13
-??CrossCallReturnLabel_26:
+        LCALL   ?Subroutine11
+??CrossCallReturnLabel_19:
         MOV     R2,#detect & 0xff
         MOV     R3,#(detect >> 8) & 0xff
         MOV     R1,#0x7
@@ -346,7 +346,7 @@ initOS:
         LJMP    ?Subroutine1
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine13:
+?Subroutine11:
         LCALL   registerTask
         ; Setup parameters for call to function registerTask
         ; Setup parameters for call to function registerTask
@@ -370,9 +370,8 @@ runOS:
         ; Setup parameters for call to function checkRF
         LCALL   checkRF
         ; Setup parameters for call to function getMyAddress
-        LCALL   getMyAddress
-        MOV     A,R1
-        XRL     A,#0x1
+        LCALL   ??Subroutine21_0
+??CrossCallReturnLabel_45:
         JZ      ??runOS_1
         ; Setup parameters for call to function checkUART
         LCALL   checkUART
@@ -404,9 +403,9 @@ checkButton:
         RSEG NEAR_CODE:CODE:NOROOT(0)
 send2Computer:
         CODE
-        MOV     A,#-0xc
+        MOV     A,#-0xf
         LCALL   ?FUNC_ENTER_XDATA
-        ; Saved register size: 12
+        ; Saved register size: 15
         ; Auto size: 0
         MOV     A,R2
         MOV     R6,A
@@ -419,13 +418,13 @@ send2Computer:
         ; Setup parameters for call to function printf
         MOV     DPL,R6
         MOV     DPH,R7
-        LCALL   ?Subroutine9
-??CrossCallReturnLabel_12:
+        LCALL   ??Subroutine23_0
+??CrossCallReturnLabel_46:
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     R2,#`?<Constant "port is %d\\ncontent is\\n">` & 0xff
         MOV     R3,#(`?<Constant "port is %d\\ncontent is\\n">` >> 8) & 0xff
-        LCALL   printf
-        MOV     A,#0x2
+        LCALL   ?Subroutine7
+??CrossCallReturnLabel_2:
         LCALL   ?DEALLOC_XSTACK8
         MOV     A,R6
         ADD     A,#0x5
@@ -435,10 +434,10 @@ send2Computer:
         MOV     DPH,A
         MOVX    A,@DPTR
         XRL     A,#0x1
-        JZ      ??CrossCallReturnLabel_15
+        JZ      ??CrossCallReturnLabel_11
         ; Setup parameters for call to function putchar
-        LCALL   ?Subroutine10
-??CrossCallReturnLabel_14:
+        LCALL   ?Subroutine9
+??CrossCallReturnLabel_10:
         ; Setup parameters for call to function putchar
         MOV     DPL,R6
         MOV     DPH,R7
@@ -448,30 +447,32 @@ send2Computer:
         INC     DPTR
         INC     DPTR
         INC     DPTR
-        LCALL   ?Subroutine10
-??CrossCallReturnLabel_15:
-        MOV     DPL,R6
-        MOV     DPH,R7
-        MOVX    A,@DPTR
-        XRL     A,#0x6
-        JZ      $+5
-        LJMP    ??send2Computer_0
+        LCALL   ?Subroutine9
+??CrossCallReturnLabel_11:
         MOV     A,R6
         ADD     A,#0x8
         MOV     ?V0 + 0,A
         MOV     A,R7
         ADDC    A,#0x0
         MOV     ?V0 + 1,A
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        XRL     A,#0x6
+        JZ      $+5
+        LJMP    ??send2Computer_0
         ; Setup parameters for call to function printf
         MOV     DPL,?V0 + 0
-        MOV     DPH,A
-        LCALL   ??Subroutine16_0
-??CrossCallReturnLabel_33:
+        MOV     DPH,?V0 + 1
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     R2,#`?<Constant "The number of nodes i...">` & 0xff
         MOV     R3,#(`?<Constant "The number of nodes i...">` >> 8) & 0xff
-        LCALL   printf
-        MOV     A,#0x2
+        LCALL   ?Subroutine7
+??CrossCallReturnLabel_3:
         LCALL   ?DEALLOC_XSTACK8
         MOV     DPL,?V0 + 0
         MOV     DPH,?V0 + 1
@@ -481,15 +482,15 @@ send2Computer:
 ??send2Computer_2:
         ; Setup parameters for call to function printf
         MOV     ?V0 + 2,A
-        LCALL   ?Subroutine11
-??CrossCallReturnLabel_16:
+        LCALL   ?Subroutine12
+??CrossCallReturnLabel_20:
         MOV     ?V0 + 2,A
         MOV     R0,#?V0 + 2
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     R2,#`?<Constant "node %d  ">` & 0xff
         MOV     R3,#(`?<Constant "node %d  ">` >> 8) & 0xff
-        LCALL   printf
-        MOV     A,#0x2
+        LCALL   ?Subroutine7
+??CrossCallReturnLabel_4:
         LCALL   ?DEALLOC_XSTACK8
         DEC     ?V0 + 4
 ??send2Computer_1:
@@ -512,8 +513,8 @@ send2Computer:
         SUBB    A,R1
         JC      ??send2Computer_5
         MOV     ?V0 + 2,R0
-        LCALL   ?Subroutine11
-??CrossCallReturnLabel_17:
+        LCALL   ?Subroutine12
+??CrossCallReturnLabel_21:
         XRL     A,R1
         JZ      ??send2Computer_4
         MOV     DPTR,#__Constant_1
@@ -528,24 +529,24 @@ send2Computer:
         LCALL   ?PUSH_XSTACK8_X_FOUR
         MOV     R2,#`?<Constant "\\nsendTimes is %d\\n">` & 0xff
         MOV     R3,#(`?<Constant "\\nsendTimes is %d\\n">` >> 8) & 0xff
-        LCALL   printf
-        MOV     A,#0x4
+        LCALL   ?Subroutine8
+??CrossCallReturnLabel_6:
         LCALL   ?DEALLOC_XSTACK8
         ; Setup parameters for call to function printf
         MOV     DPTR,#failTimes
         LCALL   ?PUSH_XSTACK8_X_FOUR
         MOV     R2,#`?<Constant "failTimes is %d\\n">` & 0xff
         MOV     R3,#(`?<Constant "failTimes is %d\\n">` >> 8) & 0xff
-        LCALL   printf
-        MOV     A,#0x4
+        LCALL   ?Subroutine8
+??CrossCallReturnLabel_7:
         LCALL   ?DEALLOC_XSTACK8
         ; Setup parameters for call to function printf
         MOV     DPTR,#successTimes
         LCALL   ?PUSH_XSTACK8_X_FOUR
         MOV     R2,#`?<Constant "successTimes is %d\\n">` & 0xff
         MOV     R3,#(`?<Constant "successTimes is %d\\n">` >> 8) & 0xff
-        LCALL   printf
-        MOV     A,#0x4
+        LCALL   ?Subroutine8
+??CrossCallReturnLabel_8:
         LCALL   ?DEALLOC_XSTACK8
         SJMP    ??send2Computer_7
 ??send2Computer_5:
@@ -555,14 +556,49 @@ send2Computer:
         MOV     DPTR,#successTimes
         SJMP    ??send2Computer_6
 ??send2Computer_0:
+        MOV     A,R6
+        ADD     A,#0x7
+        MOV     ?V0 + 6,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     ?V0 + 7,A
+        MOVX    A,@DPTR
+        XRL     A,#0x2
+        JNZ     ??send2Computer_8
+        MOV     ?V0 + 2,#0x0
+??send2Computer_9:
+        MOV     DPL,?V0 + 6
+        MOV     DPH,?V0 + 7
+        MOVX    A,@DPTR
+        CLR     C
+        SUBB    A,?V0 + 2
+        JC      ??send2Computer_7
+        ; Setup parameters for call to function getLogInfor
+        MOV     ?V0 + 4,?V0 + 2
+        MOV     A,R6
+        ADD     A,?V0 + 4
+        MOV     R0,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     R1,A
+        MOV     A,R0
+        ADD     A,#0x8
+        MOV     R2,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R3,A
+        LCALL   getLogInfor
+        MOV     DPL,?V0 + 0
+        MOV     DPH,?V0 + 1
+        MOVX    A,@DPTR
+        INC     A
+        ADD     A,?V0 + 2
+        MOV     ?V0 + 2,A
+        SJMP    ??send2Computer_9
+??send2Computer_8:
         ; Setup parameters for call to function putstr
-        INC     DPTR
-        INC     DPTR
-        INC     DPTR
-        INC     DPTR
-        INC     DPTR
-        INC     DPTR
-        INC     DPTR
+        MOV     DPL,?V0 + 6
+        MOV     DPH,?V0 + 7
         MOVX    A,@DPTR
         MOV     R1,A
         MOV     A,R6
@@ -577,11 +613,11 @@ send2Computer:
         MOV     R2,#`?<Constant "bupt">` & 0xff
         MOV     R3,#(`?<Constant "bupt">` >> 8) & 0xff
         LCALL   printf
-        MOV     R7,#0x5
+        MOV     R7,#0x8
         LJMP    ?FUNC_LEAVE_XDATA
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine11:
+?Subroutine12:
         MOV     A,R6
         ADD     A,?V0 + 2
         MOV     DPL,A
@@ -600,7 +636,7 @@ send2Computer:
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine10:
+?Subroutine9:
         MOVX    A,@DPTR
         MOV     R2,A
         MOV     R3,#0x0
@@ -626,16 +662,18 @@ sendTest2AP:
         MOVX    @DPTR,A
         MOV     DPTR,#tx
         CLR     A
-        LCALL   ?Subroutine8
-??CrossCallReturnLabel_8:
+        LCALL   ?Subroutine14
+??CrossCallReturnLabel_22:
         MOV     ?V0 + 0,A
         MOV     ?V0 + 1,#0x0
         MOV     R0,#?V0 + 0
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     R4,#`?<Constant "%d">` & 0xff
         MOV     R5,#(`?<Constant "%d">` >> 8) & 0xff
-        LCALL   ?Subroutine14
-??CrossCallReturnLabel_27:
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
         LCALL   ?DEALLOC_XSTACK8
         ; Setup parameters for call to function memcpy
         ; Setup parameters for call to function strlen
@@ -661,28 +699,31 @@ sendTest2AP:
         MOV     DPTR,#tx + 7
         MOVX    @DPTR,A
         ; Setup parameters for call to function send
-        MOV     R1,#0x30
+        MOV     R1,#0x3a
         MOV     R2,#tx & 0xff
         MOV     R3,#(tx >> 8) & 0xff
         LCALL   send
         MOV     A,R1
-        MOV     ?V0 + 0,A
-        JZ      ??sendTest2AP_0
-        ; Setup parameters for call to function sprintf
-        MOV     ?V0 + 1,#0x0
-        MOV     R0,#?V0 + 0
-        LCALL   ?PUSH_XSTACK_I_TWO
-        MOV     R4,#`?<Constant "ST2ApF:%d\\n">` & 0xff
-        MOV     R5,#(`?<Constant "ST2ApF:%d\\n">` >> 8) & 0xff
-        LCALL   ?Subroutine14
-??CrossCallReturnLabel_28:
-        LCALL   ?DEALLOC_XSTACK8
-        ; Setup parameters for call to function log
-        MOV     R2,#logTemp & 0xff
-        MOV     R3,#(logTemp >> 8) & 0xff
-        MOV     R1,#0x0
-        LCALL   log
+        MOV     R0,A
+        MOV     DPTR,#logTemp
+        JNZ     ??sendTest2AP_0
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+        LCALL   ?Subroutine13
+??CrossCallReturnLabel_29:
+        MOV     R1,#0x3
+        SJMP    ??sendTest2AP_1
 ??sendTest2AP_0:
+        MOV     A,#0x3
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    @DPTR,A
+        MOV     A,R0
+        LCALL   ?Subroutine13
+??CrossCallReturnLabel_30:
+        MOV     R1,#0x0
+??sendTest2AP_1:
+        LCALL   log
         REQUIRE ?Subroutine1
         ; // Fall through to label ?Subroutine1
 
@@ -690,6 +731,24 @@ sendTest2AP:
 ?Subroutine1:
         MOV     R7,#0x2
         LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine13:
+        INC     DPTR
+        REQUIRE ??Subroutine17_0
+        ; // Fall through to label ??Subroutine17_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine17_0:
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function log
+        ; Setup parameters for call to function log
+        ; Setup parameters for call to function log
+        ; Setup parameters for call to function log
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
 checkRF:
@@ -752,8 +811,8 @@ handleRF:
         JNC     ??handleRF_1
         MOV     DPL,R6
         MOV     DPH,R7
-        LCALL   ??Subroutine17_0
-??CrossCallReturnLabel_36:
+        LCALL   ??Subroutine20_0
+??CrossCallReturnLabel_40:
         LCALL   ?S_SHL
         MOV     A,#taskList & 0xff
         ADD     A,?V0 + 2
@@ -771,8 +830,8 @@ handleRF:
         MOV     DPH,R1
         INC     DPTR
         INC     DPTR
-        LCALL   ?Subroutine7
-??CrossCallReturnLabel_6:
+        LCALL   ?Subroutine5
+??CrossCallReturnLabel_0:
         JZ      ??handleRF_1
         ; Setup parameters for indirect call
         MOV     R4,#0x0
@@ -790,37 +849,38 @@ handleRF:
         MOV     R3,A
         LCALL   fowardFrame
         MOV     A,R1
-        MOV     DPL,R6
-        MOV     DPH,R7
+        MOV     R3,A
+        MOV     A,R6
+        ADD     A,#0x4
+        MOV     R0,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     R1,A
+        MOV     A,R3
         JNZ     ??handleRF_2
-        ; Setup parameters for call to function sprintf
-        LCALL   ?Subroutine6
-??CrossCallReturnLabel_34:
-        LCALL   ?PUSH_XSTACK_I_TWO
-        MOV     R4,#`?<Constant "FT %dS\\n">` & 0xff
-        MOV     R5,#(`?<Constant "FT %dS\\n">` >> 8) & 0xff
-??handleRF_3:
-        LCALL   ?Subroutine14
-??CrossCallReturnLabel_29:
-        LCALL   ?DEALLOC_XSTACK8
+        MOV     DPTR,#logTemp
+        MOV     A,#0x3
+        LCALL   ?Subroutine10
+??CrossCallReturnLabel_12:
         ; Setup parameters for call to function log
         MOV     R2,#logTemp & 0xff
         MOV     R3,#(logTemp >> 8) & 0xff
-??handleRF_4:
-        MOV     R1,#0x2
-        LJMP    ??handleRF_5
+        MOV     R1,#0x3
+        LJMP    ??handleRF_3
 ??handleRF_2:
+        MOV     DPL,R6
+        MOV     DPH,R7
         MOVX    A,@DPTR
         XRL     A,#0x6
-        JNZ     ??handleRF_6
+        JNZ     ??handleRF_4
         MOV     DPL,?V0 + 4
         MOV     DPH,?V0 + 5
         MOVX    A,@DPTR
-        MOV     R0,A
+        MOV     R2,A
         MOV     A,?V0 + 1
         CLR     C
-        SUBB    A,R0
-        JNC     ??handleRF_6
+        SUBB    A,R2
+        JNC     ??handleRF_4
         ; Setup parameters for call to function callApplication
         MOV     R4,#tx & 0xff
         MOV     R5,#(tx >> 8) & 0xff
@@ -829,45 +889,50 @@ handleRF:
         MOV     A,R7
         MOV     R3,A
         LCALL   callApplication
-        ; Setup parameters for call to function log
-        MOV     R2,#`?<Constant "SB\\n">` & 0xff
-        MOV     R3,#(`?<Constant "SB\\n">` >> 8) & 0xff
-        SJMP    ??handleRF_4
-??handleRF_6:
-        ; Setup parameters for call to function sprintf
-        MOV     DPL,R6
-        MOV     DPH,R7
-        LCALL   ?Subroutine6
-??CrossCallReturnLabel_35:
-        LCALL   ?PUSH_XSTACK_I_TWO
-        MOV     R4,#`?<Constant "FT %d F\\n">` & 0xff
-        MOV     R5,#(`?<Constant "FT %d F\\n">` >> 8) & 0xff
-        SJMP    ??handleRF_3
+        MOV     DPTR,#logTemp
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#0xe
+        LCALL   ??Subroutine17_0
+??CrossCallReturnLabel_32:
+        MOV     R1,#0x4
+        LJMP    ??handleRF_3
+??handleRF_4:
+        MOV     DPTR,#logTemp
+        MOV     A,#0x4
+        LCALL   ?Subroutine10
+??CrossCallReturnLabel_13:
+        MOV     A,R3
+        LCALL   ?Subroutine13
+??CrossCallReturnLabel_31:
+        MOV     R1,#0x0
+        LJMP    ??handleRF_3
 ??handleRF_0:
         MOV     DPL,R6
         MOV     DPH,R7
         MOVX    A,@DPTR
         CLR     C
         SUBB    A,#0xa
-        JNC     ??handleRF_7
+        JNC     ??handleRF_5
         XRL     0x90,#0x1
         XRL     0x90,#0x2
         MOV     A,#0x1
         XRL     A,?V0 + 1
-        JNZ     ??handleRF_8
+        JNZ     ??handleRF_6
         MOVX    A,@DPTR
         MOV     ?V0 + 2,A
         MOV     A,?V0 + 0
-        JZ      ??handleRF_9
+        JZ      ??handleRF_7
         MOV     ?V0 + 3,#0x0
         MOV     A,#0x2
         MOV     R0,#?V0 + 2
         LCALL   ?S_SHL
-        LCALL   ?Subroutine12
-??CrossCallReturnLabel_18:
-        LCALL   ?Subroutine7
-??CrossCallReturnLabel_7:
-        JZ      ??handleRF_10
+        LCALL   ?Subroutine16
+??CrossCallReturnLabel_26:
+        LCALL   ?Subroutine5
+??CrossCallReturnLabel_1:
+        JZ      ??handleRF_8
         ; Setup parameters for indirect call
         MOV     R4,#tx & 0xff
         MOV     R5,#(tx >> 8) & 0xff
@@ -878,7 +943,7 @@ handleRF:
         LCALL   ?CALL_IND
         MOV     DPTR,#tx + 7
         MOVX    A,@DPTR
-        JZ      ??handleRF_10
+        JZ      ??handleRF_8
         MOV     DPL,R6
         MOV     DPH,R7
         MOVX    A,@DPTR
@@ -892,13 +957,13 @@ handleRF:
         ; Setup parameters for call to function send2Computer
         MOV     R2,#tx & 0xff
         MOV     R3,#(tx >> 8) & 0xff
-??handleRF_11:
-        LCALL   send2Computer
-        SJMP    ??handleRF_10
 ??handleRF_9:
+        LCALL   send2Computer
+        SJMP    ??handleRF_8
+??handleRF_7:
         MOV     A,#0x6
         XRL     A,?V0 + 2
-        JNZ     ??handleRF_12
+        JNZ     ??handleRF_10
         ; Setup parameters for indirect call
         MOV     R4,#0x0
         MOV     R5,#0x0
@@ -907,17 +972,17 @@ handleRF:
         MOV     A,R7
         MOV     R3,A
         MOV     DPTR,#taskList + 26
-        LCALL   ?Subroutine5
-??CrossCallReturnLabel_2:
+        LCALL   ??Subroutine19_0
+??CrossCallReturnLabel_36:
         LCALL   ?CALL_IND
         ; Setup parameters for call to function send2Computer
-??handleRF_12:
+??handleRF_10:
         MOV     A,R6
         MOV     R2,A
         MOV     A,R7
         MOV     R3,A
-        SJMP    ??handleRF_11
-??handleRF_8:
+        SJMP    ??handleRF_9
+??handleRF_6:
         ; Setup parameters for call to function callApplication
         MOV     R4,#tx & 0xff
         MOV     R5,#(tx >> 8) & 0xff
@@ -926,15 +991,19 @@ handleRF:
         MOV     A,R7
         MOV     R3,A
         LCALL   callApplication
-        SJMP    ??handleRF_10
-??handleRF_7:
-        ; Setup parameters for call to function log
-        MOV     R2,#`?<Constant "Error port">` & 0xff
-        MOV     R3,#(`?<Constant "Error port">` >> 8) & 0xff
-        MOV     R1,#0x0
+        SJMP    ??handleRF_8
 ??handleRF_5:
+        MOV     DPTR,#logTemp
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#0x7
+        LCALL   ??Subroutine17_0
+??CrossCallReturnLabel_33:
+        MOV     R1,#0x1
+??handleRF_3:
         LCALL   log
-??handleRF_10:
+??handleRF_8:
         REQUIRE ?Subroutine2
         REQUIRE _A_P1
         ; // Fall through to label ?Subroutine2
@@ -945,15 +1014,20 @@ handleRF:
         LJMP    ?FUNC_LEAVE_XDATA
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine14:
-        MOV     R2,#logTemp & 0xff
-        MOV     R3,#(logTemp >> 8) & 0xff
-        LCALL   sprintf
-        MOV     A,#0x2
+?Subroutine10:
+        MOVX    @DPTR,A
+        INC     DPTR
+        INC     A
+        MOVX    @DPTR,A
+        MOV     DPL,R0
+        MOV     DPH,R1
+        MOVX    A,@DPTR
+        MOV     DPTR,#logTemp + 2
+        MOVX    @DPTR,A
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine7:
+?Subroutine5:
         MOVX    A,@DPTR
         MOV     R0,A
         INC     DPTR
@@ -963,23 +1037,6 @@ handleRF:
         MOV     DPH,R1
         MOV     A,DPL
         ORL     A,DPH
-        RET
-
-        RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine6:
-        INC     DPTR
-        INC     DPTR
-        INC     DPTR
-        INC     DPTR
-        REQUIRE ??Subroutine16_0
-        ; // Fall through to label ??Subroutine16_0
-
-        RSEG NEAR_CODE:CODE:NOROOT(0)
-??Subroutine16_0:
-        MOVX    A,@DPTR
-        MOV     ?V0 + 2,A
-        MOV     ?V0 + 3,#0x0
-        MOV     R0,#?V0 + 2
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
@@ -995,11 +1052,11 @@ callApplication:
         MOV     R6,A
         MOV     A,R5
         MOV     R7,A
-        LCALL   ?Subroutine3
-??CrossCallReturnLabel_37:
+        LCALL   ?Subroutine4
+??CrossCallReturnLabel_41:
         LCALL   ?S_SHL
-        LCALL   ?Subroutine12
-??CrossCallReturnLabel_19:
+        LCALL   ?Subroutine16
+??CrossCallReturnLabel_27:
         MOVX    A,@DPTR
         MOV     R0,A
         INC     DPTR
@@ -1020,13 +1077,13 @@ callApplication:
         CLR     A
         MOVX    @DPTR,A
         ; Setup parameters for indirect call
-        LCALL   ?Subroutine3
-??CrossCallReturnLabel_38:
+        LCALL   ?Subroutine4
+??CrossCallReturnLabel_42:
         LCALL   ?S_SHL
-        LCALL   ?Subroutine12
-??CrossCallReturnLabel_20:
-        LCALL   ?Subroutine5
-??CrossCallReturnLabel_3:
+        LCALL   ?Subroutine16
+??CrossCallReturnLabel_28:
+        LCALL   ??Subroutine19_0
+??CrossCallReturnLabel_37:
         LCALL   ?CALL_IND
         MOV     DPL,?V0 + 0
         MOV     DPH,?V0 + 1
@@ -1044,14 +1101,14 @@ callApplication:
         MOVX    A,@DPTR
         MOV     DPL,?V0 + 2
         MOV     DPH,?V0 + 3
-        LCALL   ?Subroutine8
-??CrossCallReturnLabel_9:
+        LCALL   ?Subroutine14
+??CrossCallReturnLabel_23:
         MOV     DPL,R6
         MOV     DPH,R7
         INC     DPTR
         INC     DPTR
-        LCALL   ?Subroutine8
-??CrossCallReturnLabel_10:
+        LCALL   ?Subroutine14
+??CrossCallReturnLabel_24:
         MOV     R0,A
         MOV     DPL,R6
         MOV     DPH,R7
@@ -1076,14 +1133,10 @@ callApplication:
         LCALL   send2Computer
         SJMP    ??callApplication_0
 ??callApplication_1:
-        ; Setup parameters for call to function MRFI_DelayMs
-        MOV     R2,#0x32
-        MOV     R3,#0x0
-        LCALL   MRFI_DelayMs
         ; Setup parameters for call to function sprintf
-        ; Setup parameters for call to function getErrorText
+        ; Setup parameters for call to function getRcText
         ; Setup parameters for call to function send
-        MOV     R1,#0x30
+        MOV     R1,#0x3a
         MOV     A,R6
         MOV     R2,A
         MOV     A,R7
@@ -1092,25 +1145,27 @@ callApplication:
         MOV     ?V0 + 0,R1
         MOV     R2,?V0 + 0
         MOV     R3,#0x0
-        LCALL   getErrorText
+        LCALL   getRcText
         MOV     ?V0 + 0,R2
         MOV     ?V0 + 1,R3
         MOV     R0,#?V0 + 0
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     R4,#`?<Constant "Send result: %s\\n">` & 0xff
         MOV     R5,#(`?<Constant "Send result: %s\\n">` >> 8) & 0xff
-        LCALL   ?Subroutine14
-??CrossCallReturnLabel_30:
-        LCALL   ?DEALLOC_XSTACK8
-        ; Setup parameters for call to function debug
         MOV     R2,#logTemp & 0xff
         MOV     R3,#(logTemp >> 8) & 0xff
-        LCALL   debug
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function consoleAP
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   consoleAP
 ??callApplication_0:
         LJMP    ?Subroutine2
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine12:
+?Subroutine16:
         MOV     A,#(taskList + 2) & 0xff
         ADD     A,?V0 + 2
         MOV     DPL,A
@@ -1120,7 +1175,7 @@ callApplication:
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine8:
+?Subroutine14:
         MOVX    @DPTR,A
         ; Setup parameters for call to function sprintf
         ; Setup parameters for call to function getMyAddress
@@ -1132,20 +1187,38 @@ callApplication:
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine5:
-        LCALL   ?Subroutine15
-??CrossCallReturnLabel_32:
+?Subroutine6:
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function memcpy
+        REQUIRE ??Subroutine18_0
+        ; // Fall through to label ??Subroutine18_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine18_0:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        REQUIRE ??Subroutine19_0
+        ; // Fall through to label ??Subroutine19_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine19_0:
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     DPH,A
+        MOV     DPL,R0
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine3:
+?Subroutine4:
         MOV     DPL,R2
         MOV     DPH,R3
-        REQUIRE ??Subroutine17_0
-        ; // Fall through to label ??Subroutine17_0
+        REQUIRE ??Subroutine20_0
+        ; // Fall through to label ??Subroutine20_0
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-??Subroutine17_0:
+??Subroutine20_0:
         MOVX    A,@DPTR
         MOV     ?V0 + 2,A
         MOV     ?V0 + 3,#0x0
@@ -1160,25 +1233,54 @@ debug:
         PUSH    DPH
         ; Saved register size: 2
         ; Auto size: 0
-        MOV     DPL,R2
-        MOV     DPH,R3
+        LCALL   ?Subroutine15
+??CrossCallReturnLabel_43:
+        JNZ     ??debug_0
         ; Setup parameters for call to function putstr
         ; Setup parameters for call to function strlen
+        MOV     R2,DPL
+        MOV     R3,DPH
         LCALL   strlen
         MOV     A,R2
         MOV     R1,A
         MOV     R2,DPL
         MOV     R3,DPH
         LCALL   putstr
+??debug_0:
         LJMP    ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine15:
+        MOV     DPL,R2
+        MOV     DPH,R3
+        ; Setup parameters for call to function getMyAddress
+        ; Setup parameters for call to function getMyAddress
+        REQUIRE ??Subroutine21_0
+        ; // Fall through to label ??Subroutine21_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine21_0:
+        LCALL   getMyAddress
+        MOV     A,R1
+        XRL     A,#0x1
+        RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
 consoleAP:
         CODE
-        ; Saved register size: 0
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
         ; Auto size: 0
+        LCALL   ?Subroutine15
+??CrossCallReturnLabel_44:
+        JNZ     ??consoleAP_0
         ; Setup parameters for call to function debug
-        LJMP    debug
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   debug
+??consoleAP_0:
+        LJMP    ?Subroutine0
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
 checkUART:
@@ -1206,8 +1308,8 @@ checkUART:
         RLC     A
         JNC     $+5
         LJMP    ??checkUART_0
-        LCALL   ?Subroutine5
-??CrossCallReturnLabel_4:
+        LCALL   ??Subroutine19_0
+??CrossCallReturnLabel_38:
         MOVX    A,@DPTR
         XRL     A,#0x6
         JNZ     ??checkUART_1
@@ -1239,10 +1341,8 @@ checkUART:
         MOV     R2,#`?<Constant ",waiting for result\\n">` & 0xff
         MOV     R3,#(`?<Constant ",waiting for result\\n">` >> 8) & 0xff
         LCALL   printf
-        MOV     DPL,?XSP + 0
-        MOV     DPH,?XSP + 1
-        LCALL   ?Subroutine5
-??CrossCallReturnLabel_5:
+        LCALL   ??Subroutine18_0
+??CrossCallReturnLabel_39:
         INC     DPTR
         MOVX    A,@DPTR
         MOV     DPTR,#rx + 1
@@ -1251,23 +1351,21 @@ checkUART:
         MOV     A,#0x1
         MOVX    @DPTR,A
         MOV     DPTR,#rx + 2
-        LCALL   ?Subroutine8
-??CrossCallReturnLabel_11:
+        LCALL   ?Subroutine14
+??CrossCallReturnLabel_25:
         MOV     DPTR,#rx + 4
-        LCALL   ?Subroutine4
-??CrossCallReturnLabel_0:
+        LCALL   ?Subroutine6
+??CrossCallReturnLabel_34:
         MOVX    A,@DPTR
         MOV     DPTR,#rx
         MOVX    @DPTR,A
         MOV     A,#-0x3
         ADD     A,R6
         MOV     DPTR,#rx + 7
-        LCALL   ?Subroutine4
-??CrossCallReturnLabel_1:
-        INC     DPTR
-        INC     DPTR
-        LCALL   ?Subroutine9
-??CrossCallReturnLabel_13:
+        LCALL   ?Subroutine6
+??CrossCallReturnLabel_35:
+        LCALL   ??Subroutine22_0
+??CrossCallReturnLabel_47:
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     A,#0x2
         LCALL   ?XSTACK_DISP0_8
@@ -1299,31 +1397,25 @@ checkUART:
         LJMP    ?FUNC_LEAVE_XDATA
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine9:
+?Subroutine3:
+        MOV     DPL,R2
+        MOV     DPH,R3
+        REQUIRE ??Subroutine22_0
+        ; // Fall through to label ??Subroutine22_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine22_0:
+        INC     DPTR
+        INC     DPTR
+        REQUIRE ??Subroutine23_0
+        ; // Fall through to label ??Subroutine23_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine23_0:
         MOVX    A,@DPTR
         MOV     ?V0 + 0,A
         MOV     ?V0 + 1,#0x0
         MOV     R0,#?V0 + 0
-        RET
-
-        RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine4:
-        MOVX    @DPTR,A
-        ; Setup parameters for call to function memcpy
-        MOV     DPL,?XSP + 0
-        MOV     DPH,?XSP + 1
-        LCALL   ?Subroutine15
-??CrossCallReturnLabel_31:
-        RET
-
-        RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine15:
-        MOVX    A,@DPTR
-        MOV     R0,A
-        INC     DPTR
-        MOVX    A,@DPTR
-        MOV     DPH,A
-        MOV     DPL,R0
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
@@ -1337,6 +1429,208 @@ framework_entry:
         LCALL   runOS
 ??framework_entry_0:
         SJMP    ??framework_entry_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+getLogInfor:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        MOVX    A,@DPTR
+        JZ      ??getLogInfor_0
+        DEC     A
+        JZ      ??getLogInfor_1
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_2
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_3
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_4
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_5
+        ADD     A,#-0x2
+        JNZ     $+5
+        LJMP    ??getLogInfor_6
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_7
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_8
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_9
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_10
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_11
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_12
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_13
+        DEC     A
+        JNZ     $+5
+        LJMP    ??getLogInfor_14
+        LJMP    ??getLogInfor_15
+??getLogInfor_0:
+        ; Setup parameters for call to function printf
+        LCALL   ?Subroutine3
+??CrossCallReturnLabel_50:
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R2,#`?<Constant "INFO_SEND:SEND_SUCCES...">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_SEND:SEND_SUCCES...">` >> 8) & 0xff
+??getLogInfor_16:
+        LCALL   ?Subroutine7
+??CrossCallReturnLabel_5:
+        LCALL   ?DEALLOC_XSTACK8
+        LJMP    ??getLogInfor_15
+??getLogInfor_1:
+        ; Setup parameters for call to function printf
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        LCALL   ??Subroutine22_0
+??CrossCallReturnLabel_48:
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R2,#`?<Constant "ERROR_SEND:SEND_FAILE...">` & 0xff
+        MOV     R3,#(`?<Constant "ERROR_SEND:SEND_FAILE...">` >> 8) & 0xff
+        LCALL   printf
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+        SJMP    ??getLogInfor_15
+??getLogInfor_2:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "INFO_SEND:SEND_TEST_2...">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_SEND:SEND_TEST_2...">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_3:
+        ; Setup parameters for call to function printf
+        LCALL   ?Subroutine3
+??CrossCallReturnLabel_51:
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R2,#`?<Constant "ERROR_SEND:SEND_TEST_...">` & 0xff
+        MOV     R3,#(`?<Constant "ERROR_SEND:SEND_TEST_...">` >> 8) & 0xff
+        SJMP    ??getLogInfor_16
+??getLogInfor_4:
+        ; Setup parameters for call to function printf
+        LCALL   ?Subroutine3
+??CrossCallReturnLabel_52:
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R2,#`?<Constant "INFO_SEND:FORWARD_SUC...">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_SEND:FORWARD_SUC...">` >> 8) & 0xff
+        SJMP    ??getLogInfor_16
+??getLogInfor_5:
+        ; Setup parameters for call to function printf
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        LCALL   ??Subroutine22_0
+??CrossCallReturnLabel_49:
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R2,#`?<Constant "ERROR_SEND:FORWARD_FA...">` & 0xff
+        MOV     R3,#(`?<Constant "ERROR_SEND:FORWARD_FA...">` >> 8) & 0xff
+        LCALL   ?Subroutine8
+??CrossCallReturnLabel_9:
+        LCALL   ?DEALLOC_XSTACK8
+        SJMP    ??getLogInfor_15
+??getLogInfor_6:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "ERROR_OTHER:ERROR_PORT;\\n">` & 0xff
+        MOV     R3,#(`?<Constant "ERROR_OTHER:ERROR_PORT;\\n">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_7:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "INFO_OTHER:SEND_CHANN...">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_OTHER:SEND_CHANN...">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_8:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "INFO_OTHER:SET_CHANNEL;\\n">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_OTHER:SET_CHANNEL;\\n">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_9:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "INFO_OTHER:SEND_LOG;\\n">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_OTHER:SEND_LOG;\\n">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_10:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "INFO_OTHER:NO_LOG;\\n">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_OTHER:NO_LOG;\\n">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_11:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "ERROR_OTHER:LOG_LEVEL...">` & 0xff
+        MOV     R3,#(`?<Constant "ERROR_OTHER:LOG_LEVEL...">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_12:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "ERROR_OTHER:SET_LOGLE...">` & 0xff
+        MOV     R3,#(`?<Constant "ERROR_OTHER:SET_LOGLE...">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_13:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "INFO_OTHER:SCAN_BACK;\\n">` & 0xff
+        MOV     R3,#(`?<Constant "INFO_OTHER:SCAN_BACK;\\n">` >> 8) & 0xff
+        SJMP    ??getLogInfor_17
+??getLogInfor_14:
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "ERROR_OTHER:SCAN_SIZE...">` & 0xff
+        MOV     R3,#(`?<Constant "ERROR_OTHER:SCAN_SIZE...">` >> 8) & 0xff
+??getLogInfor_17:
+        LCALL   printf
+??getLogInfor_15:
+        LJMP    ?Subroutine1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine8:
+        LCALL   printf
+        MOV     A,#0x4
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine7:
+        LCALL   printf
+        MOV     A,#0x2
+        RET
 
         RSEG XDATA_ID:CODE:NOROOT(0)
 `?<Initializer for <Constant "no room in last r`:
@@ -1383,26 +1677,6 @@ framework_entry:
         DB "%d"
 
         RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "ST2ApF:%d\\n">>`:
-        DB "ST2ApF:%d\012"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "FT %dS\\n">>`:
-        DB "FT %dS\012"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "SB\\n">>`:
-        DB "SB\012"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "FT %d F\\n">>`:
-        DB "FT %d F\012"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "Error port">>`:
-        DB "Error port"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
 `?<Initializer for <Constant "Send result: %s\\n`:
         DB "Send result: %s\012"
 
@@ -1413,6 +1687,73 @@ framework_entry:
         RSEG XDATA_ID:CODE:NOROOT(0)
 `?<Initializer for <Constant ",waiting for resu`:
         DB ",waiting for result\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_SEND:SEND_SU`:
+        DB "INFO_SEND:SEND_SUCCESSED, dstAddr: d%;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ERROR_SEND:SEND_F`:
+        DB 45H, 52H, 52H, 4FH, 52H, 5FH, 53H, 45H
+        DB 4EH, 44H, 3AH, 53H, 45H, 4EH, 44H, 5FH
+        DB 46H, 41H, 49H, 4CH, 45H, 44H, 2CH, 20H
+        DB 64H, 73H, 74H, 41H, 64H, 64H, 72H, 3AH
+        DB 20H, 64H, 25H, 2CH, 20H, 72H, 63H, 3AH
+        DB 20H, 64H, 25H, 2CH, 20H, 66H, 61H, 69H
+        DB 6CH, 65H, 64H, 20H, 74H, 69H, 6DH, 65H
+        DB 73H, 3AH, 64H, 25H, 3BH, 0AH, 0
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_SEND:SEND_TE`:
+        DB "INFO_SEND:SEND_TEST_2AP_SUCCESSED;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ERROR_SEND:SEND_T`:
+        DB "ERROR_SEND:SEND_TEST_2AP_FAILED, rc: d%;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_SEND:FORWARD`:
+        DB "INFO_SEND:FORWARD_SUCCESSED, dstAddr: d%;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ERROR_SEND:FORWAR`:
+        DB "ERROR_SEND:FORWARD_FAILED, dstAddr: d%, rc: d%;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ERROR_OTHER:ERROR`:
+        DB "ERROR_OTHER:ERROR_PORT;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_OTHER:SEND_C`:
+        DB "INFO_OTHER:SEND_CHANNEL;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_OTHER:SET_CH`:
+        DB "INFO_OTHER:SET_CHANNEL;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_OTHER:SEND_L`:
+        DB "INFO_OTHER:SEND_LOG;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_OTHER:NO_LOG`:
+        DB "INFO_OTHER:NO_LOG;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ERROR_OTHER:LOG_L`:
+        DB "ERROR_OTHER:LOG_LEVEL_ERROR_INFRAME;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ERROR_OTHER:SET_L`:
+        DB "ERROR_OTHER:SET_LOGLEVEL_SIZE_ERROR;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "INFO_OTHER:SCAN_B`:
+        DB "INFO_OTHER:SCAN_BACK;\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ERROR_OTHER:SCAN_`:
+        DB "ERROR_OTHER:SCAN_SIZEOUT;\012"
 
         RSEG XDATA_ID:CODE:NOROOT(0)
 `?<Initializer for __Constant_1>`:
@@ -1498,41 +1839,6 @@ framework_entry:
 
         RSEG XDATA_I:XDATA:NOROOT(0)
         DATA8
-`?<Constant "ST2ApF:%d\\n">`:
-        DS 11
-        REQUIRE `?<Initializer for <Constant "ST2ApF:%d\\n">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
-`?<Constant "FT %dS\\n">`:
-        DS 8
-        REQUIRE `?<Initializer for <Constant "FT %dS\\n">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA32
-`?<Constant "SB\\n">`:
-        DS 4
-        REQUIRE `?<Initializer for <Constant "SB\\n">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
-`?<Constant "FT %d F\\n">`:
-        DS 9
-        REQUIRE `?<Initializer for <Constant "FT %d F\\n">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
-`?<Constant "Error port">`:
-        DS 11
-        REQUIRE `?<Initializer for <Constant "Error port">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
 `?<Constant "Send result: %s\\n">`:
         DS 17
         REQUIRE `?<Initializer for <Constant "Send result: %s\\n`
@@ -1553,6 +1859,111 @@ framework_entry:
         REQUIRE __INIT_XDATA_I
 
         RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_SEND:SEND_SUCCES...">`:
+        DS 40
+        REQUIRE `?<Initializer for <Constant "INFO_SEND:SEND_SU`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ERROR_SEND:SEND_FAILE...">`:
+        DS 63
+        REQUIRE `?<Initializer for <Constant "ERROR_SEND:SEND_F`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_SEND:SEND_TEST_2...">`:
+        DS 36
+        REQUIRE `?<Initializer for <Constant "INFO_SEND:SEND_TE`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ERROR_SEND:SEND_TEST_...">`:
+        DS 42
+        REQUIRE `?<Initializer for <Constant "ERROR_SEND:SEND_T`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_SEND:FORWARD_SUC...">`:
+        DS 43
+        REQUIRE `?<Initializer for <Constant "INFO_SEND:FORWARD`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ERROR_SEND:FORWARD_FA...">`:
+        DS 49
+        REQUIRE `?<Initializer for <Constant "ERROR_SEND:FORWAR`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ERROR_OTHER:ERROR_PORT;\\n">`:
+        DS 25
+        REQUIRE `?<Initializer for <Constant "ERROR_OTHER:ERROR`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_OTHER:SEND_CHANN...">`:
+        DS 26
+        REQUIRE `?<Initializer for <Constant "INFO_OTHER:SEND_C`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_OTHER:SET_CHANNEL;\\n">`:
+        DS 25
+        REQUIRE `?<Initializer for <Constant "INFO_OTHER:SET_CH`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_OTHER:SEND_LOG;\\n">`:
+        DS 22
+        REQUIRE `?<Initializer for <Constant "INFO_OTHER:SEND_L`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_OTHER:NO_LOG;\\n">`:
+        DS 20
+        REQUIRE `?<Initializer for <Constant "INFO_OTHER:NO_LOG`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ERROR_OTHER:LOG_LEVEL...">`:
+        DS 38
+        REQUIRE `?<Initializer for <Constant "ERROR_OTHER:LOG_L`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ERROR_OTHER:SET_LOGLE...">`:
+        DS 38
+        REQUIRE `?<Initializer for <Constant "ERROR_OTHER:SET_L`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "INFO_OTHER:SCAN_BACK;\\n">`:
+        DS 23
+        REQUIRE `?<Initializer for <Constant "INFO_OTHER:SCAN_B`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ERROR_OTHER:SCAN_SIZE...">`:
+        DS 27
+        REQUIRE `?<Initializer for <Constant "ERROR_OTHER:SCAN_`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
         DATA32
 __Constant_1:
         DS 4
@@ -1561,15 +1972,15 @@ __Constant_1:
 
         END
 // 
-// 1 667 bytes in segment NEAR_CODE
+// 2 078 bytes in segment NEAR_CODE
 //     2 bytes in segment SFR_AN
-//   332 bytes in segment XDATA_I
-//   332 bytes in segment XDATA_ID
+//   806 bytes in segment XDATA_I
+//   806 bytes in segment XDATA_ID
 //    54 bytes in segment XDATA_Z
 // 
-// 1 995 bytes of CODE  memory (+ 4 bytes shared)
+// 2 880 bytes of CODE  memory (+ 4 bytes shared)
 //     0 bytes of DATA  memory (+ 2 bytes shared)
-//   382 bytes of XDATA memory (+ 4 bytes shared)
+//   856 bytes of XDATA memory (+ 4 bytes shared)
 //
 //Errors: none
-//Warnings: 2
+//Warnings: 3

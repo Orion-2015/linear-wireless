@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:46:36 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  16:32:57 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -79,9 +79,7 @@
         EXTERN ?FUNC_ENTER_XDATA
         EXTERN ?FUNC_LEAVE_XDATA
         EXTERN ?PUSH_XSTACK8_X_TWO
-        EXTERN ?PUSH_XSTACK_I_TWO
         EXTERN ?V0
-        EXTERN __INIT_XDATA_I
 
         PUBLIC getLogHandle
 
@@ -90,14 +88,15 @@
         EXTERN strlen
         EXTERN logBuffer
         EXTERN logIndex
+        EXTERN logTemp
 
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
 getLogHandle:
         CODE
-        MOV     A,#-0xb
+        MOV     A,#-0x9
         LCALL   ?FUNC_ENTER_XDATA
-        ; Saved register size: 11
+        ; Saved register size: 9
         ; Auto size: 0
         MOV     A,R4
         ADD     A,#0x7
@@ -120,6 +119,14 @@ getLogHandle:
         MOV     A,R0
         ORL     A,R1
         JZ      ??getLogHandle_0
+        MOV     DPTR,#logIndex
+        CLR     C
+        MOVX    A,@DPTR
+        SUBB    A,#0x29
+        INC     DPTR
+        MOVX    A,@DPTR
+        SUBB    A,#0x0
+        JNC     ??getLogHandle_0
         ; Setup parameters for call to function memcpy
         MOV     DPTR,#logIndex
         LCALL   ?PUSH_XSTACK8_X_TWO
@@ -138,21 +145,25 @@ getLogHandle:
         INC     DPTR
         MOVX    A,@DPTR
         MOV     A,R0
-        MOV     DPL,?V0 + 0
-        MOV     DPH,?V0 + 1
-        MOVX    @DPTR,A
-        ; Setup parameters for call to function log
-        MOV     R2,#`?<Constant "SL\\n">` & 0xff
-        MOV     R3,#(`?<Constant "SL\\n">` >> 8) & 0xff
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_0:
+        MOV     A,#0xa
         SJMP    ??getLogHandle_1
 ??getLogHandle_0:
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,R0
+        ORL     A,R1
+        JNZ     ??getLogHandle_2
         ; Setup parameters for call to function memcpy
-        MOV     ?V0 + 2,#0x6
-        MOV     ?V0 + 3,#0x0
-        MOV     R0,#?V0 + 2
-        LCALL   ?PUSH_XSTACK_I_TWO
-        MOV     R4,#`?<Constant "No log">` & 0xff
-        MOV     R5,#(`?<Constant "No log">` >> 8) & 0xff
+        MOV     DPTR,#logIndex
+        LCALL   ?PUSH_XSTACK8_X_TWO
+        MOV     R4,#logBuffer & 0xff
+        MOV     R5,#(logBuffer >> 8) & 0xff
         MOV     A,R6
         MOV     R2,A
         MOV     A,R7
@@ -167,59 +178,36 @@ getLogHandle:
         MOV     R3,A
         LCALL   strlen
         MOV     A,R2
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_1:
+        MOV     A,#0xb
+??getLogHandle_1:
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x4
+        LCALL   log
+??getLogHandle_2:
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
         MOV     DPL,?V0 + 0
         MOV     DPH,?V0 + 1
         MOVX    @DPTR,A
-        ; Setup parameters for call to function log
-        MOV     R2,#`?<Constant "NL\\n">` & 0xff
-        MOV     R3,#(`?<Constant "NL\\n">` >> 8) & 0xff
-??getLogHandle_1:
-        MOV     R1,#0x2
-        LCALL   log
-        MOV     R7,#0x4
-        LJMP    ?FUNC_LEAVE_XDATA
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "SL\\n">>`:
-        DB "SL\012"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "No log">>`:
-        DB "No log"
-
-        RSEG XDATA_ID:CODE:NOROOT(0)
-`?<Initializer for <Constant "NL\\n">>`:
-        DB "NL\012"
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA32
-`?<Constant "SL\\n">`:
-        DS 4
-        REQUIRE `?<Initializer for <Constant "SL\\n">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA8
-`?<Constant "No log">`:
-        DS 7
-        REQUIRE `?<Initializer for <Constant "No log">>`
-        REQUIRE __INIT_XDATA_I
-
-        RSEG XDATA_I:XDATA:NOROOT(0)
-        DATA32
-`?<Constant "NL\\n">`:
-        DS 4
-        REQUIRE `?<Initializer for <Constant "NL\\n">>`
-        REQUIRE __INIT_XDATA_I
+        MOV     DPTR,#logTemp
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+        INC     DPTR
+        RET
 
         END
 // 
-// 134 bytes in segment NEAR_CODE
-//  15 bytes in segment XDATA_I
-//  15 bytes in segment XDATA_ID
+// 162 bytes in segment NEAR_CODE
 // 
-// 149 bytes of CODE  memory
-//  15 bytes of XDATA memory
+// 162 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

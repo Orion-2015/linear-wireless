@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:20 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  18:07:05 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -89,15 +89,13 @@
         PUBLIC logTemp
         PUBLIC removeOldLog
 
-        EXTERN strlen
         EXTERN memcpy
-        EXTERN debug
 
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
 logBuffer:
-        DS 500
+        DS 50
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
@@ -122,11 +120,11 @@ logLevel:
         RSEG NEAR_CODE:CODE:NOROOT(0)
 log:
         CODE
-        MOV     A,#-0xd
+        MOV     A,#-0xb
         LCALL   ?FUNC_ENTER_XDATA
-        ; Saved register size: 13
+        ; Saved register size: 11
         ; Auto size: 0
-        MOV     ?V0 + 2,R1
+        MOV     ?V0 + 0,R1
         MOV     A,R2
         MOV     R6,A
         MOV     A,R3
@@ -134,50 +132,48 @@ log:
         MOV     DPTR,#logLevel
         MOVX    A,@DPTR
         CLR     C
-        SUBB    A,?V0 + 2
+        SUBB    A,?V0 + 0
         JC      ??log_0
-        MOV     DPTR,#logIndex
+        MOV     DPL,R6
+        MOV     DPH,R7
         MOVX    A,@DPTR
-        MOV     ?V0 + 0,A
+        MOV     R2,A
+        MOV     DPTR,#logIndex
+        MOV     ?V0 + 2,R2
+        MOVX    A,@DPTR
+        ADD     A,?V0 + 2
+        MOV     R0,A
         INC     DPTR
         MOVX    A,@DPTR
-        MOV     ?V0 + 1,A
-        ; Setup parameters for call to function strlen
-        LCALL   strlen
-        MOV     ?V0 + 4,R2
-        MOV     ?V0 + 5,R3
-        MOV     A,?V0 + 0
-        ADD     A,?V0 + 4
-        MOV     R0,A
-        MOV     A,?V0 + 1
-        ADDC    A,?V0 + 5
+        ADDC    A,#0x0
         MOV     R1,A
         LCALL   ?Subroutine0
 ??CrossCallReturnLabel_0:
         CLR     C
         MOV     A,R0
-        SUBB    A,#-0xb
+        SUBB    A,#0x33
         MOV     A,R1
-        SUBB    A,#0x1
+        SUBB    A,#0x0
         JC      ??log_1
         ; Setup parameters for call to function removeOldLog
-        ; Setup parameters for call to function strlen
-        LCALL   ?Subroutine1
-??CrossCallReturnLabel_3:
+        MOV     A,R2
+        ADD     A,#0x1
         INC     R2
-        MOV     A,R3
+        CLR     A
         ADDC    A,#0x0
         MOV     R3,A
         LCALL   removeOldLog
 ??log_1:
-        ; Setup parameters for call to function strlen
-        LCALL   ?Subroutine1
-??CrossCallReturnLabel_4:
-        MOV     ?V0 + 0,A
-        MOV     A,R3
+        ; Setup parameters for call to function memcpy
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        ADD     A,#0x1
+        MOV     ?V0 + 2,A
+        CLR     A
         ADDC    A,#0x0
-        MOV     ?V0 + 1,A
-        MOV     R0,#?V0 + 0
+        MOV     ?V0 + 3,A
+        MOV     R0,#?V0 + 2
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     A,R6
         MOV     R4,A
@@ -194,11 +190,12 @@ log:
         LCALL   memcpy
         MOV     A,#0x2
         LCALL   ?DEALLOC_XSTACK8
-        ; Setup parameters for call to function strlen
-        LCALL   ?Subroutine1
-??CrossCallReturnLabel_5:
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        ADD     A,#0x1
         MOV     R0,A
-        MOV     A,R3
+        CLR     A
         ADDC    A,#0x0
         MOV     R1,A
         MOV     DPTR,#logIndex
@@ -209,27 +206,9 @@ log:
         MOVX    A,@DPTR
         ADDC    A,R1
         MOVX    @DPTR,A
-        ; Setup parameters for call to function debug
-        MOV     A,R6
-        MOV     R2,A
-        MOV     A,R7
-        MOV     R3,A
-        LCALL   debug
 ??log_0:
-        MOV     R7,#0x6
+        MOV     R7,#0x4
         LJMP    ?FUNC_LEAVE_XDATA
-
-        RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine1:
-        MOV     A,R6
-        MOV     R2,A
-        MOV     A,R7
-        MOV     R3,A
-        LCALL   strlen
-        ; Setup parameters for call to function memcpy
-        MOV     A,R2
-        ADD     A,#0x1
-        RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
 removeOldLog:
@@ -252,21 +231,20 @@ removeOldLog:
         ADDC    A,#0x0
 ??removeOldLog_0:
         MOV     R1,A
-        LCALL   ?Subroutine2
-??CrossCallReturnLabel_6:
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_3:
         JZ      ??removeOldLog_2
         CLR     C
         MOV     A,R0
-        SUBB    A,#-0xc
+        SUBB    A,#0x32
         MOV     A,R1
-        SUBB    A,#0x1
+        SUBB    A,#0x0
         JC      ??removeOldLog_1
 ??removeOldLog_2:
-        MOV     A,#-0xc
+        MOV     A,#0x32
         XRL     A,R0
         JNZ     ??removeOldLog_3
-        MOV     A,#0x1
-        XRL     A,R1
+        MOV     A,R1
 ??removeOldLog_3:
         JNZ     ??removeOldLog_4
         MOV     DPTR,#logIndex
@@ -283,8 +261,8 @@ removeOldLog:
         MOV     R3,A
         SJMP    ??CrossCallReturnLabel_2
 ??removeOldLog_6:
-        LCALL   ?Subroutine2
-??CrossCallReturnLabel_7:
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_4:
         PUSH    A
         MOV     A,R0
         CLR     C
@@ -305,9 +283,9 @@ removeOldLog:
 ??CrossCallReturnLabel_2:
         CLR     C
         MOV     A,R0
-        SUBB    A,#-0xc
+        SUBB    A,#0x32
         MOV     A,R1
-        SUBB    A,#0x1
+        SUBB    A,#0x0
         JC      ??removeOldLog_6
         MOV     DPTR,#logIndex
         CLR     C
@@ -324,7 +302,7 @@ removeOldLog:
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine2:
+?Subroutine1:
         MOV     A,#logBuffer & 0xff
         ADD     A,R0
         MOV     DPL,A
@@ -347,17 +325,17 @@ removeOldLog:
         RSEG XDATA_ID:CODE:NOROOT(0)
 `?<Initializer for logLevel>`:
         DATA8
-        DB 2
+        DB 5
 
         END
 // 
-// 286 bytes in segment NEAR_CODE
+// 267 bytes in segment NEAR_CODE
 //   1 byte  in segment XDATA_I
 //   1 byte  in segment XDATA_ID
-// 602 bytes in segment XDATA_Z
+// 152 bytes in segment XDATA_Z
 // 
-// 287 bytes of CODE  memory
-// 603 bytes of XDATA memory
+// 268 bytes of CODE  memory
+// 153 bytes of XDATA memory
 //
 //Errors: none
-//Warnings: 1
+//Warnings: none
