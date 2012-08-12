@@ -15,13 +15,15 @@ void getStationDataHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFr
 {
 	uint8 myAddr;
 	myAddr = getMyAddress();
-	
-	sprintf((char*)stationDataBuffer, "This is station test data, my address is %d\n", myAddr);
-	
+	sprintf((char*)stationDataBuffer, "my address is %d\n", myAddr);
+#ifdef COMDEBUG	
 	memcpy(appOutFrame->msg, stationDataBuffer, strlen((char*)stationDataBuffer));
 	appOutFrame->len = strlen((char*)stationDataBuffer);
-	
-	log(INFO, "send station data\n");
+#else	
+	memcpy(appOutFrame->msg, &myAddr, sizeof(myAddr));
+	appOutFrame->len = sizeof(myAddr);
+#endif
+//	log(INFO, "send station data\n");
 	return;	
 }
 

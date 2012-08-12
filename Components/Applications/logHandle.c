@@ -19,13 +19,22 @@ void getLogHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 	{
 		memcpy(appOutFrame->msg, logBuffer, logIndex);
 		appOutFrame->len = logIndex;
-		log(INFO, "Send log");
+#ifndef LOGINFO
+		log(INFO, "Send log\n");
+#else
+		log(INFO, "SL\n");
+#endif
 	}
 	else
 	{
 		memcpy(appOutFrame->msg, "No log", 6);
 		appOutFrame->len = strlen((char*)appOutFrame->msg);
-		log(INFO, "No log");
+#ifndef LOGINFO
+		log(INFO, "No log\n");
+#else
+		log(INFO, "NL\n");
+#endif
+		
 	}
 	return;	
 }

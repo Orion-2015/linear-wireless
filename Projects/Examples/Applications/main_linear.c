@@ -62,9 +62,21 @@ void main (void)
 	
 	BSP_Init( );
 	
-	SET_MAIN_CLOCK_SOURCE(CRYSTAL);   
- 	initUART();
+	SET_MAIN_CLOCK_SOURCE(CRYSTAL);  
+	//if(getMyAddress() == APADDRESS)
 	
+		initUART();
+		printf( "Start iwsn system...\n" );
+		//printf("Run OS!\n");
+	
+	//else
+	
+		InitRFIO(); /* set io as normal io, not uart */
+	
+ 	
+	
+	//P0DIR &= ~0x03; /* Set button as input */
+	EnableRecv();
 	SMPL_Init( NULL );
 	
 	/* turn on the radio so we are always able to receive data asynchronously */
@@ -73,7 +85,7 @@ void main (void)
 	/* turn on LED. */
 	BSP_TURN_ON_LED1( );
 	BSP_TURN_ON_LED2( );
-	printf( "Start iwsn system...\n" );
+	//printf( "Start iwsn system...\n" );
 	
   /* never coming back... */
   framework_entry();

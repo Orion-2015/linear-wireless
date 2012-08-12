@@ -12,6 +12,10 @@ struct AppFrame* pInframe; /* used for application */
 
 extern char roomFlag;
 extern char getAckFlag;
+static uint32 sendTimes = 0;
+static uint32 successTimes = 0;
+static uint32 failTimes = 0;
+
 void checkFlag()
 {
 		if(roomFlag == 0)
@@ -68,6 +72,7 @@ void initOS(void)
 
 void runOS(void)
 {
+	//uint16 count = 0x7ff;
 	while(1)
 	{
 		checkRF();
@@ -76,6 +81,20 @@ void runOS(void)
 			checkUART();
 			//checkButton();
 		}
+		else
+
+		{
+			checkUART();
+			checkButton();
+		}
+		/*
+		count--;
+		if(count == 0)
+		{
+			BSP_TOGGLE_LED2();
+			count = 0x7ff;
+		}
+		*/
 	}
 }
 
@@ -100,15 +119,43 @@ void send2Computer(struct AppFrame* pFrame)
 {
 #ifdef COMDEBUG
 	printf("Receive new message\n");
-	printf("port is %d\ncontent is ", pFrame->port);
+	printf("port is %d\ncontent is\n", pFrame->port);
 	if(pFrame->numUnits != 1)
 	{
 		putchar(pFrame->numUnits);
 		putchar(pFrame->currentUnit);
 	}
+	
+	//printf("startdata");
+	if(pFrame->port == SCAN)
+	{
+		printf("The number of nodes is %d\nThey are ",pFrame->msg[0]);
+		for(uint8 j=pFrame->msg[0];j>=1;j--)
+		{
+			printf("node %d  ",pFrame->msg[j]);	
+		}
+		uint8 flag_fail = 0;
+		for(uint8 k=pFrame->msg[0],i=1;k>=1,i<=pFrame->msg[0];k--,i++)
+		{
+			if(pFrame->msg[k] != i)	
+			{
+				failTimes++;
+				flag_fail = 1;
+				break;				
+			}			
+		}
+		if(flag_fail == 0)
+			successTimes++;
+		printf("\nsendTimes is %d\n", sendTimes);
+		printf("failTimes is %d\n", failTimes);
+		printf("successTimes is %d\n", successTimes);
+	}	
+	else
+	{
+		putstr((uint8*)pFrame->msg, pFrame->len);
+	}
 #endif	
-	printf("startdata");
-	putstr((uint8*)pFrame->msg, pFrame->len);	
+	//putstr((uint8*)pFrame->msg, pFrame->len);
 	printf("bupt");
 	return;
 }
@@ -121,25 +168,33 @@ void sendTest2AP(void)
 	struct AppFrame* appFrame = (struct AppFrame*)tx;
 	appFrame->srcAddr = myAddr;
 	appFrame->originalAddr = myAddr;
-	appFrame->finnalDstAddr = 2;
+	appFrame->finnalDstAddr = 1;
 	appFrame->port = 0x00;
-	appFrame->msg[0] = 0x00;
-	appFrame->len = 1;
-	
+	sprintf(logTemp, "%d", getMyAddress()); 
+	memcpy(appFrame->msg, logTemp, strlen(logTemp));
+	appFrame->len = strlen(logTemp);
 	/* send frame */
 	rc = send(appFrame, sizeof(struct AppFrame));
 	if(rc != SMPL_SUCCESS)
 	{
+#ifdef LOGINFO
+		sprintf((char*)logTemp, "ST2ApF:%d\n", rc);			
+		log(ERROR, logTemp);
+#else
 		log(ERROR, "Send Test2AP failed");
+#endif
 	}
 }
+
 
 void checkRF(void)
 {
 	struct AppFrame *appFrame;
 	appFrame = receive();
 	if(appFrame == NULL) return;
+#ifdef COMDEBUG
 	checkFlag();
+#endif
 	handleRF(appFrame, FALSE);
 	return;
 }
@@ -169,20 +224,32 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 		rc = fowardFrame(pInframe);
 		if(rc == SMPL_SUCCESS)
 		{
-			sprintf((char*)logTemp, "Forward to %d success\n", pInframe->dstAddr);			
+#ifndef LOGINFO
+			sprintf((char*)logTemp, "Forward to %d success\n", pInframe->dstAddr);
+#else
+			sprintf((char*)logTemp, "FT %dS\n", pInframe->dstAddr);
+#endif
 			log(INFO, logTemp);
 		}
 		else
 		{
 			/* if forward failed and is scan application, then go back route */
-			if(SCAN == pInframe->port)
+			if(SCAN == pInframe->port && pInframe->finnalDstAddr > myAddr)
 			{
 				callApplication(pInframe, pOutFrame);
+#ifndef LOGINFO
 				log(INFO, "Scan back\n");
+#else				
+				log(INFO, "SB\n");
+#endif				
 			}
 			else
 			{
-				sprintf((char*)logTemp, "Forward to %d failed\n", pInframe->dstAddr);			
+#ifndef LOGINFO				
+				sprintf((char*)logTemp, "Forward to %d failed\n", pInframe->dstAddr);	
+#else
+				sprintf((char*)logTemp, "FT %d F\n", pInframe->dstAddr);	
+#endif		
 				log(INFO, logTemp);
 			}
 		}		
@@ -191,6 +258,8 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 	{
 		if(pInframe->port < COMMAND_SIZE)
 		{
+			BSP_TOGGLE_LED1();
+			BSP_TOGGLE_LED2();
 			/* if dstAddress is ap address, then send data to computer by uart */
 			if(myAddr == APADDRESS)
 			{
@@ -198,6 +267,7 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 				{
 					if(taskList[pInframe->port].taskFunction != NULL)
 					{
+						
 						taskList[pInframe->port].taskFunction(pInframe, pOutFrame);
 						if(pOutFrame->len != 0)
 						{
@@ -210,7 +280,15 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 				}
 				else
 				{
+					if(pInframe->port == SCAN)
+					{
+						taskList[pInframe->port].taskFunction(pInframe, NULL);
+						send2Computer(pInframe);
+					}
+					else
+					{
 					send2Computer(pInframe);
+					}
 				}
 			}
 			/* else call user callback function to handle request */
@@ -240,26 +318,50 @@ void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 		pOutFrame->srcAddr = getMyAddress();
 		if(pOutFrame->len != 0)
 		{
-			MRFI_DelayMs(50);
-			rc = send(pOutFrame, sizeof(struct AppFrame));
-			if(rc == SMPL_SUCCESS)
+			if(pOutFrame->srcAddr == pOutFrame->finnalDstAddr)
 			{
-			sprintf(logTemp, "Send result: %d\n", rc);
-			consoleAP(logTemp);
-			}			
+				send2Computer(pOutFrame);
+			}
+			else
+			{
+				MRFI_DelayMs(50);
+				rc = send(pOutFrame, sizeof(struct AppFrame));
+				//if(rc == SMPL_SUCCESS)
+				{
+					sprintf((char*)logTemp, "Send result: %s\n", getErrorText(rc));
+					consoleAP(logTemp);
+				}
+				/*
+				else
+				{
+					uint8 i = MAXRESENDTIMES;
+					while(i)
+					{
+						rc = send(pOutFrame, sizeof(struct AppFrame));
+						if(rc == SMPL_SUCCESS)
+							break;
+						MRFI_DelayMs(100);
+						i--;
+					}
+				}
+			*/
+			}
+			
 		}
 	}
 }
 
 void debug(char* data)
 {
+	/* only ap node have uart */
+	//if(getMyAddress() != APADDRESS) return;		
 	putstr((uint8*)data, strlen((char*)data));
 	return;
 }
 
 void consoleAP(char* data)
 {
-	if(getMyAddress() != APADDRESS) return;
+	//if(getMyAddress() != APADDRESS) return;
 	debug(data);
 }
 
@@ -275,8 +377,11 @@ void checkUART(void)
 	len -= 2; /* remove 0x0d0a end with symbol */
 	if( len >= UARTCOMMANDMINSIZE )
 	{
-		checkFlag();
+		
 #ifdef	COMDEBUG
+		if(cmd->port == SCAN)
+			sendTimes++;
+		checkFlag();
 		printf("\nGet command: ");
 		puthex((uint8*)cmd, len);
 		printf(",waiting for result\n");

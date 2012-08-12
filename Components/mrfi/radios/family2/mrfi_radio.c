@@ -94,7 +94,7 @@
  */
 
 #if (defined MRFI_CC1110) || (defined MRFI_CC1111)
-#define MRFI_SETTING_PA_TABLE0    0x8E
+#define MRFI_SETTING_PA_TABLE0    0x1D    /*60   C8  1D*/
 #define MRFI_RADIO_PARTNUM        0x01
 #define MRFI_RADIO_MIN_VERSION    3
 
@@ -487,8 +487,10 @@ void MRFI_Init(void)
     uint16_t rndSeed = 0x0;
 
     /* Put radio in RX mode */
-    RFST = SRX;
-
+    
+		
+		RFST = SRX;
+    
     /* Delay for valid RSSI. Otherwise same RSSI
      * value could be read every time.
      */
@@ -677,6 +679,7 @@ uint8_t MRFI_Transmit(mrfiPacket_t * pPacket, uint8_t txType)
   static uint8_t ccaRetries;
   uint8_t returnValue = MRFI_TX_RESULT_SUCCESS;
 
+	EnableSend();
   /* radio must be awake to transmit */
   MRFI_ASSERT( mrfiRadioState != MRFI_RADIO_STATE_OFF );
 
@@ -860,7 +863,7 @@ uint8_t MRFI_Transmit(mrfiPacket_t * pPacket, uint8_t txType)
   {
     Mrfi_RxModeOn();
   }
-
+  EnableRecv();
   return( returnValue );
 }
 

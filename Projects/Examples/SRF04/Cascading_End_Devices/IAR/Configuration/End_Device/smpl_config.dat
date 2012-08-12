@@ -67,3 +67,5 @@
  */
 /* -DRX_POLLS */
 
+-DFWVERSION=2
+

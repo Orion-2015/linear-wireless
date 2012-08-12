@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<Workspace>
+  <ConfigDictionary>
+    
+  <CurrentConfigs><Project>Polling_with_AP/CC1110-Sender</Project></CurrentConfigs></ConfigDictionary>
+  <Desktop>
+    <Static>
+      <Workspace>
+        <ColumnWidths>
+          
+          
+          
+          
+        <Column0>613</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+      </Workspace>
+    <Find-in-Files><ColumnWidth0>664</ColumnWidth0><ColumnWidth1>94</ColumnWidth1><ColumnWidth2>1138</ColumnWidth2></Find-in-Files></Static>
+    <Windows>
+      
+    <Wnd0>
+        <Tabs>
+          <Tab>
+            <Identity>TabID-2907-18727</Identity>
+            <TabName>Workspace</TabName>
+            <Factory>Workspace</Factory>
+            <Session>
+              
+            <NodeDict><ExpandedNode>Polling_with_AP</ExpandedNode><ExpandedNode>Polling_with_AP/Components</ExpandedNode><ExpandedNode>Polling_with_AP/Components/bsp</ExpandedNode><ExpandedNode>Polling_with_AP/Components/mrfi</ExpandedNode><ExpandedNode>Polling_with_AP/Components/nwk</ExpandedNode><ExpandedNode>Polling_with_AP/Components/nwk applications</ExpandedNode><ExpandedNode>Polling_with_AP/peer applications</ExpandedNode><ExpandedNode>Polling_with_AP/peer applications/Configuration</ExpandedNode><ExpandedNode>Polling_with_AP/peer applications/application</ExpandedNode><ExpandedNode>Polling_with_AP/peer applications/application/Access Point</ExpandedNode><ExpandedNode>Polling_with_AP/peer applications/application/End Device</ExpandedNode><ExpandedNode>Polling_with_AP/peer applications/application/End Device/main_2EDOnePolls.c</ExpandedNode></NodeDict></Session>
+          </Tab>
+        </Tabs>
+        
+      <SelectedTab>0</SelectedTab></Wnd0><Wnd1><Tabs><Tab><Identity>TabID-19779-10596</Identity><TabName>Find in Files</TabName><Factory>Find-in-Files</Factory><Session/></Tab></Tabs><SelectedTab>0</SelectedTab></Wnd1></Windows>
+    <Editor>
+      
+      
+      
+      
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\Applications\main_AP_RE.c</Filename><XPos>0</XPos><YPos>102</YPos><SelStart>5119</SelStart><SelEnd>5138</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\bsp\bsp.h</Filename><XPos>0</XPos><YPos>40</YPos><SelStart>3172</SelStart><SelEnd>3172</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\Applications\main_2EDOnePolls.c</Filename><XPos>0</XPos><YPos>273</YPos><SelStart>9540</SelStart><SelEnd>9540</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\Configuration\smpl_nwk_config.dat</Filename><XPos>0</XPos><YPos>48</YPos><SelStart>3106</SelStart><SelEnd>3123</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_types.h</Filename><XPos>0</XPos><YPos>30</YPos><SelStart>2614</SelStart><SelEnd>2614</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\mrfi\mrfi_defs.h</Filename><XPos>0</XPos><YPos>214</YPos><SelStart>10963</SelStart><SelEnd>10963</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_api.c</Filename><XPos>0</XPos><YPos>295</YPos><SelStart>10780</SelStart><SelEnd>10780</SelEnd></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_globals.c</Filename><XPos>0</XPos><YPos>150</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd></Tab><ActiveTab>7</ActiveTab></Pane><ActivePane>0</ActivePane><Sizes><Pane><X>1000000</X><Y>1000000</Y></Pane></Sizes><SplitMode>1</SplitMode></Editor>
+    <Positions>
+      
+      
+      
+      
+      
+    <Top><Row0><Sizes><Toolbar-00ed8078><key>iaridepm.enu1</key></Toolbar-00ed8078></Sizes></Row0></Top><Left><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>749</Bottom><Right>704</Right><x>-2</x><y>-2</y><xscreen>430</xscreen><yscreen>206</yscreen><sizeHorzCX>223958</sizeHorzCX><sizeHorzCY>206413</sizeHorzCY><sizeVertCX>367708</sizeVertCX><sizeVertCY>752505</sizeVertCY></Rect></Wnd0></Sizes></Row0></Left><Right><Row0><Sizes/></Row0></Right><Bottom><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>204</Bottom><Right>1922</Right><x>-2</x><y>-2</y><xscreen>1924</xscreen><yscreen>206</yscreen><sizeHorzCX>1002083</sizeHorzCX><sizeHorzCY>206413</sizeHorzCY><sizeVertCX>223958</sizeVertCX><sizeVertCY>206413</sizeVertCY></Rect></Wnd1></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+  </Desktop>
+</Workspace>
+
+

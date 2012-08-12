@@ -1,0 +1,363 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:20 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\ApplicationFramewor /
+//                          k\log.c                                           /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\Applicati /
+//                          onFramework\log.c -D MCU_H=<ioCC1110.h> -D        /
+//                          MRFI_CC1110 -lb E:\linear-wireless\Projects\Examp /
+//                          les\SRF04\Cascading_End_Devices\IAR\CC1110-EndDev /
+//                          ice\List\ -o E:\linear-wireless\Projects\Examples /
+//                          \SRF04\Cascading_End_Devices\IAR\CC1110-EndDevice /
+//                          \Obj\ -e --debug --core=plain --dptr=16,1         /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\log.s51 /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME log
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC log
+        PUBLIC logBuffer
+        PUBLIC logIndex
+        PUBLIC logLevel
+        PUBLIC logTemp
+        PUBLIC removeOldLog
+
+        EXTERN strlen
+        EXTERN memcpy
+        EXTERN debug
+
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+logBuffer:
+        DS 500
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA16
+logIndex:
+        DS 2
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+logTemp:
+        DS 100
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+logLevel:
+        DATA8
+        DS 1
+        REQUIRE `?<Initializer for logLevel>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+log:
+        CODE
+        MOV     A,#-0xd
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 13
+        ; Auto size: 0
+        MOV     ?V0 + 2,R1
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     DPTR,#logLevel
+        MOVX    A,@DPTR
+        CLR     C
+        SUBB    A,?V0 + 2
+        JC      ??log_0
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 1,A
+        ; Setup parameters for call to function strlen
+        LCALL   strlen
+        MOV     ?V0 + 4,R2
+        MOV     ?V0 + 5,R3
+        MOV     A,?V0 + 0
+        ADD     A,?V0 + 4
+        MOV     R0,A
+        MOV     A,?V0 + 1
+        ADDC    A,?V0 + 5
+        MOV     R1,A
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_0:
+        CLR     C
+        MOV     A,R0
+        SUBB    A,#-0xb
+        MOV     A,R1
+        SUBB    A,#0x1
+        JC      ??log_1
+        ; Setup parameters for call to function removeOldLog
+        ; Setup parameters for call to function strlen
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_3:
+        INC     R2
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R3,A
+        LCALL   removeOldLog
+??log_1:
+        ; Setup parameters for call to function strlen
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_4:
+        MOV     ?V0 + 0,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     ?V0 + 1,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,R6
+        MOV     R4,A
+        MOV     A,R7
+        MOV     R5,A
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        ADD     A,#logBuffer & 0xff
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        ADDC    A,#(logBuffer >> 8) & 0xff
+        MOV     R3,A
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function strlen
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_5:
+        MOV     R0,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R1,A
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        ADD     A,R0
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        ADDC    A,R1
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function debug
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   debug
+??log_0:
+        MOV     R7,#0x6
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   strlen
+        ; Setup parameters for call to function memcpy
+        MOV     A,R2
+        ADD     A,#0x1
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+removeOldLog:
+        CODE
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        MOV     A,R2
+        ADD     A,#-0x1
+        MOV     R0,A
+        MOV     A,R3
+        ADDC    A,#-0x1
+        SJMP    ??removeOldLog_0
+??removeOldLog_1:
+        MOV     A,R0
+        ADD     A,#0x1
+        INC     R0
+        MOV     A,R1
+        ADDC    A,#0x0
+??removeOldLog_0:
+        MOV     R1,A
+        LCALL   ?Subroutine2
+??CrossCallReturnLabel_6:
+        JZ      ??removeOldLog_2
+        CLR     C
+        MOV     A,R0
+        SUBB    A,#-0xc
+        MOV     A,R1
+        SUBB    A,#0x1
+        JC      ??removeOldLog_1
+??removeOldLog_2:
+        MOV     A,#-0xc
+        XRL     A,R0
+        JNZ     ??removeOldLog_3
+        MOV     A,#0x1
+        XRL     A,R1
+??removeOldLog_3:
+        JNZ     ??removeOldLog_4
+        MOV     DPTR,#logIndex
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        SJMP    ??removeOldLog_5
+??removeOldLog_4:
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_1:
+        MOV     A,R0
+        MOV     R2,A
+        MOV     A,R1
+        MOV     R3,A
+        SJMP    ??CrossCallReturnLabel_2
+??removeOldLog_6:
+        LCALL   ?Subroutine2
+??CrossCallReturnLabel_7:
+        PUSH    A
+        MOV     A,R0
+        CLR     C
+        SUBB    A,R2
+        MOV     R4,A
+        MOV     A,R1
+        SUBB    A,R3
+        MOV     R5,A
+        MOV     A,#logBuffer & 0xff
+        ADD     A,R4
+        MOV     DPL,A
+        MOV     A,#(logBuffer >> 8) & 0xff
+        ADDC    A,R5
+        MOV     DPH,A
+        POP     A
+        MOVX    @DPTR,A
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_2:
+        CLR     C
+        MOV     A,R0
+        SUBB    A,#-0xc
+        MOV     A,R1
+        SUBB    A,#0x1
+        JC      ??removeOldLog_6
+        MOV     DPTR,#logIndex
+        CLR     C
+        MOVX    A,@DPTR
+        SUBB    A,R2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        SUBB    A,R3
+??removeOldLog_5:
+        MOVX    @DPTR,A
+        POP     DPH
+        POP     DPL
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine2:
+        MOV     A,#logBuffer & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#(logBuffer >> 8) & 0xff
+        ADDC    A,R1
+        MOV     DPH,A
+        MOVX    A,@DPTR
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        MOV     A,R0
+        ADD     A,#0x1
+        INC     R0
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+        RET
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for logLevel>`:
+        DATA8
+        DB 2
+
+        END
+// 
+// 286 bytes in segment NEAR_CODE
+//   1 byte  in segment XDATA_I
+//   1 byte  in segment XDATA_ID
+// 602 bytes in segment XDATA_Z
+// 
+// 287 bytes of CODE  memory
+// 603 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: 1

@@ -1,0 +1,369 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:19 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\simpliciti\nwk\nwk_ /
+//                          globals.c                                         /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\simplicit /
+//                          i\nwk\nwk_globals.c -D MCU_H=<ioCC1110.h> -D      /
+//                          MRFI_CC1110 -lb E:\linear-wireless\Projects\Examp /
+//                          les\SRF04\Cascading_End_Devices\IAR\CC1110-EndDev /
+//                          ice\List\ -o E:\linear-wireless\Projects\Examples /
+//                          \SRF04\Cascading_End_Devices\IAR\CC1110-EndDevice /
+//                          \Obj\ -e --debug --core=plain --dptr=16,1         /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\nwk_glo /
+//                          bals.s51                                          /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME nwk_globals
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSTACK_DISP0_8
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC getMyAddress
+        PUBLIC nwk_getAPAddress
+        PUBLIC nwk_getBCastAddress
+        PUBLIC nwk_getFWVersion
+        PUBLIC nwk_getMyAddress
+        PUBLIC nwk_getProtocolVersion
+        PUBLIC nwk_globalsInit
+        PUBLIC nwk_setAPAddress
+        PUBLIC nwk_setMyAddress
+
+        EXTERN memset
+        EXTERN memcpy
+        EXTERN memcmp
+        EXTERN mrfiBroadcastAddr
+        EXTERN sMyROMAddress
+
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+sAPAddress:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+sMyRAMAddress:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+sRAMAddressIsSet:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+sVersionInfo:
+        DS 5
+        REQUIRE `?<Initializer for sVersionInfo>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_globalsInit:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     DPTR,#sRAMAddressIsSet
+        MOVX    A,@DPTR
+        JNZ     ??nwk_globalsInit_0
+        ; Setup parameters for call to function memcpy
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#sMyROMAddress & 0xff
+        MOV     R5,#(sMyROMAddress >> 8) & 0xff
+        MOV     R2,#sMyRAMAddress & 0xff
+        MOV     R3,#(sMyRAMAddress >> 8) & 0xff
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     DPTR,#sRAMAddressIsSet
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+??nwk_globalsInit_0:
+        SJMP    ??Subroutine2_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        LCALL   ?DEALLOC_XSTACK8
+        REQUIRE ??Subroutine2_0
+        ; // Fall through to label ??Subroutine2_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine2_0:
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+getMyAddress:
+        CODE
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        ; Setup parameters for call to function nwk_getMyAddress
+        LCALL   nwk_getMyAddress
+        MOV     DPL,R2
+        MOV     DPH,R3
+        MOVX    A,@DPTR
+        MOV     R1,A
+        REQUIRE ?Subroutine1
+        ; // Fall through to label ?Subroutine1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        POP     DPH
+        POP     DPL
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_getMyAddress:
+        CODE
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        MOV     DPTR,#sRAMAddressIsSet
+        MOVX    A,@DPTR
+        JZ      ??nwk_getMyAddress_0
+        MOV     R2,#sMyRAMAddress & 0xff
+        MOV     R3,#(sMyRAMAddress >> 8) & 0xff
+        SJMP    ??nwk_getMyAddress_1
+??nwk_getMyAddress_0:
+        MOV     R2,#sMyROMAddress & 0xff
+        MOV     R3,#(sMyROMAddress >> 8) & 0xff
+??nwk_getMyAddress_1:
+        SJMP    ?Subroutine1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_getFWVersion:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        MOV     R2,#(sVersionInfo + 1) & 0xff
+        MOV     R3,#((sVersionInfo + 1) >> 8) & 0xff
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_getProtocolVersion:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        MOV     R1,#0x2
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_setMyAddress:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        MOV     R1,#0x0
+        MOV     DPTR,#sRAMAddressIsSet
+        MOVX    A,@DPTR
+        JNZ     ??nwk_setMyAddress_0
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,R1
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     R2,#sMyRAMAddress & 0xff
+        MOV     R3,#(sMyRAMAddress >> 8) & 0xff
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     DPTR,#sRAMAddressIsSet
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+        MOV     R1,A
+??nwk_setMyAddress_0:
+        SJMP    ??Subroutine2_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_setAPAddress:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+        LCALL   memcpy
+        MOV     A,#0x2
+        LJMP    ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_getAPAddress:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 1
+        MOV     A,#-0x1
+        LCALL   ?ALLOC_XSTACK8
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 0,#0x1
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function memcmp
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOV     R4,DPL
+        MOV     R5,DPH
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+        LCALL   memcmp
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     ?V0 + 1,R3
+        MOV     A,R2
+        ORL     A,?V0 + 1
+        JNZ     ??nwk_getAPAddress_0
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        SJMP    ??nwk_getAPAddress_1
+??nwk_getAPAddress_0:
+        MOV     R2,#sAPAddress & 0xff
+        MOV     R3,#(sAPAddress >> 8) & 0xff
+??nwk_getAPAddress_1:
+        MOV     A,#0x1
+        LJMP    ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_getBCastAddress:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        MOV     R2,#mrfiBroadcastAddr & 0xff
+        MOV     R3,#(mrfiBroadcastAddr >> 8) & 0xff
+        RET
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for sVersionInfo>`:
+        DATA8
+        DB 2
+        DB 1
+        DB 1
+        DB 1
+        DB 0
+
+        END
+// 
+// 298 bytes in segment NEAR_CODE
+//   5 bytes in segment XDATA_I
+//   5 bytes in segment XDATA_ID
+//   3 bytes in segment XDATA_Z
+// 
+// 303 bytes of CODE  memory
+//   8 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

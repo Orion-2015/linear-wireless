@@ -1,0 +1,603 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:23 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\bsp\uart.c          /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\bsp\uart. /
+//                          c -D MCU_H=<ioCC1110.h> -D MRFI_CC1110 -lb        /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\ -o     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\Obj\ -e      /
+//                          --debug --core=plain --dptr=16,1                  /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\uart.s5 /
+//                          1                                                 /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME uart
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?INTERRUPT_ENTER_XSP
+        EXTERN ?INTERRUPT_LEAVE_XSP
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBWEAK `??URX0_ISR??INTVEC 19`
+        PUBWEAK CLKCON
+        PUBWEAK P0SEL
+        PUBWEAK P1SEL
+        PUBWEAK PERCFG
+        PUBWEAK S1CON
+        PUBWEAK U0BAUD
+        PUBWEAK U0CSR
+        PUBWEAK U0DBUF
+        PUBWEAK U0GCR
+        PUBWEAK U0UCR
+        PUBLIC URX0_ISR
+        PUBLIC Uart_R
+        PUBWEAK _A_IEN0
+        PUBWEAK _A_IRCON
+        PUBWEAK _A_IRCON2
+        PUBWEAK _A_S0CON
+        PUBWEAK _A_TCON
+        PUBLIC getUART
+        PUBLIC hasUart
+        PUBLIC initUART
+        PUBLIC putchar
+        PUBLIC puthex
+        PUBLIC putstr
+        PUBLIC rx_receive_line
+
+URX0_ISR            SYMBOL "URX0_ISR"
+`??URX0_ISR??INTVEC 19` SYMBOL "??INTVEC 19", URX0_ISR
+
+        EXTERN sprintf
+        EXTERN logTemp
+
+
+        ASEGN SFR_AN:DATA:NOROOT,086H
+// unsigned char volatile __sfr U0CSR
+U0CSR:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,088H
+// union <unnamed> volatile __sfr _A_TCON
+_A_TCON:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,098H
+// union <unnamed> volatile __sfr _A_S0CON
+_A_S0CON:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,09bH
+// unsigned char volatile __sfr S1CON
+S1CON:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0a8H
+// union <unnamed> volatile __sfr _A_IEN0
+_A_IEN0:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0c0H
+// union <unnamed> volatile __sfr _A_IRCON
+_A_IRCON:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0c1H
+// unsigned char volatile __sfr U0DBUF
+U0DBUF:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0c2H
+// unsigned char volatile __sfr U0BAUD
+U0BAUD:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0c4H
+// unsigned char volatile __sfr U0UCR
+U0UCR:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0c5H
+// unsigned char volatile __sfr U0GCR
+U0GCR:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0c6H
+// unsigned char volatile __sfr CLKCON
+CLKCON:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0e8H
+// union <unnamed> volatile __sfr _A_IRCON2
+_A_IRCON2:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0f1H
+// unsigned char volatile __sfr PERCFG
+PERCFG:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0f3H
+// unsigned char volatile __sfr P0SEL
+P0SEL:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0f4H
+// unsigned char volatile __sfr P1SEL
+P1SEL:
+        DATA8
+        DS 1
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+Uart_R:
+        DS 102
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+initUART:
+        CODE
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        ANL     0xf1,#0xfe
+        MOV     A,0xf1
+        MOV     C,0xE0 /* A   */.0
+        JNC     ??initUART_0
+        ORL     0xf4,#0x30
+        SJMP    ??initUART_1
+??initUART_0:
+        ORL     0xf3,#0xc
+??initUART_1:
+        MOV     A,0xc6
+        ANL     A,#0x7
+        ADD     A,#0x8
+        MOV     0xc5,A
+        MOV     0xc2,#-0x7d
+        ORL     0x86,#0x80
+        ORL     0x86,#0x40
+        ORL     0xc4,#0x82
+        SETB    0xe8.1
+        ORL     0xa8,#0x84
+        MOV     DPTR,#Uart_R + 100
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    @DPTR,A
+        REQUIRE ?Subroutine0
+        REQUIRE PERCFG
+        REQUIRE P1SEL
+        REQUIRE P0SEL
+        REQUIRE U0GCR
+        REQUIRE CLKCON
+        REQUIRE U0BAUD
+        REQUIRE U0CSR
+        REQUIRE U0UCR
+        REQUIRE _A_TCON
+        REQUIRE _A_S0CON
+        REQUIRE _A_IRCON
+        REQUIRE _A_IRCON2
+        REQUIRE S1CON
+        REQUIRE _A_IEN0
+        ; // Fall through to label ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        POP     DPH
+        POP     DPL
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+hasUart:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ORL     0x86,#0x40
+        MOV     C,0x88.3
+        JNC     ??hasUart_0
+        MOV     R1,#0x1
+        RET
+??hasUart_0:
+        MOV     R1,#0x0
+        RET
+        REQUIRE U0CSR
+        REQUIRE _A_TCON
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+getUART:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        MOV     A,0x86
+        MOV     R0,A
+        ORL     0x86,#0x40
+??getUART_0:
+        MOV     C,0x88.3
+        JNC     ??getUART_0
+        MOV     A,0xc1
+        MOV     R1,A
+        CLR     0x88.3
+        MOV     0x86,R0
+        RET
+        REQUIRE U0CSR
+        REQUIRE _A_TCON
+        REQUIRE U0DBUF
+        REQUIRE _A_S0CON
+        REQUIRE _A_IRCON
+        REQUIRE _A_IRCON2
+        REQUIRE S1CON
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+putchar:
+        CODE
+        PUSH    ?V0 + 0
+        ; Saved register size: 2
+        ; Auto size: 0
+        MOV     A,#0xa
+        XRL     A,R2
+        JNZ     ??putchar_0
+        MOV     A,R3
+??putchar_0:
+        JNZ     ??putchar_1
+??putchar_2:
+        MOV     C,0xe8.1
+        JNC     ??putchar_2
+        CLR     0xe8.1
+        MOV     0xc1,#0xd
+??putchar_1:
+        MOV     C,0xe8.1
+        JNC     ??putchar_1
+        CLR     0xe8.1
+        MOV     A,R2
+        MOV     ?V0 + 0,A
+        MOV     0xc1,?V0 + 0
+        MOV     R3,#0x0
+        POP     ?V0 + 0
+        RET
+        REQUIRE _A_IRCON2
+        REQUIRE _A_TCON
+        REQUIRE _A_S0CON
+        REQUIRE _A_IRCON
+        REQUIRE S1CON
+        REQUIRE U0DBUF
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+putstr:
+        CODE
+        MOV     A,#-0xc
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 12
+        ; Auto size: 0
+        MOV     ?V0 + 0,R2
+        MOV     ?V0 + 1,R3
+        MOV     ?V0 + 4,R1
+        MOV     R6,#0x0
+        MOV     R7,#0x0
+        SJMP    ??putstr_0
+??putstr_1:
+        ; Setup parameters for call to function putchar
+        MOV     A,?V0 + 0
+        ADD     A,R6
+        MOV     DPL,A
+        MOV     A,?V0 + 1
+        ADDC    A,R7
+        MOV     DPH,A
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     R3,#0x0
+        LCALL   putchar
+        MOV     A,R6
+        ADD     A,#0x1
+        INC     R6
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     R7,A
+??putstr_0:
+        MOV     ?V0 + 2,?V0 + 4
+        CLR     C
+        MOV     A,R6
+        SUBB    A,?V0 + 2
+        MOV     A,R7
+        SUBB    A,#0x0
+        MOV     C,0xD0 /* PSW */.2
+        XRL     A,PSW
+        RLC     A
+        JC      ??putstr_1
+        MOV     R7,#0x5
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+puthex:
+        CODE
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     ?V0 + 1,R1
+        MOV     A,R1
+        CLR     C
+        RLC     A
+        MOV     R0,A
+        CLR     A
+        RLC     A
+        MOV     R1,A
+        MOV     A,R0
+        SUBB    A,#0x65
+        MOV     A,R1
+        SUBB    A,#0x0
+        CLR     C
+        XRL     A,PSW
+        RLC     A
+        JNC     ??puthex_0
+        MOV     ?V0 + 0,#0x0
+        SJMP    ??puthex_1
+??puthex_2:
+        MOV     DPL,?V0 + 0
+        MOV     R2,DPL
+        ; Setup parameters for call to function sprintf
+        MOV     A,R6
+        ADD     A,R2
+        MOV     DPL,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     DPH,A
+        MOVX    A,@DPTR
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "%02x">` & 0xff
+        MOV     R5,#(`?<Constant "%02x">` >> 8) & 0xff
+        MOV     A,R2
+        CLR     C
+        RLC     A
+        MOV     R2,A
+        CLR     A
+        RLC     A
+        MOV     R3,A
+        MOV     A,#logTemp & 0xff
+        ADD     A,R2
+        MOV     R2,A
+        MOV     A,#(logTemp >> 8) & 0xff
+        ADDC    A,R3
+        MOV     R3,A
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        INC     ?V0 + 0
+??puthex_1:
+        MOV     A,?V0 + 0
+        CLR     C
+        SUBB    A,?V0 + 1
+        JC      ??puthex_2
+        ; Setup parameters for call to function putstr
+        MOV     A,?V0 + 1
+        CLR     C
+        RLC     A
+        MOV     R1,A
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   putstr
+??puthex_0:
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+rx_receive_line:
+        CODE
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 0
+        MOV     DPTR,#Uart_R + 101
+        MOVX    A,@DPTR
+        XRL     A,#0x1
+        JNZ     ??rx_receive_line_0
+        MOV     DPL,R2
+        MOV     DPH,R3
+        MOV     A,#Uart_R & 0xff
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#(Uart_R >> 8) & 0xff
+        MOVX    @DPTR,A
+        MOV     DPTR,#Uart_R + 100
+        MOVX    A,@DPTR
+        MOV     R1,A
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    @DPTR,A
+        SJMP    ??rx_receive_line_1
+??rx_receive_line_0:
+        MOV     R1,#0x0
+??rx_receive_line_1:
+        LJMP    ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+URX0_ISR:
+        CODE
+        PUSH    A
+        MOV     A,#-0xe
+        LCALL   ?INTERRUPT_ENTER_XSP
+        ; Saved register size: 14
+        ; Auto size: 0
+        CLR     0x88.3
+        MOV     DPTR,#Uart_R + 101
+        MOVX    A,@DPTR
+        JNZ     ??URX0_ISR_0
+        MOV     A,0xc1
+        PUSH    A
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_0:
+        POP     A
+        MOVX    @DPTR,A
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_1:
+        MOVX    A,@DPTR
+        XRL     A,#0xa
+        JNZ     ??URX0_ISR_1
+        MOV     A,#(Uart_R + 255) & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#((Uart_R - 1) >> 8) & 0xff
+        ADDC    A,#0x0
+        MOV     DPH,A
+        MOVX    A,@DPTR
+        XRL     A,#0xd
+        JNZ     ??URX0_ISR_1
+        MOV     DPTR,#Uart_R + 101
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+??URX0_ISR_1:
+        MOV     DPTR,#Uart_R + 100
+        MOVX    A,@DPTR
+        INC     A
+        MOVX    @DPTR,A
+        SJMP    ??URX0_ISR_2
+??URX0_ISR_0:
+        ; Setup parameters for call to function putchar
+        MOV     R2,#0x1
+        MOV     R3,#0x0
+        LCALL   putchar
+        ; Setup parameters for call to function putchar
+        MOV     R2,#0x3f
+        MOV     R3,#0x0
+        LCALL   putchar
+        ; Setup parameters for call to function putchar
+        MOV     R2,#0x1
+        MOV     R3,#0x0
+        LCALL   putchar
+??URX0_ISR_2:
+        MOV     R7,#0x1
+        LJMP    ?INTERRUPT_LEAVE_XSP
+        REQUIRE _A_TCON
+        REQUIRE U0DBUF
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        MOV     DPTR,#Uart_R + 100
+        MOVX    A,@DPTR
+        MOV     R0,A
+        MOV     A,#Uart_R & 0xff
+        ADD     A,R0
+        MOV     DPL,A
+        MOV     A,#(Uart_R >> 8) & 0xff
+        ADDC    A,#0x0
+        MOV     DPH,A
+        RET
+
+        COMMON INTVEC:CODE:ROOT(0)
+        ORG 19
+`??URX0_ISR??INTVEC 19`:
+        LJMP       (URX0_ISR)
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "%02x">>`:
+        DB "%02x"
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "%02x">`:
+        DS 5
+        REQUIRE `?<Initializer for <Constant "%02x">>`
+        REQUIRE __INIT_XDATA_I
+
+        END
+// 
+//   3 bytes in segment INTVEC
+// 447 bytes in segment NEAR_CODE
+//  15 bytes in segment SFR_AN
+//   5 bytes in segment XDATA_I
+//   5 bytes in segment XDATA_ID
+// 102 bytes in segment XDATA_Z
+// 
+// 452 bytes of CODE  memory (+  3 bytes shared)
+//   0 bytes of DATA  memory (+ 15 bytes shared)
+// 107 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

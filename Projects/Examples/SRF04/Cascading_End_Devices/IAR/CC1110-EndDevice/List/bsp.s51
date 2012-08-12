@@ -1,0 +1,251 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:19 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\bsp\bsp.c           /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\bsp\bsp.c /
+//                           -D MCU_H=<ioCC1110.h> -D MRFI_CC1110 -lb         /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\ -o     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\Obj\ -e      /
+//                          --debug --core=plain --dptr=16,1                  /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\bsp.s51 /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME bsp
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?XSP
+
+        PUBLIC BSP_Delay
+        PUBLIC BSP_Init
+        PUBLIC BSP_InitBoard
+        PUBLIC BSP_InitButtons
+        PUBLIC BSP_InitDrivers
+        PUBLIC BSP_InitLeds
+        PUBWEAK P0INP
+        PUBWEAK P1DIR
+        PUBWEAK T3CC0
+        PUBWEAK T3CTL
+        PUBWEAK _A_IEN0
+        PUBWEAK _A_P1
+        PUBWEAK _A_TIMIF
+
+
+        ASEGN SFR_AN:DATA:NOROOT,08fH
+// unsigned char volatile __sfr P0INP
+P0INP:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,090H
+// union <unnamed> volatile __sfr _A_P1
+_A_P1:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0a8H
+// union <unnamed> volatile __sfr _A_IEN0
+_A_IEN0:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0cbH
+// unsigned char volatile __sfr T3CTL
+T3CTL:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0cdH
+// unsigned char volatile __sfr T3CC0
+T3CC0:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0d8H
+// union <unnamed> volatile __sfr _A_TIMIF
+_A_TIMIF:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0feH
+// unsigned char volatile __sfr P1DIR
+P1DIR:
+        DATA8
+        DS 1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+BSP_Init:
+        CODE
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 2
+        MOV     A,#-0x2
+        LCALL   ?ALLOC_XSTACK8
+        ; Setup parameters for call to function BSP_InitDrivers
+        LCALL   BSP_InitDrivers
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOV     A,#-0x56
+        MOVX    @DPTR,A
+        INC     DPTR
+        CLR     A
+        MOVX    @DPTR,A
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    A,@DPTR
+        JNZ     ??BSP_Init_0
+        CLR     0xa8.7
+??BSP_Init_1:
+        SJMP    ??BSP_Init_1
+??BSP_Init_0:
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        POP     DPH
+        POP     DPL
+        RET
+        REQUIRE _A_IEN0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+// __near_func __xdata_reentrant void BSP_InitBoard(void)
+BSP_InitBoard:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+// __near_func __xdata_reentrant void BSP_Delay(uint16_t)
+BSP_Delay:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ANL     0xcb,#0xef
+        CLR     0xd8.0
+        ORL     0xcb,#0x4
+        MOV     B,#0xd
+        MOV     A,R2
+        MUL     AB
+        MOV     0xcd,A
+        MOV     A,0xcb
+        ANL     A,#0xfc
+        ORL     A,#0x2
+        MOV     0xcb,A
+        ORL     0xcb,#0x10
+??BSP_Delay_0:
+        MOV     C,0xd8.0
+        JNC     ??BSP_Delay_0
+        ANL     0xcb,#0xef
+        CLR     0xd8.0
+        RET
+        REQUIRE T3CTL
+        REQUIRE _A_TIMIF
+        REQUIRE T3CC0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+// __near_func __xdata_reentrant void BSP_InitDrivers(void)
+BSP_InitDrivers:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ; Setup parameters for call to function BSP_InitLeds
+        LCALL   BSP_InitLeds
+        ORL     0x8f,#0x2
+        RET
+        REQUIRE P0INP
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+// __near_func __xdata_reentrant void BSP_InitLeds(void)
+BSP_InitLeds:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ORL     0xfe,#0x1
+        ORL     0xfe,#0x2
+        SETB    0x90.0
+        SETB    0x90.1
+        RET
+        REQUIRE P1DIR
+        REQUIRE _A_P1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+// __near_func __xdata_reentrant void BSP_InitButtons(void)
+BSP_InitButtons:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ORL     0x8f,#0x2
+        RET
+        REQUIRE P0INP
+
+        END
+// 
+// 106 bytes in segment NEAR_CODE
+//   7 bytes in segment SFR_AN
+// 
+// 106 bytes of CODE memory
+//   0 bytes of DATA memory (+ 7 bytes shared)
+//
+//Errors: none
+//Warnings: none

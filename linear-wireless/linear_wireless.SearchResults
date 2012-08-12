@@ -1,0 +1,168 @@
+---- Mrfi_DelayUsecLong Matches (56 in 7 files) ----
+Mrfi.h (e:\linear-wireless\components\mrfi):#define MRFI_DelayMs( ms ) Mrfi_DelayUsecLong( ms, 0, NULL )
+Mrfi.h (e:\linear-wireless\components\mrfi):#define MRFI_DelayUsec( us ) Mrfi_DelayUsecLong( 0, us, NULL)
+Mrfi.h (e:\linear-wireless\components\mrfi):#define MRFI_WaitTimeoutMs( ms, term ) Mrfi_DelayUsecLong( ms, 0, term)
+Mrfi.h (e:\linear-wireless\components\mrfi):#define MRFI_WaitTimeoutUsec( us, term ) Mrfi_DelayUsecLong( 0, us, term)
+Mrfi.h (e:\linear-wireless\components\mrfi):bool Mrfi_DelayUsecLong( uint32_t, uint16_t, TimeoutTerminator_t );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1)://static void Mrfi_DelayUsecLong(uint32_t count, TimeoutTerminator_t term);
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):    Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):        Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Enabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):  Mrfi_DelayUsecLong( 0, howLong, Mrfi_CheckSem ); // delay with semaphore dependency
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):  Mrfi_DelayUsecLong( sReplyDelayScalar, 0, Mrfi_CheckSem );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Disabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):        Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Enabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):  Mrfi_DelayUsecLong( sReplyDelayScalar, 0, Mrfi_CheckSem );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Disabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3)://static void Mrfi_DelayUsecLong(uint32_t count, TimeoutTerminator_t term);
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):    Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):        Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):    Mrfi_DelayUsecLong( (MRFI_RandomByte() & 0x0F) + 1, 0, NULL );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):    Mrfi_DelayUsecLong( ( MRFI_MAX_TRANSMIT_TIME_us * 2 ) / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Enabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):  Mrfi_DelayUsecLong( sReplyDelayScalar, 0, Mrfi_CheckSem );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):  Mrfi_DelayUsecLong( 0, howLong, Mrfi_CheckSem ); // delay with semaphore dependency
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Disabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):    Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):          Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Disabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Enabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):  Mrfi_DelayUsecLong( sReplyDelayScalar, 0, Mrfi_CheckSem );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5)://static void Mrfi_DelayUsecLong(uint32_t count, TimeoutTerminator_t term);
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):    //Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_ms, 0, mrfi_TxImmediateDone );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):    Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):        //Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_ms, 0, mrfi_TxCCADone );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):        Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Enabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):  Mrfi_DelayUsecLong( sReplyDelayScalar, 0, Mrfi_CheckSem );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):  Mrfi_DelayUsecLong( 0, howLong, Mrfi_CheckSem ); // delay with semaphore dependency
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Disabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):    Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):        Mrfi_DelayUsecLong( MRFI_MAX_TRANSMIT_TIME_us / 1000,
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Disabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6): * @fn          Mrfi_DelayUsecLong -- Frequency Hopping Enabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):bool Mrfi_DelayUsecLong(uint32_t ms, uint16_t us, TimeoutTerminator_t term)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):  Mrfi_DelayUsecLong( sReplyDelayScalar, 0, Mrfi_CheckSem );
+---- MRFI_Time Matches (53 in 7 files) ----
+Mrfi.c (e:\linear-wireless\components\mrfi):/* MRFI_Time holds the active time counted by the timer interrupt.
+Mrfi.c (e:\linear-wireless\components\mrfi):static volatile uint32_t MRFI_Time = 0;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):  t.milliseconds = MRFI_Time; // get current milliseconds count
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):    MRFI_Time = t->milliseconds;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):  time.formatted.time = MRFI_Time );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):      if( time.bytes.ms_lo != ( MRFI_Time & 0xFF ) ) // have we seen least one ms
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):        MRFI_Time++; // count the millisecond
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):      BSP_CRITICAL_STATEMENT( ms = MRFI_Time ); // update the test value
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):      time.words.ms_lo = (uint16_t)MRFI_Time;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1): *              remaining bytes in the MRFI_Time array.
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):  MRFI_Time++;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):  t.milliseconds = MRFI_Time; // get current milliseconds count
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):    MRFI_Time = t->milliseconds;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):  time.formatted.time = MRFI_Time );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):      if( time.bytes.ms_lo != ( MRFI_Time & 0xFF ) ) // have we seen least one ms
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):        MRFI_Time++; // count the millisecond
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):      BSP_CRITICAL_STATEMENT( ms = MRFI_Time ); // update the test value
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):      time.words.ms_lo = (uint16_t)MRFI_Time;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2): *              remaining bytes in the MRFI_Time array.
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):  MRFI_Time++;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):  t.milliseconds = MRFI_Time; // get current milliseconds count
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):  MRFI_Time = t->milliseconds;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):  time.formatted.time = MRFI_Time );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):      if( time.bytes.ms_lo != ( MRFI_Time & 0xFF ) ) // have we seen least one ms
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):      BSP_CRITICAL_STATEMENT( ms = MRFI_Time ); // update the test value
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):      time.words.ms_lo = (uint16_t)MRFI_Time;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3): *              remaining bytes in the MRFI_Time array.
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):  MRFI_Time++;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):  t.milliseconds = MRFI_Time; // get current milliseconds count
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):    MRFI_Time = t->milliseconds;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):  time.formatted.time = MRFI_Time );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):      if( time.bytes.ms_lo != ( MRFI_Time & 0xFF ) ) // have we seen least one ms
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):      BSP_CRITICAL_STATEMENT( ms = MRFI_Time ); // update the test value
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):      time.words.ms_lo = (uint16_t)MRFI_Time;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4): *              remaining bytes in the MRFI_Time array.
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):  MRFI_Time++;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):  t.milliseconds = MRFI_Time; // get current milliseconds count
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):    MRFI_Time = t->milliseconds;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):  time.formatted.time = MRFI_Time );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):      if( time.bytes.ms_lo != ( MRFI_Time & 0xFF ) ) // have we seen least one ms
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):        MRFI_Time++; // count the millisecond
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):      BSP_CRITICAL_STATEMENT( ms = MRFI_Time ); // update the test value
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):      time.words.ms_lo = (uint16_t)MRFI_Time;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5): *              remaining bytes in the MRFI_Time array.
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):  MRFI_Time++;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):  t.milliseconds = MRFI_Time; // get current milliseconds count
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):    MRFI_Time = t->milliseconds;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):  time.formatted.time = MRFI_Time );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):      if( time.bytes.ms_lo != ( MRFI_Time & 0xFF ) ) // have we seen least one ms
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):      BSP_CRITICAL_STATEMENT( ms = MRFI_Time ); // update the test value
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):      time.words.ms_lo = (uint16_t)MRFI_Time;
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6): *              remaining bytes in the MRFI_Time array.
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):  MRFI_Time++;
+---- MRFI_SetTime Matches (14 in 8 files) ----
+Mrfi.h (e:\linear-wireless\components\mrfi):void MRFI_SetTime( mrfi_Time_t* t );
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1): * @fn          MRFI_SetTime
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):void MRFI_SetTime( mrfi_Time_t* t )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2): * @fn          MRFI_SetTime
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):void MRFI_SetTime( mrfi_Time_t* t )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3): * @fn          MRFI_SetTime
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):void MRFI_SetTime( mrfi_Time_t* t )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4): * @fn          MRFI_SetTime
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):void MRFI_SetTime( mrfi_Time_t* t )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5): * @fn          MRFI_SetTime
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):void MRFI_SetTime( mrfi_Time_t* t )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6): * @fn          MRFI_SetTime
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):void MRFI_SetTime( mrfi_Time_t* t )
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications):  MRFI_SetTime( t );
+---- nwk_pllJumpPLL Matches (7 in 1 files) ----
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications):static void nwk_pllJumpPLL( mrfi_Time_t* t );
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications): * @fn          nwk_pllJumpPLL
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications):void nwk_pllJumpPLL( mrfi_Time_t* t )
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications):      nwk_pllJumpPLL( &(data->Time) );
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications):    nwk_pllJumpPLL( &(data->Time) );
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications):    nwk_pllJumpPLL( &(data->Time) );
+Nwk_pll.c (e:\linear-wireless\components\simpliciti\nwk_applications):      nwk_pllJumpPLL( &(data->Time) );
+---- MRFI_DelayMs Matches (33 in 11 files) ----
+Framework.c (e:\linear-wireless\components\applicationframework):			MRFI_DelayMs(25);   /*before send back, waiting ack for 50ms*/
+main_UART_Bridge.c (e:\linear-wireless\projects\examples\applications):		MRFI_DelayMs(1000);
+main_UART_Bridge.c (e:\linear-wireless\projects\examples\applications):			MRFI_DelayMs( 5 );
+main_UART_Bridge.c (e:\linear-wireless\projects\examples\applications):			MRFI_DelayMs( 5 );
+Mrfi.h (e:\linear-wireless\components\mrfi):   * calls to MRFI_DelayMs are not incorrectly timed.
+Mrfi.h (e:\linear-wireless\components\mrfi):#define MRFI_DelayMs( ms ) Mrfi_DelayUsecLong( ms, 0, NULL )
+Mrfi.h (e:\linear-wireless\components\mrfi):void    MRFI_DelayMs(uint16_t);
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):#define Mrfi_DelayMs( a ) MRFI_DelayMs( a )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1): * @fn          MRFI_DelayMs
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1):void MRFI_DelayMs(uint16_t milliseconds)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family1): *              invoked. Cleaner then trying to make MRFI_DelayMs() thread-safe
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):#define Mrfi_DelayMs( a ) MRFI_DelayMs( a )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2): * @fn          MRFI_DelayMs -- Frequency Hopping Disabled
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2):void MRFI_DelayMs(uint16_t milliseconds)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family2): *              invoked. Cleaner then trying to make MRFI_DelayMs() thread-safe
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):#define Mrfi_DelayMs( a ) MRFI_DelayMs( a )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3): * @fn          MRFI_DelayMs
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3):void MRFI_DelayMs(uint16_t milliseconds)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family3): *              invoked. Cleaner then trying to make MRFI_DelayMs() thread-safe
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):#define Mrfi_DelayMs( a ) MRFI_DelayMs( a )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4): * @fn          MRFI_DelayMs
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4):void MRFI_DelayMs(uint16_t milliseconds)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family4): *              invoked. Cleaner then trying to make MRFI_DelayMs() thread-safe
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):#define Mrfi_DelayMs( a ) MRFI_DelayMs( a )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5): * @fn          MRFI_DelayMs
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5):void MRFI_DelayMs(uint16_t milliseconds)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family5): *              invoked. Cleaner then trying to make MRFI_DelayMs() thread-safe
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):#define Mrfi_DelayMs( a ) MRFI_DelayMs( a )
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6): * @fn          MRFI_DelayMs
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6):void MRFI_DelayMs(uint16_t milliseconds)
+Mrfi_radio.c (e:\linear-wireless\components\mrfi\radios\family6): *              invoked. Cleaner then trying to make MRFI_DelayMs() thread-safe
+Nwk_frame.c (e:\linear-wireless\components\simpliciti\nwk):    MRFI_DelayMs(1);
+Nwk_types.h (e:\linear-wireless\components\simpliciti\nwk):#define NWK_DELAY(spin)   MRFI_DelayMs(spin)

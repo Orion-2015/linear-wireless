@@ -1,0 +1,595 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:22 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\ApplicationFramewor /
+//                          k\radio.c                                         /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\Applicati /
+//                          onFramework\radio.c -D MCU_H=<ioCC1110.h> -D      /
+//                          MRFI_CC1110 -lb E:\linear-wireless\Projects\Examp /
+//                          les\SRF04\Cascading_End_Devices\IAR\CC1110-EndDev /
+//                          ice\List\ -o E:\linear-wireless\Projects\Examples /
+//                          \SRF04\Cascading_End_Devices\IAR\CC1110-EndDevice /
+//                          \Obj\ -e --debug --core=plain --dptr=16,1         /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\radio.s /
+//                          51                                                /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME radio
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSP
+        EXTERN __INIT_XDATA_I
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC EnableRecv
+        PUBLIC EnableSend
+        PUBLIC InitRFIO
+        PUBWEAK P1DIR
+        PUBWEAK P1SEL
+        PUBWEAK _A_P1
+        PUBLIC getErrorText
+        PUBLIC receive
+        PUBLIC rx
+        PUBLIC send
+        PUBLIC tx
+
+        EXTERN SMPL_Receive
+        EXTERN getNextAddress
+        EXTERN SMPL_Send_Linear
+        EXTERN sprintf
+        EXTERN log
+        EXTERN getMyAddress
+        EXTERN MRFI_DelayMs
+        EXTERN logTemp
+
+
+        ASEGN SFR_AN:DATA:NOROOT,090H
+// union <unnamed> volatile __sfr _A_P1
+_A_P1:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0f4H
+// unsigned char volatile __sfr P1SEL
+P1SEL:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0feH
+// unsigned char volatile __sfr P1DIR
+P1DIR:
+        DATA8
+        DS 1
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+rx:
+        DS 50
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+tx:
+        DS 50
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+receive:
+        CODE
+        PUSH    DPL
+        PUSH    DPH
+        ; Saved register size: 2
+        ; Auto size: 1
+        MOV     A,#-0x1
+        LCALL   ?ALLOC_XSTACK8
+        ; Setup parameters for call to function SMPL_Receive
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOV     R4,DPL
+        MOV     R5,DPH
+        MOV     R2,#rx & 0xff
+        MOV     R3,#(rx >> 8) & 0xff
+        MOV     R1,#-0x2
+        LCALL   SMPL_Receive
+        MOV     A,R1
+        JZ      ??receive_0
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        SJMP    ??receive_1
+??receive_0:
+        MOV     R2,#rx & 0xff
+        MOV     R3,#(rx >> 8) & 0xff
+??receive_1:
+        MOV     A,#0x1
+        LCALL   ?DEALLOC_XSTACK8
+        POP     DPH
+        POP     DPL
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+getErrorText:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        MOV     A,R1
+        JZ      ??getErrorText_0
+        DEC     A
+        JZ      ??getErrorText_1
+        DEC     A
+        JZ      ??getErrorText_2
+        DEC     A
+        JZ      ??getErrorText_3
+        DEC     A
+        JZ      ??getErrorText_4
+        DEC     A
+        JZ      ??getErrorText_5
+        DEC     A
+        JZ      ??getErrorText_6
+        DEC     A
+        JZ      ??getErrorText_7
+        DEC     A
+        JZ      ??getErrorText_8
+        DEC     A
+        JZ      ??getErrorText_9
+        DEC     A
+        JZ      ??getErrorText_10
+        DEC     A
+        JZ      ??getErrorText_11
+        DEC     A
+        JZ      ??getErrorText_12
+        SJMP    ??getErrorText_13
+??getErrorText_0:
+        MOV     R2,#`?<Constant "SMPL_SUCCESS">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_SUCCESS">` >> 8) & 0xff
+        RET
+??getErrorText_1:
+        MOV     R2,#`?<Constant "SMPL_TIMEOUT">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_TIMEOUT">` >> 8) & 0xff
+        RET
+??getErrorText_2:
+        MOV     R2,#`?<Constant "SMPL_BAD_PARAM">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_BAD_PARAM">` >> 8) & 0xff
+        RET
+??getErrorText_3:
+        MOV     R2,#`?<Constant "SMPL_NOMEM">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NOMEM">` >> 8) & 0xff
+        RET
+??getErrorText_4:
+        MOV     R2,#`?<Constant "SMPL_NO_FRAME">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_FRAME">` >> 8) & 0xff
+        RET
+??getErrorText_5:
+        MOV     R2,#`?<Constant "SMPL_NO_LINK">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_LINK">` >> 8) & 0xff
+        RET
+??getErrorText_6:
+        MOV     R2,#`?<Constant "SMPL_NO_JOIN">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_JOIN">` >> 8) & 0xff
+        RET
+??getErrorText_7:
+        MOV     R2,#`?<Constant "SMPL_NO_CHANNEL">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_CHANNEL">` >> 8) & 0xff
+        RET
+??getErrorText_8:
+        MOV     R2,#`?<Constant "SMPL_NO_PEER_UNLINK">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_PEER_UNLINK">` >> 8) & 0xff
+        RET
+??getErrorText_9:
+        MOV     R2,#`?<Constant "SMPL_TX_CCA_FAIL">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_TX_CCA_FAIL">` >> 8) & 0xff
+        RET
+??getErrorText_10:
+        MOV     R2,#`?<Constant "SMPL_NO_PAYLOAD">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_PAYLOAD">` >> 8) & 0xff
+        RET
+??getErrorText_11:
+        MOV     R2,#`?<Constant "SMPL_NO_AP_ADDRESS">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_AP_ADDRESS">` >> 8) & 0xff
+        RET
+??getErrorText_12:
+        MOV     R2,#`?<Constant "SMPL_NO_ACK">` & 0xff
+        MOV     R3,#(`?<Constant "SMPL_NO_ACK">` >> 8) & 0xff
+        RET
+??getErrorText_13:
+        MOV     R2,#`?<Constant "Unknown rc">` & 0xff
+        MOV     R3,#(`?<Constant "Unknown rc">` >> 8) & 0xff
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+send:
+        CODE
+        MOV     A,#-0xf
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 15
+        ; Auto size: 0
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     ?V0 + 5,R1
+        MOV     ?V0 + 0,#0x1
+        MOV     A,R6
+        ADD     A,#0x4
+        MOV     ?V0 + 6,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     ?V0 + 7,A
+??send_0:
+        ; Setup parameters for call to function getNextAddress
+        MOV     R3,?V0 + 0
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   getNextAddress
+        MOV     A,R1
+        JZ      ??send_1
+        MOV     DPL,?V0 + 6
+        MOV     DPH,?V0 + 7
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function SMPL_Send_Linear
+        MOV     R4,?V0 + 5
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   SMPL_Send_Linear
+        MOV     A,R1
+        MOV     ?V0 + 1,A
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     R3,#0x0
+        MOV     A,R1
+        JNZ     ??send_2
+        ; Setup parameters for call to function sprintf
+        MOV     ?V0 + 2,R2
+        MOV     ?V0 + 3,R3
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "ST:%dS\\n">` & 0xff
+        MOV     R5,#(`?<Constant "ST:%dS\\n">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x0
+        LCALL   log
+        SJMP    ??send_3
+??send_2:
+        ; Setup parameters for call to function sprintf
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,R3
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 2,?V0 + 0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     ?V0 + 2,R2
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#`?<Constant "ST:%dF for %ds:%s\\n">` & 0xff
+        MOV     R5,#(`?<Constant "ST:%dF for %ds:%s\\n">` >> 8) & 0xff
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        LCALL   sprintf
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x0
+        LCALL   log
+        INC     ?V0 + 0
+        MOV     A,?V0 + 0
+        CLR     C
+        SUBB    A,#0x4
+        JNC     ??send_3
+        LJMP    ??send_0
+??send_1:
+        MOV     ?V0 + 1,#0x5
+??send_3:
+        MOV     R1,?V0 + 1
+        MOV     R7,#0x8
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+InitRFIO:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ANL     0xf4,#0xf3
+        ORL     0xfe,#0xc
+        RET
+        REQUIRE P1SEL
+        REQUIRE P1DIR
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+EnableSend:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ; Setup parameters for call to function getMyAddress
+        LCALL   getMyAddress
+        SETB    0x90.3
+        CLR     0x90.2
+        ; Setup parameters for call to function MRFI_DelayMs
+        MOV     R2,#0x32
+        MOV     R3,#0x0
+        LJMP    MRFI_DelayMs
+        REQUIRE _A_P1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+EnableRecv:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        CLR     0x90.3
+        SETB    0x90.2
+        RET
+        REQUIRE _A_P1
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_SUCCESS">>`:
+        DB "SMPL_SUCCESS"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_TIMEOUT">>`:
+        DB "SMPL_TIMEOUT"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_BAD_PARAM">>`:
+        DB "SMPL_BAD_PARAM"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NOMEM">>`:
+        DB "SMPL_NOMEM"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_FRAME">>`:
+        DB "SMPL_NO_FRAME"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_LINK">>`:
+        DB "SMPL_NO_LINK"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_JOIN">>`:
+        DB "SMPL_NO_JOIN"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_CHANNEL">`:
+        DB "SMPL_NO_CHANNEL"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_PEER_UNLI`:
+        DB "SMPL_NO_PEER_UNLINK"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_TX_CCA_FAIL"`:
+        DB "SMPL_TX_CCA_FAIL"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_PAYLOAD">`:
+        DB "SMPL_NO_PAYLOAD"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_AP_ADDRES`:
+        DB "SMPL_NO_AP_ADDRESS"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "SMPL_NO_ACK">>`:
+        DB "SMPL_NO_ACK"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Unknown rc">>`:
+        DB "Unknown rc"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ST:%dS\\n">>`:
+        DB "ST:%dS\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "ST:%dF for %ds:%s`:
+        DB "ST:%dF for %ds:%s\012"
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_SUCCESS">`:
+        DS 13
+        REQUIRE `?<Initializer for <Constant "SMPL_SUCCESS">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_TIMEOUT">`:
+        DS 13
+        REQUIRE `?<Initializer for <Constant "SMPL_TIMEOUT">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_BAD_PARAM">`:
+        DS 15
+        REQUIRE `?<Initializer for <Constant "SMPL_BAD_PARAM">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NOMEM">`:
+        DS 11
+        REQUIRE `?<Initializer for <Constant "SMPL_NOMEM">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_FRAME">`:
+        DS 14
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_FRAME">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_LINK">`:
+        DS 13
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_LINK">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_JOIN">`:
+        DS 13
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_JOIN">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_CHANNEL">`:
+        DS 16
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_CHANNEL">`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_PEER_UNLINK">`:
+        DS 20
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_PEER_UNLI`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_TX_CCA_FAIL">`:
+        DS 17
+        REQUIRE `?<Initializer for <Constant "SMPL_TX_CCA_FAIL"`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_PAYLOAD">`:
+        DS 16
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_PAYLOAD">`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_AP_ADDRESS">`:
+        DS 19
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_AP_ADDRES`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "SMPL_NO_ACK">`:
+        DS 12
+        REQUIRE `?<Initializer for <Constant "SMPL_NO_ACK">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Unknown rc">`:
+        DS 11
+        REQUIRE `?<Initializer for <Constant "Unknown rc">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ST:%dS\\n">`:
+        DS 8
+        REQUIRE `?<Initializer for <Constant "ST:%dS\\n">>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "ST:%dF for %ds:%s\\n">`:
+        DS 19
+        REQUIRE `?<Initializer for <Constant "ST:%dF for %ds:%s`
+        REQUIRE __INIT_XDATA_I
+
+        END
+// 
+// 368 bytes in segment NEAR_CODE
+//   3 bytes in segment SFR_AN
+// 230 bytes in segment XDATA_I
+// 230 bytes in segment XDATA_ID
+// 100 bytes in segment XDATA_Z
+// 
+// 598 bytes of CODE  memory
+//   0 bytes of DATA  memory (+ 3 bytes shared)
+// 330 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

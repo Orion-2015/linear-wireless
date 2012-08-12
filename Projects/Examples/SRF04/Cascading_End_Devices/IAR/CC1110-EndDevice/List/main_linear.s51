@@ -1,0 +1,193 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:48:02 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Projects\Examples\Applications /
+//                          \main_linear.c                                    /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Projects\Examples\Ap /
+//                          plications\main_linear.c -D MCU_H=<ioCC1110.h>    /
+//                          -D MRFI_CC1110 -lb E:\linear-wireless\Projects\Ex /
+//                          amples\SRF04\Cascading_End_Devices\IAR\CC1110-End /
+//                          Device\List\ -o E:\linear-wireless\Projects\Examp /
+//                          les\SRF04\Cascading_End_Devices\IAR\CC1110-EndDev /
+//                          ice\Obj\ -e --debug --core=plain --dptr=16,1      /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\main_li /
+//                          near.s51                                          /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME main_linear
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN __INIT_XDATA_I
+
+        PUBWEAK CLKCON
+        PUBWEAK SLEEP
+        PUBWEAK _A_P1
+        PUBLIC main
+        PUBLIC sMyROMAddress
+
+        EXTERN BSP_Init
+        EXTERN initUART
+        EXTERN printf
+        EXTERN InitRFIO
+        EXTERN EnableRecv
+        EXTERN SMPL_Init
+        EXTERN SMPL_Ioctl
+        EXTERN framework_entry
+
+
+        ASEGN SFR_AN:DATA:NOROOT,090H
+// union <unnamed> volatile __sfr _A_P1
+_A_P1:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0beH
+// unsigned char volatile __sfr SLEEP
+SLEEP:
+        DATA8
+        DS 1
+
+        ASEGN SFR_AN:DATA:NOROOT,0c6H
+// unsigned char volatile __sfr CLKCON
+CLKCON:
+        DATA8
+        DS 1
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+        DATA8
+`?<Constant "Start iwsn system...\\n">`:
+        DS 22
+        REQUIRE `?<Initializer for <Constant "Start iwsn system`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG XDATA_I:XDATA:NOROOT(0)
+sMyROMAddress:
+        DATA8
+        DS 1
+        REQUIRE `?<Initializer for sMyROMAddress>`
+        REQUIRE __INIT_XDATA_I
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+main:
+        CODE
+        ; Auto size: 0
+        ; Setup parameters for call to function BSP_Init
+        LCALL   BSP_Init
+        ANL     0xbe,#0xfb
+??main_0:
+        MOV     A,0xbe
+        MOV     C,0xE0 /* A   */.6
+        JNC     ??main_0
+        NOP
+        ANL     0xc6,#0xb8
+        ORL     0xbe,#0x4
+        ; Setup parameters for call to function initUART
+        LCALL   initUART
+        ; Setup parameters for call to function printf
+        MOV     R2,#`?<Constant "Start iwsn system...\\n">` & 0xff
+        MOV     R3,#(`?<Constant "Start iwsn system...\\n">` >> 8) & 0xff
+        LCALL   printf
+        ; Setup parameters for call to function InitRFIO
+        LCALL   InitRFIO
+        ; Setup parameters for call to function EnableRecv
+        LCALL   EnableRecv
+        ; Setup parameters for call to function SMPL_Init
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        LCALL   SMPL_Init
+        ; Setup parameters for call to function SMPL_Ioctl
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#0x8
+        MOV     R1,#0x3
+        LCALL   SMPL_Ioctl
+        CLR     0x90.0
+        CLR     0x90.1
+        ; Setup parameters for call to function framework_entry
+        LCALL   framework_entry
+??main_1:
+        SJMP    ??main_1
+        REQUIRE CLKCON
+        REQUIRE SLEEP
+        REQUIRE _A_P1
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for <Constant "Start iwsn system`:
+        DB "Start iwsn system...\012"
+
+        RSEG XDATA_ID:CODE:NOROOT(0)
+`?<Initializer for sMyROMAddress>`:
+        DATA8
+        DB 2
+
+        END
+// 
+// 62 bytes in segment NEAR_CODE
+//  3 bytes in segment SFR_AN
+// 23 bytes in segment XDATA_I
+// 23 bytes in segment XDATA_ID
+// 
+// 85 bytes of CODE  memory
+//  0 bytes of DATA  memory (+ 3 bytes shared)
+// 23 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: 2

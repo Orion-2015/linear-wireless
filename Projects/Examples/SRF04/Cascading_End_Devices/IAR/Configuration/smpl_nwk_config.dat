@@ -101,3 +101,6 @@
 
 /* debug on comasstist */
 -DCOMDEBUG
+
+/* log information*/
+-DLOGINFO
