@@ -62,11 +62,11 @@
  *   Schematic   :  S1
  *   Description :  Push Button
  *   Polarity    :  Active Low
- *   GPIO        :  P0.1
+ *   GPIO        :  P1.2
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
-#define __bsp_BUTTON1_BIT__             2
-#define __bsp_BUTTON1_PORT__            P1
+#define __bsp_BUTTON1_BIT__             0
+#define __bsp_BUTTON1_PORT__            P0
 #define __bsp_BUTTON1_IS_ACTIVE_LOW__   1
 
 
@@ -76,11 +76,11 @@
  *   Schematic   :  JOY_PUSH (U400)
  *   Description :  Joystick Center Press
  *   Polarity    :  Active High
- *   GPIO        :  P0.5
+ *   GPIO        :  P1.3
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
-#define __bsp_BUTTON2_BIT__             3
-#define __bsp_BUTTON2_PORT__            P1
+#define __bsp_BUTTON2_BIT__             1
+#define __bsp_BUTTON2_PORT__            P0
 #define __bsp_BUTTON2_IS_ACTIVE_LOW__   1
 
 

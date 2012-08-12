@@ -303,7 +303,7 @@
         </option>
         <option>
           <name>CCListAssFile</name>
-          <state>0</state>
+          <state>1</state>
         </option>
         <option>
           <name>CCListAssSource</name>
@@ -744,7 +744,7 @@
         </option>
         <option>
           <name>ListSymbols</name>
-          <state>2</state>
+          <state>0</state>
         </option>
         <option>
           <name>PageLengthCheck</name>
@@ -4247,7 +4247,7 @@
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_QMgmt.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_QMgmt.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk\nwk_QMgmt.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk\nwk_types.h</name>
@@ -4265,7 +4265,7 @@
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_ioctl.c</name>
       </file>
       <file>
-        <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_ioctl.h</name>
+        <name>$PROJ_DIR$\..\..\..\..\..\Components\SimpliciTI\nwk_applications\nwk_ioctl.h</name>
       </file>
       <file>
         <name>$PROJ_DIR$\..\..\..\..\..\Components\simpliciti\nwk_applications\nwk_join.c</name>

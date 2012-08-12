@@ -13,7 +13,7 @@ struct AppFrame* receive(void)
 	}
 	else
 	{
-		BSP_TOGGLE_LED2();
+		//BSP_TOGGLE_LED2();
 		return (struct AppFrame*)rx;
 	}
 }
@@ -56,23 +56,74 @@ smplStatus_t send(struct AppFrame* data, uint8 len)
 {
 	smplStatus_t 	rc;
 	uint8 				nextAddr;
-	nextAddr = getNextAddress(data->originalAddr, data->finnalDstAddr, 1);
-	if(nextAddr)
+	for(uint8 i = 1;i<=MAX_HOPS;i++)
 	{
-		data->dstAddr = nextAddr;
-		rc = SMPL_Send_Linear(data->dstAddr, (uint8_t*)data, len);
-    if(rc == SMPL_SUCCESS)
+		nextAddr = getNextAddress(data->originalAddr, data->finnalDstAddr, i);
+		if(nextAddr)
 		{
-			BSP_TOGGLE_LED1();	
-			sprintf((char*)logTemp, "Send to %d success\n", data->dstAddr);			
-			log(ERROR, logTemp);
+			data->dstAddr = nextAddr;
+			rc = SMPL_Send_Linear(data->dstAddr, (uint8_t*)data, len);
+    	if(rc == SMPL_SUCCESS)
+			{
+				//BSP_TOGGLE_LED1();	
+#ifndef LOGINFO
+				sprintf((char*)logTemp, "Send to %d success\n", data->dstAddr);	
+#else
+				sprintf((char*)logTemp, "ST:%dS\n", data->dstAddr);	
+#endif
+				log(ERROR, logTemp);
+				break;
+			}
+			else
+			{
+#ifndef LOGINFO				
+				sprintf((char*)logTemp, "Send to %d failed for %d times:%s\n", data->dstAddr,i, getErrorText(rc));			
+#else
+				sprintf((char*)logTemp, "ST:%dF for %ds:%s\n", data->dstAddr,i, rc);				
+#endif	
+				log(ERROR, logTemp);
+			}
 		}
 		else
 		{
-			sprintf((char*)logTemp, "Send to %d failed:%s\n", data->dstAddr, getErrorText(rc));			
-			log(ERROR, logTemp);			
+			rc = SMPL_NO_LINK;
+			break;
 		}
-		return rc;
 	}
-	return 	SMPL_NO_LINK;
+	return rc;
+}
+
+void InitRFIO(void)
+{
+#ifdef FWVERSION
+	if(FWVERSION == 2)
+	{
+		P1SEL &= ~0x0C;
+		P1DIR |= 0x0C;
+	//	P0DIR |= 0x04;
+	}
+#endif
+}
+void EnableSend(void)
+{
+#ifdef FWVERSION
+	uint8 myaddress = getMyAddress();
+	if(FWVERSION == 2)
+	{
+		P1_3 = 1;
+		P1_2 = 0;	
+		MRFI_DelayMs(50);
+	}
+#endif
+}
+
+void EnableRecv(void)
+{
+#ifdef FWVERSION
+	if(FWVERSION == 2)
+	{
+		P1_3 = 0;
+		P1_2 = 1;
+	}
+#endif
 }

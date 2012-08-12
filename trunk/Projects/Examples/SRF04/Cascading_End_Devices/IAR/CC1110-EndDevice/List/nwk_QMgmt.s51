@@ -1,0 +1,654 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:21 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\simpliciti\nwk\nwk_ /
+//                          QMgmt.c                                           /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\simplicit /
+//                          i\nwk\nwk_QMgmt.c -D MCU_H=<ioCC1110.h> -D        /
+//                          MRFI_CC1110 -lb E:\linear-wireless\Projects\Examp /
+//                          les\SRF04\Cascading_End_Devices\IAR\CC1110-EndDev /
+//                          ice\List\ -o E:\linear-wireless\Projects\Examples /
+//                          \SRF04\Cascading_End_Devices\IAR\CC1110-EndDevice /
+//                          \Obj\ -e --debug --core=plain --dptr=16,1         /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\nwk_QMg /
+//                          mt.s51                                            /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME nwk_QMgmt
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSP
+        EXTERN ?XSTACK_DISP0_8
+        EXTERN __INIT_XDATA_Z
+
+        PUBWEAK _A_IEN0
+        PUBLIC nwk_QInit
+        PUBLIC nwk_QadjustOrder
+        PUBLIC nwk_QfindOldest
+        PUBLIC nwk_QfindSlot
+        PUBLIC nwk_getQ
+
+        EXTERN memset
+        EXTERN nwk_getConnInfo
+        EXTERN memcmp
+
+
+        ASEGN SFR_AN:DATA:NOROOT,0a8H
+// union <unnamed> volatile __sfr _A_IEN0
+_A_IEN0:
+        DATA8
+        DS 1
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+sInFrameQ:
+        DS 300
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+sOutFrameQ:
+        DS 60
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_QInit:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 0,#0x2c
+        MOV     ?V0 + 1,#0x1
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#sInFrameQ & 0xff
+        MOV     R3,#(sInFrameQ >> 8) & 0xff
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 0,#0x3c
+        MOV     ?V0 + 1,#0x0
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#sOutFrameQ & 0xff
+        MOV     R3,#(sOutFrameQ >> 8) & 0xff
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_QfindSlot:
+        CODE
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     ?V0 + 0,R1
+        MOV     R0,#0x0
+        MOV     R1,#0x0
+        MOV     R6,#0x0
+        MOV     R7,#0x0
+        MOV     R4,#0x0
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JNZ     ??nwk_QfindSlot_0
+        MOV     R2,#sInFrameQ & 0xff
+        MOV     R3,#(sInFrameQ >> 8) & 0xff
+        MOV     R5,#0x5
+        SJMP    ??nwk_QfindSlot_1
+??nwk_QfindSlot_0:
+        MOV     R2,#sOutFrameQ & 0xff
+        MOV     R3,#(sOutFrameQ >> 8) & 0xff
+        MOV     R5,#0x1
+??nwk_QfindSlot_1:
+        MOV     A,#0x1
+        ADD     A,R5
+        MOV     ?V0 + 1,A
+        MOV     ?V0 + 2,R0
+        SJMP    ??nwk_QfindSlot_2
+??nwk_QfindSlot_3:
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+??nwk_QfindSlot_4:
+        INC     ?V0 + 2
+        MOV     A,R2
+        ADD     A,#0x3c
+        MOV     R2,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R3,A
+??nwk_QfindSlot_2:
+        MOV     A,?V0 + 2
+        CLR     C
+        SUBB    A,R5
+        JNC     ??nwk_QfindSlot_5
+        MOV     DPL,R2
+        MOV     DPH,R3
+        MOVX    A,@DPTR
+        JZ      ??nwk_QfindSlot_6
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JNZ     ??nwk_QfindSlot_4
+        INC     R4
+        MOVX    A,@DPTR
+        XRL     A,#0x4
+        JZ      ??nwk_QfindSlot_4
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 3,A
+        CLR     C
+        SUBB    A,?V0 + 1
+        JNC     ??nwk_QfindSlot_4
+        MOV     A,R2
+        MOV     R0,A
+        MOV     A,R3
+        MOV     R1,A
+        MOV     ?V0 + 1,?V0 + 3
+        SJMP    ??nwk_QfindSlot_4
+??nwk_QfindSlot_6:
+        MOV     A,#0x2
+        XRL     A,?V0 + 0
+        JNZ     ??nwk_QfindSlot_3
+        SJMP    ??nwk_QfindSlot_7
+??nwk_QfindSlot_5:
+        MOV     A,R6
+        ORL     A,R7
+        JNZ     ??nwk_QfindSlot_8
+        MOV     A,R0
+        ORL     A,R1
+        JNZ     ??nwk_QfindSlot_9
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        SJMP    ??nwk_QfindSlot_7
+??nwk_QfindSlot_9:
+        MOV     A,R0
+        MOV     R6,A
+        MOV     A,R1
+        MOV     R7,A
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        ; Setup parameters for call to function nwk_QadjustOrder
+        MOVX    A,@DPTR
+        MOV     R2,A
+        MOV     R1,?V0 + 0
+        LCALL   nwk_QadjustOrder
+        MOV     A,?V0 + 2
+        SJMP    ??nwk_QfindSlot_10
+??nwk_QfindSlot_8:
+        MOV     A,#0x1
+        ADD     A,R4
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+??nwk_QfindSlot_10:
+        MOVX    @DPTR,A
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+??nwk_QfindSlot_7:
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_QadjustOrder:
+        CODE
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 8
+        ; Auto size: 0
+        MOV     A,R1
+        MOV     R3,A
+        MOV     A,#0x1
+        XRL     A,R3
+        JNZ     ??nwk_QadjustOrder_0
+        MOV     R0,#sInFrameQ & 0xff
+        MOV     R1,#(sInFrameQ >> 8) & 0xff
+        MOV     C,0xa8.7
+        CLR     A
+        RLC     A
+        MOV     R6,A
+        CLR     0xa8.7
+        MOV     R4,#0x5
+??nwk_QadjustOrder_1:
+        MOV     DPL,R0
+        MOV     DPH,R1
+        MOVX    A,@DPTR
+        JZ      ??nwk_QadjustOrder_2
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     A,R2
+        CLR     C
+        SUBB    A,R5
+        JNC     ??nwk_QadjustOrder_2
+        MOVX    A,@DPTR
+        DEC     A
+        MOVX    @DPTR,A
+??nwk_QadjustOrder_2:
+        MOV     A,R0
+        ADD     A,#0x3c
+        MOV     R0,A
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R1,A
+        DEC     R4
+        MOV     A,R4
+        JNZ     ??nwk_QadjustOrder_1
+        MOV     A,R6
+        MOV     C,0xE0 /* A   */.0
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+??nwk_QadjustOrder_0:
+        MOV     R7,#0x1
+        LJMP    ?FUNC_LEAVE_XDATA
+        REQUIRE _A_IEN0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_QfindOldest:
+        CODE
+        MOV     A,#-0xf
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 15
+        ; Auto size: 10
+        MOV     A,#-0xa
+        LCALL   ?ALLOC_XSTACK8
+        MOV     A,#0x7
+        LCALL   ?XSTACK_DISP0_8
+        MOV     A,R1
+        MOVX    @DPTR,A
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOV     A,R2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R3
+        MOVX    @DPTR,A
+        MOV     A,#0x6
+        LCALL   ?XSTACK_DISP0_8
+        MOV     A,R4
+        MOVX    @DPTR,A
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    @DPTR,A
+        MOV     ?V0 + 6,A
+        MOV     ?V0 + 7,A
+        MOV     A,#0x4
+        LCALL   ?XSTACK_DISP0_8
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    @DPTR,A
+        MOV     A,#0x8
+        LCALL   ?XSTACK_DISP0_8
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOVX    @DPTR,A
+        MOV     A,#0x7
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        XRL     A,#0x1
+        JNZ     ??nwk_QfindOldest_0
+        MOV     R6,#sInFrameQ & 0xff
+        MOV     R7,#(sInFrameQ >> 8) & 0xff
+        MOV     ?V0 + 4,#0x6
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_1:
+        MOVX    A,@DPTR
+        MOV     R0,A
+        MOV     A,#0x1
+        XRL     A,R0
+        JNZ     ??nwk_QfindOldest_1
+        ; Setup parameters for call to function nwk_getConnInfo
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_2:
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   nwk_getConnInfo
+        MOV     ?V0 + 6,R2
+        MOV     ?V0 + 7,R3
+        MOV     A,R2
+        ORL     A,?V0 + 7
+        JNZ     ??nwk_QfindOldest_2
+??nwk_QfindOldest_0:
+        MOV     R2,#0x0
+        MOV     R3,#0x0
+        LJMP    ??nwk_QfindOldest_3
+??nwk_QfindOldest_2:
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+        MOV     A,R2
+        ADD     A,#0x3
+        MOV     R0,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R1,A
+        MOV     A,#0x8
+        LCALL   ?XSTACK_DISP0_8
+        MOV     A,R0
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R1
+        MOVX    @DPTR,A
+        SJMP    ??nwk_QfindOldest_4
+??nwk_QfindOldest_1:
+        MOV     A,R0
+        JNZ     ??nwk_QfindOldest_0
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_3:
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     ?V0 + 0,A
+??nwk_QfindOldest_4:
+        MOV     A,#0x6
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        XRL     A,#0x1
+        JNZ     ??nwk_QfindOldest_5
+        MOV     ?V0 + 1,#0x1
+        SJMP    ??nwk_QfindOldest_6
+??nwk_QfindOldest_5:
+        MOV     ?V0 + 1,#0x3
+??nwk_QfindOldest_6:
+        MOV     ?V0 + 5,#0x5
+??nwk_QfindOldest_7:
+        MOV     C,0xa8.7
+        CLR     A
+        RLC     A
+        MOV     R0,A
+        CLR     0xa8.7
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        XRL     A,?V0 + 1
+        JZ      $+5
+        LJMP    ??nwk_QfindOldest_8
+        MOV     A,#0x4
+        MOVX    @DPTR,A
+        MOV     A,R0
+        MOV     C,0xE0 /* A   */.0
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        ANL     A,#0x3f
+        XRL     A,?V0 + 0
+        JZ      $+5
+        LJMP    ??nwk_QfindOldest_9
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_4:
+        MOVX    A,@DPTR
+        XRL     A,#0x1
+        JNZ     ??nwk_QfindOldest_10
+        MOV     A,#0x3f
+        XRL     A,?V0 + 0
+        JNZ     ??nwk_QfindOldest_11
+        MOV     A,?V0 + 6
+        ADD     A,#0x3
+        MOV     R0,A
+        MOV     A,?V0 + 7
+        SJMP    ??nwk_QfindOldest_12
+??nwk_QfindOldest_11:
+        MOV     A,R6
+        ADD     A,#0x4
+        MOV     R0,A
+        MOV     A,R7
+??nwk_QfindOldest_12:
+        ADDC    A,#0x0
+        MOV     R1,A
+        MOV     A,#0x4
+        LCALL   ?XSTACK_DISP0_8
+        MOV     A,R0
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R1
+        MOVX    @DPTR,A
+??nwk_QfindOldest_10:
+        ; Setup parameters for call to function memcmp
+        MOV     ?V0 + 2,#0x1
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,#0xa
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     R4,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     A,#0x6
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R3,A
+        LCALL   memcmp
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     ?V0 + 2,R2
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    A,@DPTR
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     DPH,A
+        MOV     DPL,R2
+        MOVX    A,@DPTR
+        JZ      ??nwk_QfindOldest_13
+        MOV     A,?V0 + 2
+        JNZ     ??nwk_QfindOldest_9
+??nwk_QfindOldest_13:
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        MOV     R2,DPL
+        MOV     R3,DPH
+        MOVX    A,@DPTR
+        CLR     C
+        SUBB    A,?V0 + 4
+        JNC     ??nwk_QfindOldest_9
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,R0
+        ORL     A,R1
+        JZ      ??nwk_QfindOldest_14
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        LCALL   ??Subroutine1_0
+??CrossCallReturnLabel_0:
+        MOV     A,?V0 + 1
+        MOVX    @DPTR,A
+??nwk_QfindOldest_14:
+        MOV     DPL,R2
+        MOV     DPH,R3
+        MOVX    A,@DPTR
+        MOV     ?V0 + 4,A
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOV     A,R6
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R7
+??nwk_QfindOldest_15:
+        MOVX    @DPTR,A
+        SJMP    ??nwk_QfindOldest_16
+??nwk_QfindOldest_9:
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOV     A,?V0 + 1
+        SJMP    ??nwk_QfindOldest_15
+??nwk_QfindOldest_8:
+        MOV     A,R0
+        MOV     C,0xE0 /* A   */.0
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+??nwk_QfindOldest_16:
+        MOV     A,R6
+        ADD     A,#0x3c
+        MOV     R6,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     R7,A
+        DEC     ?V0 + 5
+        MOV     A,?V0 + 5
+        JZ      $+5
+        LJMP    ??nwk_QfindOldest_7
+        MOV     A,#0x2
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R3,A
+??nwk_QfindOldest_3:
+        MOV     A,#0xa
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x8
+        LJMP    ?FUNC_LEAVE_XDATA
+        REQUIRE _A_IEN0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    A,@DPTR
+        MOV     R0,A
+        REQUIRE ??Subroutine1_0
+        ; // Fall through to label ??Subroutine1_0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+??Subroutine1_0:
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     DPH,A
+        MOV     DPL,R0
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_getQ:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        MOV     A,#0x1
+        XRL     A,R1
+        JNZ     ??nwk_getQ_0
+        MOV     R2,#sInFrameQ & 0xff
+        MOV     R3,#(sInFrameQ >> 8) & 0xff
+        RET
+??nwk_getQ_0:
+        MOV     R2,#sOutFrameQ & 0xff
+        MOV     R3,#(sOutFrameQ >> 8) & 0xff
+        RET
+
+        END
+// 
+// 764 bytes in segment NEAR_CODE
+//   1 byte  in segment SFR_AN
+// 360 bytes in segment XDATA_Z
+// 
+// 764 bytes of CODE  memory
+//   0 bytes of DATA  memory (+ 1 byte shared)
+// 360 bytes of XDATA memory
+//
+//Errors: none
+//Warnings: none

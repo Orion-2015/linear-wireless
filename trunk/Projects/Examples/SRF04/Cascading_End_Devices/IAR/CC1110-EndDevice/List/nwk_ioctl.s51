@@ -1,0 +1,464 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:18 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\simpliciti\nwk_appl /
+//                          ications\nwk_ioctl.c                              /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\simplicit /
+//                          i\nwk_applications\nwk_ioctl.c -D                 /
+//                          MCU_H=<ioCC1110.h> -D MRFI_CC1110 -lb             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\ -o     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\Obj\ -e      /
+//                          --debug --core=plain --dptr=16,1                  /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\nwk_ioc /
+//                          tl.s51                                            /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME nwk_ioctl
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK8_X_TWO
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSP
+        EXTERN ?XSTACK_DISP0_8
+
+        PUBLIC nwk_connectionControl
+        PUBLIC nwk_deviceAddress
+        PUBLIC nwk_radioControl
+        PUBLIC nwk_rawReceive
+        PUBLIC nwk_rawSend
+
+        EXTERN nwk_buildFrame
+        EXTERN memcpy
+        EXTERN nwk_sendFrame
+        EXTERN nwk_retrieveFrame
+        EXTERN MRFI_RxIdle
+        EXTERN MRFI_Sleep
+        EXTERN MRFI_WakeUp
+        EXTERN nwk_getConnInfo
+        EXTERN MRFI_Rssi
+        EXTERN MRFI_RxOn
+        EXTERN nwk_getMyAddress
+        EXTERN nwk_setMyAddress
+        EXTERN nwk_freeConnection
+
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_rawSend:
+        CODE
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        ADD     A,#-0x3
+        JZ      ??nwk_rawSend_0
+        ADD     A,#-0x2
+        JZ      ??nwk_rawSend_0
+        DEC     A
+        JNZ     ??nwk_rawSend_1
+??nwk_rawSend_0:
+        MOV     R5,#0x1
+        SJMP    ??nwk_rawSend_2
+??nwk_rawSend_1:
+        MOV     R5,#0x3
+??nwk_rawSend_2:
+        ; Setup parameters for call to function nwk_buildFrame
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R4,A
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R3,A
+        LCALL   nwk_buildFrame
+        MOV     ?V0 + 0,R2
+        MOV     ?V0 + 1,R3
+        MOV     R1,?V0 + 1
+        MOV     A,R2
+        ORL     A,R1
+        JZ      ??nwk_rawSend_3
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 2,#0x1
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        MOV     R4,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     A,R2
+        ADD     A,#0x3
+        INC     R2
+        INC     R2
+        INC     R2
+        MOV     A,R1
+        ADDC    A,#0x0
+        MOV     R3,A
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function nwk_sendFrame
+        MOV     R1,#0x1
+        MOV     R2,?V0 + 0
+        MOV     R3,?V0 + 1
+        LCALL   nwk_sendFrame
+        SJMP    ??nwk_rawSend_4
+??nwk_rawSend_3:
+        MOV     R1,#0x3
+??nwk_rawSend_4:
+        REQUIRE ?Subroutine0
+        ; // Fall through to label ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_rawReceive:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 3
+        MOV     A,#-0x3
+        LCALL   ?ALLOC_XSTACK8
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        CLR     A
+        MOVX    @DPTR,A
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        PUSH    A
+        MOV     A,#0x1
+        LCALL   ?XSTACK_DISP0_8
+        POP     A
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function nwk_retrieveFrame
+        MOV     A,R2
+        ADD     A,#0x6
+        MOV     ?V0 + 0,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     ?V0 + 1,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPL,R2
+        MOV     DPH,R3
+        LCALL   ?PUSH_XSTACK8_X_TWO
+        MOV     A,R2
+        ADD     A,#0x4
+        MOV     ?V0 + 0,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     ?V0 + 1,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R4,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     A,#0x6
+        LCALL   ?XSTACK_DISP0_8
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   nwk_retrieveFrame
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     A,#0x3
+        LCALL   ?DEALLOC_XSTACK8
+        REQUIRE ?Subroutine1
+        ; // Fall through to label ?Subroutine1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_radioControl:
+        CODE
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     ?V0 + 1,R1
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     ?V0 + 0,#0x0
+        MOV     A,#0x4
+        XRL     A,?V0 + 1
+        JNZ     ??nwk_radioControl_0
+        ; Setup parameters for call to function MRFI_RxIdle
+        LCALL   MRFI_RxIdle
+        ; Setup parameters for call to function MRFI_Sleep
+        LCALL   MRFI_Sleep
+        SJMP    ??nwk_radioControl_1
+??nwk_radioControl_0:
+        MOV     A,#0x5
+        XRL     A,?V0 + 1
+        JNZ     ??nwk_radioControl_2
+        ; Setup parameters for call to function MRFI_WakeUp
+        LCALL   MRFI_WakeUp
+        SJMP    ??nwk_radioControl_1
+??nwk_radioControl_2:
+        MOV     A,#0x6
+        XRL     A,?V0 + 1
+        JNZ     ??nwk_radioControl_3
+        ; Setup parameters for call to function nwk_getConnInfo
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   nwk_getConnInfo
+        MOV     A,R2
+        ORL     A,R3
+        JNZ     ??nwk_radioControl_4
+        MOV     R1,#0x2
+        SJMP    ??nwk_radioControl_5
+??nwk_radioControl_4:
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 2,#0x2
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,R2
+        ADD     A,#0x4
+        MOV     R4,A
+        MOV     A,R3
+        ADDC    A,#0x0
+        MOV     R5,A
+        MOV     DPL,R6
+        MOV     DPH,R7
+        INC     DPTR
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        SJMP    ??nwk_radioControl_1
+??nwk_radioControl_3:
+        MOV     A,#0x7
+        XRL     A,?V0 + 1
+        JNZ     ??nwk_radioControl_6
+        ; Setup parameters for call to function MRFI_Rssi
+        LCALL   MRFI_Rssi
+        MOV     A,R1
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    @DPTR,A
+        SJMP    ??nwk_radioControl_1
+??nwk_radioControl_6:
+        MOV     A,#0x8
+        XRL     A,?V0 + 1
+        JNZ     ??nwk_radioControl_7
+        ; Setup parameters for call to function MRFI_RxOn
+        LCALL   MRFI_RxOn
+        SJMP    ??nwk_radioControl_1
+??nwk_radioControl_7:
+        MOV     A,#0x9
+        XRL     A,?V0 + 1
+        JNZ     ??nwk_radioControl_8
+        ; Setup parameters for call to function MRFI_RxIdle
+        LCALL   MRFI_RxIdle
+        SJMP    ??nwk_radioControl_1
+??nwk_radioControl_8:
+        MOV     ?V0 + 0,#0x2
+??nwk_radioControl_1:
+        MOV     R1,?V0 + 0
+??nwk_radioControl_5:
+        LJMP    ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_deviceAddress:
+        CODE
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     ?V0 + 1,R1
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     ?V0 + 0,#0x2
+        MOV     A,#0x1
+        XRL     A,?V0 + 1
+        JNZ     ??nwk_deviceAddress_0
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 2,#0x1
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        ; Setup parameters for call to function nwk_getMyAddress
+        LCALL   nwk_getMyAddress
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        SJMP    ??nwk_deviceAddress_1
+??nwk_deviceAddress_0:
+        MOV     A,R1
+        JNZ     ??nwk_deviceAddress_2
+        ; Setup parameters for call to function nwk_setMyAddress
+        LCALL   nwk_setMyAddress
+        MOV     A,R1
+        JZ      ??nwk_deviceAddress_2
+??nwk_deviceAddress_1:
+        MOV     ?V0 + 0,#0x0
+??nwk_deviceAddress_2:
+        MOV     R1,?V0 + 0
+        LJMP    ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+nwk_connectionControl:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        MOV     A,R1
+        MOV     R6,A
+        MOV     DPL,R2
+        MOV     DPH,R3
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,#0xe
+        XRL     A,R6
+        JZ      ??nwk_connectionControl_0
+??nwk_connectionControl_1:
+        MOV     R1,#0x2
+        SJMP    ??nwk_connectionControl_2
+??nwk_connectionControl_0:
+        MOV     A,#-0x1
+        XRL     A,R1
+        JZ      ??nwk_connectionControl_1
+        ; Setup parameters for call to function nwk_getConnInfo
+        LCALL   nwk_getConnInfo
+        MOV     A,R2
+        ORL     A,R3
+        JZ      ??nwk_connectionControl_1
+        ; Setup parameters for call to function nwk_freeConnection
+        LCALL   nwk_freeConnection
+        MOV     R1,#0x0
+??nwk_connectionControl_2:
+        LJMP    ?Subroutine1
+
+        END
+// 
+// 498 bytes in segment NEAR_CODE
+// 
+// 498 bytes of CODE memory
+//
+//Errors: none
+//Warnings: none

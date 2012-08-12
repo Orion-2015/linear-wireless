@@ -1,0 +1,795 @@
+///////////////////////////////////////////////////////////////////////////////
+//                                                                            /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:21 /
+// Copyright 2004-2011 IAR Systems AB.                                        /
+//                                                                            /
+//    Core               =  plain                                             /
+//    Code model         =  near                                              /
+//    Data model         =  large                                             /
+//    Calling convention =  xdata reentrant                                   /
+//    Constant location  =  data                                              /
+//    Dptr setup         =  1,16                                              /
+//    Source file        =  E:\linear-wireless\Components\simpliciti\nwk\nwk_ /
+//                          api.c                                             /
+//    Command line       =  -f E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\Configuration\End_Device\s /
+//                          mpl_config.dat (-DNUM_CONNECTIONS=2               /
+//                          -DSIZE_INFRAME_Q=5 -DSIZE_OUTFRAME_Q=1            /
+//                          -DEND_DEVICE -DFWVERSION=2) -f                    /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
+//                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
+//                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
+//                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
+//                          -DxFREQUENCY_AGILITY -DAPP_AUTO_ACK               /
+//                          -DxEXTENDED_API -DxSMPL_SECURE                    /
+//                          -DxNVOBJECT_SUPPORT -DxSW_TIMER                   /
+//                          -DxFREQUENCY_HOPPING -DNWK_PLL_REFERENCE_CLOCK    /
+//                          -DBSP_TIMER_USED=1 -DNWK_PLL_SHOW_LOCATION_INDICA /
+//                          TORS -DUART_NUMBER=UART_NUMBER_0                  /
+//                          -DUART_LOCATION=UART_LOCATION_1                   /
+//                          -DUART_BAUD_RATE=19200 -DUART_FLOW_CONTROL=UART_F /
+//                          LOW_CONTROL_OFF -DUART_PARITY_MODE=UART_PARITY_NO /
+//                          NE -DUART_STOP_BITS=UART_1_STOP_BIT -DCOMDEBUG)   /
+//                          -DLOGINFO E:\linear-wireless\Components\simplicit /
+//                          i\nwk\nwk_api.c -D MCU_H=<ioCC1110.h> -D          /
+//                          MRFI_CC1110 -lb E:\linear-wireless\Projects\Examp /
+//                          les\SRF04\Cascading_End_Devices\IAR\CC1110-EndDev /
+//                          ice\List\ -o E:\linear-wireless\Projects\Examples /
+//                          \SRF04\Cascading_End_Devices\IAR\CC1110-EndDevice /
+//                          \Obj\ -e --debug --core=plain --dptr=16,1         /
+//                          --data_model=large --code_model=near              /
+//                          --calling_convention=xdata_reentrant              /
+//                          --place_constants=data --nr_virtual_regs 8 -I     /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\bsp /
+//                          \ -I E:\linear-wireless\Projects\Examples\SRF04\C /
+//                          ascading_End_Devices\IAR\..\..\..\..\..\Component /
+//                          s\bsp\drivers\ -I E:\linear-wireless\Projects\Exa /
+//                          mples\SRF04\Cascading_End_Devices\IAR\..\..\..\.. /
+//                          \..\Components\bsp\boards\SRF04EB\ -I             /
+//                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\..\..\..\..\..\Components\mrf /
+//                          i\ -I E:\linear-wireless\Projects\Examples\SRF04\ /
+//                          Cascading_End_Devices\IAR\..\..\..\..\..\Componen /
+//                          ts\SimpliciTI\nwk\ -I E:\linear-wireless\Projects /
+//                          \Examples\SRF04\Cascading_End_Devices\IAR\..\..\. /
+//                          .\..\..\Components\SimpliciTI\nwk_applications\   /
+//                          -I E:\linear-wireless\Projects\Examples\SRF04\Cas /
+//                          cading_End_Devices\IAR\..\..\..\..\..\Components\ /
+//                          ApplicationFramework\ -Ohz                        /
+//    List file          =  E:\linear-wireless\Projects\Examples\SRF04\Cascad /
+//                          ing_End_Devices\IAR\CC1110-EndDevice\List\nwk_api /
+//                          .s51                                              /
+//                                                                            /
+//                                                                            /
+///////////////////////////////////////////////////////////////////////////////
+
+        NAME nwk_api
+
+        RSEG DOVERLAY:DATA:NOROOT(0)
+        RSEG IOVERLAY:IDATA:NOROOT(0)
+        RSEG ISTACK:IDATA:NOROOT(0)
+        RSEG PSTACK:XDATA:NOROOT(0)
+        RSEG XSTACK:XDATA:NOROOT(0)
+
+        EXTERN ?ALLOC_XSTACK8
+        EXTERN ?DEALLOC_XSTACK8
+        EXTERN ?FUNC_ENTER_XDATA
+        EXTERN ?FUNC_LEAVE_XDATA
+        EXTERN ?PUSH_XSTACK_I_TWO
+        EXTERN ?V0
+        EXTERN ?XSP
+        EXTERN ?XSTACK_DISP0_8
+        EXTERN __INIT_XDATA_Z
+
+        PUBLIC SMPL_Init
+        PUBLIC SMPL_Ioctl
+        PUBLIC SMPL_Link
+        PUBLIC SMPL_LinkListen
+        PUBLIC SMPL_Receive
+        PUBLIC SMPL_Send
+        PUBLIC SMPL_SendOpt
+        PUBLIC SMPL_Send_Linear
+        PUBWEAK _A_IEN0
+
+        EXTERN MRFI_Init
+        EXTERN nwk_nwkInit
+        EXTERN MRFI_WakeUp
+        EXTERN nwk_getMyAddress
+        EXTERN MRFI_SetRxAddrFilter
+        EXTERN MRFI_EnableRxAddrFilter
+        EXTERN nwk_join
+        EXTERN MRFI_GetRadioState
+        EXTERN nwk_setListenContext
+        EXTERN MRFI_RxOn
+        EXTERN nwk_getLocalLinkID
+        EXTERN MRFI_DelayMs
+        EXTERN MRFI_Sleep
+        EXTERN MRFI_RxIdle
+        EXTERN nwk_getConnInfo
+        EXTERN nwk_checkConnInfo
+        EXTERN nwk_buildFrame
+        EXTERN nwk_buildAckReqFrame
+        EXTERN memcpy
+        EXTERN nwk_sendFrame
+        EXTERN MRFI_ReplyDelay
+        EXTERN nwk_retrieveFrame
+        EXTERN nwk_link
+        EXTERN nwk_connectionControl
+        EXTERN nwk_deviceAddress
+        EXTERN nwk_rawSend
+        EXTERN nwk_rawReceive
+        EXTERN nwk_radioControl
+        EXTERN nwk_getFWVersion
+        EXTERN nwk_getProtocolVersion
+
+
+        ASEGN SFR_AN:DATA:NOROOT,0a8H
+// union <unnamed> volatile __sfr _A_IEN0
+_A_IEN0:
+        DATA8
+        DS 1
+
+        RSEG XDATA_Z:XDATA:NOROOT(0)
+        DATA8
+sInit_done:
+        DS 1
+        REQUIRE __INIT_XDATA_Z
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_Init:
+        CODE
+        MOV     A,#-0x8
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 8
+        ; Auto size: 0
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     DPTR,#sInit_done
+        MOVX    A,@DPTR
+        JNZ     ??SMPL_Init_0
+        ; Setup parameters for call to function MRFI_Init
+        LCALL   MRFI_Init
+        ; Setup parameters for call to function nwk_nwkInit
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   nwk_nwkInit
+        MOV     A,R1
+        JNZ     ??SMPL_Init_1
+        ; Setup parameters for call to function MRFI_WakeUp
+        LCALL   MRFI_WakeUp
+        ; Setup parameters for call to function MRFI_SetRxAddrFilter
+        ; Setup parameters for call to function nwk_getMyAddress
+        LCALL   nwk_getMyAddress
+        LCALL   MRFI_SetRxAddrFilter
+        ; Setup parameters for call to function MRFI_EnableRxAddrFilter
+        LCALL   MRFI_EnableRxAddrFilter
+??SMPL_Init_0:
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function nwk_join
+        LCALL   nwk_join
+??SMPL_Init_1:
+        MOV     R7,#0x1
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_LinkListen:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        MOV     DPL,R2
+        MOV     DPH,R3
+        ; Setup parameters for call to function MRFI_GetRadioState
+        LCALL   MRFI_GetRadioState
+        MOV     A,R1
+        MOV     ?V0 + 0,A
+        ; Setup parameters for call to function nwk_setListenContext
+        MOV     R1,#0x0
+        LCALL   nwk_setListenContext
+        MOV     A,#0x3
+        XRL     A,?V0 + 0
+        JZ      ??SMPL_LinkListen_0
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JNZ     ??SMPL_LinkListen_1
+        ; Setup parameters for call to function MRFI_WakeUp
+        LCALL   MRFI_WakeUp
+??SMPL_LinkListen_1:
+        ; Setup parameters for call to function MRFI_RxOn
+        LCALL   MRFI_RxOn
+??SMPL_LinkListen_0:
+        MOV     R6,#-0xc
+        MOV     R7,#0x1
+??SMPL_LinkListen_2:
+        ; Setup parameters for call to function nwk_getLocalLinkID
+        LCALL   nwk_getLocalLinkID
+        MOV     A,R1
+        MOV     R0,A
+        MOV     ?V0 + 1,R0
+        JNZ     ??SMPL_LinkListen_3
+        ; Setup parameters for call to function MRFI_DelayMs
+        MOV     R2,#0xa
+        MOV     R3,#0x0
+        LCALL   MRFI_DelayMs
+        MOV     A,R6
+        ADD     A,#-0x1
+        DEC     R6
+        MOV     A,R7
+        ADDC    A,#-0x1
+        MOV     R7,A
+        MOV     A,R6
+        ORL     A,R7
+        JNZ     ??SMPL_LinkListen_2
+??SMPL_LinkListen_3:
+        MOV     A,#0x3
+        XRL     A,?V0 + 0
+        JZ      ??SMPL_LinkListen_4
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JNZ     ??SMPL_LinkListen_5
+        ; Setup parameters for call to function MRFI_Sleep
+        LCALL   MRFI_Sleep
+        SJMP    ??SMPL_LinkListen_4
+??SMPL_LinkListen_5:
+        ; Setup parameters for call to function MRFI_RxIdle
+        LCALL   MRFI_RxIdle
+??SMPL_LinkListen_4:
+        MOV     A,?V0 + 1
+        JNZ     ??SMPL_LinkListen_6
+        ; Setup parameters for call to function nwk_setListenContext
+        MOV     R1,#0x1
+        LCALL   nwk_setListenContext
+        MOV     R1,#0x1
+        SJMP    ??SMPL_LinkListen_7
+??SMPL_LinkListen_6:
+        MOVX    @DPTR,A
+        MOV     R1,#0x0
+??SMPL_LinkListen_7:
+        REQUIRE ?Subroutine0
+        ; // Fall through to label ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine0:
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_Send:
+        CODE
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
+        ; Auto size: 0
+        ; Setup parameters for call to function SMPL_SendOpt
+        CLR     A
+        MOV     ?V0 + 0,A
+        MOV     ?V0 + 1,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        LCALL   SMPL_SendOpt
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        SJMP    ?Subroutine0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_Send_Linear:
+        CODE
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     ?V0 + 1,R1
+        MOV     A,R2
+        MOV     R6,A
+        MOV     A,R3
+        MOV     R7,A
+        MOV     ?V0 + 0,R4
+        ; Setup parameters for call to function nwk_getConnInfo
+        MOV     R1,#-0x2
+        LCALL   nwk_getConnInfo
+        MOV     DPL,R2
+        MOV     DPH,R3
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOV     A,?V0 + 1
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function SMPL_SendOpt
+        MOV     ?V0 + 2,#0x1
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,?V0 + 0
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        MOV     R1,#-0x2
+        LCALL   SMPL_SendOpt
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        REQUIRE ?Subroutine1
+        ; // Fall through to label ?Subroutine1
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        MOV     R7,#0x4
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_SendOpt:
+        CODE
+        MOV     A,#-0xf
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 15
+        ; Auto size: 3
+        MOV     A,#-0x3
+        LCALL   ?ALLOC_XSTACK8
+        MOV     A,R1
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    @DPTR,A
+        MOV     A,#0x1
+        LCALL   ?XSTACK_DISP0_8
+        MOV     A,R2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,R3
+        MOVX    @DPTR,A
+        MOV     ?V0 + 6,R4
+        MOV     A,#0x12
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     R6,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R7,A
+        ; Setup parameters for call to function nwk_getConnInfo
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    A,@DPTR
+        MOV     R1,A
+        LCALL   nwk_getConnInfo
+        MOV     ?V0 + 2,R2
+        MOV     ?V0 + 3,R3
+        MOV     ?V0 + 0,#0x2
+        ; Setup parameters for call to function MRFI_GetRadioState
+        LCALL   MRFI_GetRadioState
+        MOV     A,R1
+        MOV     ?V0 + 7,A
+        MOV     ?V0 + 1,#0x0
+        MOV     A,?V0 + 2
+        ORL     A,?V0 + 3
+        JZ      ??SMPL_SendOpt_0
+        ; Setup parameters for call to function nwk_checkConnInfo
+        MOV     R1,#0x1
+        MOV     R2,?V0 + 2
+        MOV     R3,?V0 + 3
+        LCALL   nwk_checkConnInfo
+        MOV     A,R1
+        MOV     R0,A
+        MOV     ?V0 + 0,R0
+        JZ      ??SMPL_SendOpt_1
+??SMPL_SendOpt_0:
+        MOV     R1,?V0 + 0
+??SMPL_SendOpt_2:
+        MOV     A,#0x3
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x8
+        LJMP    ?FUNC_LEAVE_XDATA
+??SMPL_SendOpt_1:
+        MOV     A,#0x1
+        LCALL   ?XSTACK_DISP0_8
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,R0
+        ORL     A,R1
+        JZ      ??SMPL_SendOpt_0
+        MOV     A,?V0 + 6
+        CLR     C
+        SUBB    A,#0x33
+        JNC     ??SMPL_SendOpt_0
+        MOV     A,R6
+        ORL     A,R7
+        JNZ     ??SMPL_SendOpt_3
+        ; Setup parameters for call to function nwk_buildFrame
+        MOV     DPL,?V0 + 2
+        MOV     DPH,?V0 + 3
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     R4,?V0 + 6
+        MOV     A,#0x1
+        LCALL   ?XSTACK_DISP0_8
+        LCALL   ?Subroutine2
+??CrossCallReturnLabel_0:
+        LCALL   nwk_buildFrame
+        MOV     ?V0 + 4,R2
+        MOV     ?V0 + 5,R3
+        MOV     R6,?V0 + 4
+        MOV     R7,?V0 + 5
+??SMPL_SendOpt_4:
+        MOV     A,R6
+        ORL     A,R7
+        JNZ     ??SMPL_SendOpt_5
+        MOV     R1,#0x3
+        SJMP    ??SMPL_SendOpt_2
+??SMPL_SendOpt_3:
+        MOV     A,R6
+        MOV     C,0xE0 /* A   */.0
+        JNC     ??SMPL_SendOpt_6
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOVX    A,@DPTR
+        CPL     A
+        JZ      ??SMPL_SendOpt_6
+        ; Setup parameters for call to function nwk_buildAckReqFrame
+        MOV     A,?V0 + 2
+        ADD     A,#0x2
+        MOV     ?V0 + 4,A
+        MOV     A,?V0 + 3
+        ADDC    A,#0x0
+        MOV     ?V0 + 5,A
+        MOV     R0,#?V0 + 4
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     DPL,?V0 + 2
+        MOV     DPH,?V0 + 3
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R5,A
+        MOV     R4,?V0 + 6
+        MOV     A,#0x3
+        LCALL   ?XSTACK_DISP0_8
+        LCALL   ?Subroutine2
+??CrossCallReturnLabel_1:
+        LCALL   nwk_buildAckReqFrame
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     ?V0 + 4,R2
+        MOV     ?V0 + 5,R3
+        MOV     R6,?V0 + 4
+        MOV     R7,?V0 + 5
+        MOV     ?V0 + 1,#0x1
+        SJMP    ??SMPL_SendOpt_4
+??SMPL_SendOpt_6:
+        MOV     R1,#0x2
+        LJMP    ??SMPL_SendOpt_2
+??SMPL_SendOpt_5:
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 4,#0x1
+        MOV     ?V0 + 5,#0x0
+        MOV     R0,#?V0 + 4
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     A,?V0 + 2
+        ADD     A,#0x3
+        MOV     R4,A
+        MOV     A,?V0 + 3
+        ADDC    A,#0x0
+        MOV     R5,A
+        MOV     A,R6
+        ADD     A,#0x3
+        MOV     R2,A
+        MOV     A,R7
+        ADDC    A,#0x0
+        MOV     R3,A
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function nwk_sendFrame
+        MOV     R1,#0x1
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   nwk_sendFrame
+        MOV     A,R1
+        MOV     ?V0 + 0,A
+        JZ      $+5
+        LJMP    ??SMPL_SendOpt_0
+        MOV     A,?V0 + 1
+        MOV     C,0xE0 /* A   */.0
+        JC      $+5
+        LJMP    ??SMPL_SendOpt_0
+        MOV     A,#0x3
+        XRL     A,?V0 + 7
+        JZ      ??SMPL_SendOpt_7
+        MOV     A,#0x1
+        XRL     A,?V0 + 7
+        JNZ     ??SMPL_SendOpt_8
+        ; Setup parameters for call to function MRFI_WakeUp
+        LCALL   MRFI_WakeUp
+??SMPL_SendOpt_8:
+        ; Setup parameters for call to function MRFI_RxOn
+        LCALL   MRFI_RxOn
+??SMPL_SendOpt_7:
+        ; Setup parameters for call to function MRFI_ReplyDelay
+        LCALL   MRFI_ReplyDelay
+        MOV     A,#0x3
+        XRL     A,?V0 + 7
+        JZ      ??SMPL_SendOpt_9
+        MOV     A,#0x1
+        XRL     A,?V0 + 7
+        JNZ     ??SMPL_SendOpt_10
+        ; Setup parameters for call to function MRFI_Sleep
+        LCALL   MRFI_Sleep
+        SJMP    ??SMPL_SendOpt_9
+??SMPL_SendOpt_10:
+        ; Setup parameters for call to function MRFI_RxIdle
+        LCALL   MRFI_RxIdle
+??SMPL_SendOpt_9:
+        MOV     C,0xa8.7
+        CLR     A
+        RLC     A
+        MOV     R0,A
+        CLR     0xa8.7
+        MOV     DPL,?V0 + 2
+        MOV     DPH,?V0 + 3
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        JZ      ??SMPL_SendOpt_11
+        MOV     DPL,?V0 + 2
+        MOV     DPH,?V0 + 3
+        INC     DPTR
+        INC     DPTR
+        CLR     A
+        MOVX    @DPTR,A
+        MOV     ?V0 + 0,#0xc
+??SMPL_SendOpt_11:
+        MOV     A,R0
+        MOV     C,0xE0 /* A   */.0
+        MOV     0xa8.7,C
+        MOV     A,0xa8
+        LJMP    ??SMPL_SendOpt_0
+        REQUIRE _A_IEN0
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine2:
+        MOVX    A,@DPTR
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R3,A
+        MOV     DPL,?V0 + 2
+        MOV     DPH,?V0 + 3
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_Receive:
+        CODE
+        MOV     A,#-0xd
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 13
+        ; Auto size: 3
+        MOV     A,#-0x3
+        LCALL   ?ALLOC_XSTACK8
+        MOV     A,R1
+        MOV     R7,A
+        MOV     ?V0 + 4,R2
+        MOV     ?V0 + 5,R3
+        MOV     ?V0 + 0,R4
+        MOV     ?V0 + 1,R5
+        ; Setup parameters for call to function nwk_getConnInfo
+        LCALL   nwk_getConnInfo
+        MOV     R6,#0x2
+        MOV     A,R2
+        ORL     A,R3
+        JZ      ??SMPL_Receive_0
+        ; Setup parameters for call to function nwk_checkConnInfo
+        MOV     R1,#0x0
+        LCALL   nwk_checkConnInfo
+        MOV     A,R1
+        MOV     R6,A
+        JZ      ??SMPL_Receive_1
+??SMPL_Receive_0:
+        MOV     A,R6
+        MOV     R1,A
+        SJMP    ??SMPL_Receive_2
+??SMPL_Receive_1:
+        MOV     DPL,?XSP + 0
+        MOV     DPH,?XSP + 1
+        MOV     A,#0x1
+        MOVX    @DPTR,A
+        LCALL   ?XSTACK_DISP0_8
+        MOV     A,R7
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function nwk_retrieveFrame
+        CLR     A
+        MOV     ?V0 + 2,A
+        MOV     ?V0 + 3,A
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,?V0 + 4
+        MOV     R5,?V0 + 5
+        MOV     A,#0x6
+        LCALL   ?XSTACK_DISP0_8
+        MOV     R2,DPL
+        MOV     R3,DPH
+        LCALL   nwk_retrieveFrame
+        MOV     A,#0x6
+        LCALL   ?DEALLOC_XSTACK8
+??SMPL_Receive_2:
+        MOV     A,#0x3
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x6
+        LJMP    ?FUNC_LEAVE_XDATA
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_Link:
+        CODE
+        ; Saved register size: 0
+        ; Auto size: 0
+        ; Setup parameters for call to function nwk_link
+        LJMP    nwk_link
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+SMPL_Ioctl:
+        CODE
+        MOV     A,#-0xb
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 11
+        ; Auto size: 0
+        MOV     ?V0 + 0,R2
+        MOV     A,R4
+        MOV     R6,A
+        MOV     A,R5
+        MOV     R7,A
+        MOV     DPTR,#sInit_done
+        MOVX    A,@DPTR
+        JNZ     ??SMPL_Ioctl_0
+        MOV     A,R1
+        ADD     A,#-0x5
+        JZ      ??SMPL_Ioctl_0
+        ADD     A,#-0x5
+        JZ      ??SMPL_Ioctl_0
+??SMPL_Ioctl_1:
+        MOV     R1,#0x2
+        LJMP    ??SMPL_Ioctl_2
+??SMPL_Ioctl_0:
+        MOV     A,R1
+        ADD     A,#-0x2
+        JZ      ??SMPL_Ioctl_3
+        DEC     A
+        JZ      ??SMPL_Ioctl_4
+        ADD     A,#-0x2
+        JZ      ??SMPL_Ioctl_5
+        DEC     A
+        JZ      ??SMPL_Ioctl_6
+        DEC     A
+        JZ      ??SMPL_Ioctl_7
+        DEC     A
+        JZ      ??SMPL_Ioctl_8
+        SJMP    ??SMPL_Ioctl_1
+??SMPL_Ioctl_6:
+        ; Setup parameters for call to function nwk_connectionControl
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        MOV     R1,?V0 + 0
+        LCALL   nwk_connectionControl
+        SJMP    ??SMPL_Ioctl_2
+??SMPL_Ioctl_5:
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JZ      ??SMPL_Ioctl_9
+        MOV     A,R2
+        JNZ     ??SMPL_Ioctl_1
+??SMPL_Ioctl_9:
+        ; Setup parameters for call to function nwk_deviceAddress
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        MOV     R1,?V0 + 0
+        LCALL   nwk_deviceAddress
+        SJMP    ??SMPL_Ioctl_2
+??SMPL_Ioctl_10:
+        SJMP    ??SMPL_Ioctl_1
+??SMPL_Ioctl_3:
+        MOV     A,#0x3
+        XRL     A,?V0 + 0
+        JNZ     ??SMPL_Ioctl_11
+        ; Setup parameters for call to function nwk_rawSend
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   nwk_rawSend
+        SJMP    ??SMPL_Ioctl_2
+??SMPL_Ioctl_11:
+        MOV     A,#0x2
+        XRL     A,?V0 + 0
+        JNZ     ??SMPL_Ioctl_1
+        ; Setup parameters for call to function nwk_rawReceive
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   nwk_rawReceive
+        SJMP    ??SMPL_Ioctl_2
+??SMPL_Ioctl_4:
+        ; Setup parameters for call to function nwk_radioControl
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        MOV     R1,?V0 + 0
+        LCALL   nwk_radioControl
+        SJMP    ??SMPL_Ioctl_2
+??SMPL_Ioctl_7:
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JNZ     ??SMPL_Ioctl_1
+        ; Setup parameters for call to function memcpy
+        MOV     ?V0 + 2,#0x4
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        ; Setup parameters for call to function nwk_getFWVersion
+        LCALL   nwk_getFWVersion
+        MOV     A,R2
+        MOV     R4,A
+        MOV     A,R3
+        MOV     R5,A
+        MOV     A,R6
+        MOV     R2,A
+        MOV     A,R7
+        MOV     R3,A
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        SJMP    ??SMPL_Ioctl_12
+??SMPL_Ioctl_8:
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
+        JNZ     ??SMPL_Ioctl_10
+        ; Setup parameters for call to function nwk_getProtocolVersion
+        LCALL   nwk_getProtocolVersion
+        MOV     A,R1
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    @DPTR,A
+??SMPL_Ioctl_12:
+        MOV     R1,#0x0
+??SMPL_Ioctl_2:
+        LJMP    ?Subroutine1
+
+        END
+// 
+// 949 bytes in segment NEAR_CODE
+//   1 byte  in segment SFR_AN
+//   1 byte  in segment XDATA_Z
+// 
+// 949 bytes of CODE  memory
+//   0 bytes of DATA  memory (+ 1 byte shared)
+//   1 byte  of XDATA memory
+//
+//Errors: none
+//Warnings: none
