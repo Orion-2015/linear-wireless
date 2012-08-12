@@ -12,7 +12,7 @@ uint8 logBuffer[LOGBUFFERLEN];
 volatile uint16 logIndex = 0;
 char logTemp[LOGTEMP_SIZE];
 
-uint8 logLevel = INFO; 
+uint8 logLevel = TRACE; 
 
 /* not implement, send to uart or lcd
  */
@@ -21,16 +21,18 @@ void log(uint8 logType, char* logContent)
 
 	if(logType <= logLevel)
 	{
-		if(logIndex + strlen(logContent) + 1 > LOGBUFFERLEN)
+		/*the length of logContent is logContent[0],use it take place of strlen(logContent)*/
+		
+		if(logIndex + logContent[0] + 1 > LOGBUFFERLEN)
 		{
-			removeOldLog(strlen(logContent) + 1);
+			removeOldLog(logContent[0] + 1);
 		}
 		/* olgIndex has updated by removeOldLog() function if has call it */
-		memcpy(logBuffer + logIndex, logContent, strlen(logContent) + 1);
-		logIndex += (strlen(logContent) + 1);
+		memcpy(logBuffer + logIndex, logContent, logContent[0] + 1);
+		logIndex += (logContent[0] + 1);
 		
 #ifdef COMDEBUG		
-		debug(logContent);
+		//debug(logContent);
 #endif	
 	}
 }
@@ -64,4 +66,6 @@ void removeOldLog(uint16 newLogLength)
 	logIndex -= newIndex;
 	return;
 }
+
+
 

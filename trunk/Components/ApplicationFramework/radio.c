@@ -18,7 +18,7 @@ struct AppFrame* receive(void)
 	}
 }
 
-char* getErrorText(smplStatus_t rc)
+char* getRcText(smplStatus_t rc)
 {
 	switch(rc)
 	{
@@ -56,6 +56,26 @@ smplStatus_t send(struct AppFrame* data, uint8 len)
 {
 	smplStatus_t 	rc;
 	uint8 				nextAddr;
+	if(data->port == GETLOG)
+	{
+		rc = SMPL_Send_Linear(data->finnalDstAddr, (uint8_t*)data, len);
+		if(rc == SMPL_SUCCESS)
+			{
+				logTemp[0] = 3;/* the length of logTemp*/
+				logTemp[1] = SEND_SUCCESSED;
+				logTemp[2] = data->finnalDstAddr;
+				log(INFO_SEND, logTemp);
+			}
+			else
+			{
+				logTemp[0] = 5;/* the length of logTemp*/
+				logTemp[1] = SEND_FAILED;
+				logTemp[2] = data->finnalDstAddr;
+				logTemp[3] = rc;
+				logTemp[4] = 0;   /*failed times*/
+				log(ERROR_SEND, logTemp);
+			}
+	}
 	for(uint8 i = 1;i<=MAX_HOPS;i++)
 	{
 		nextAddr = getNextAddress(data->originalAddr, data->finnalDstAddr, i);
@@ -65,23 +85,41 @@ smplStatus_t send(struct AppFrame* data, uint8 len)
 			rc = SMPL_Send_Linear(data->dstAddr, (uint8_t*)data, len);
     	if(rc == SMPL_SUCCESS)
 			{
+				logTemp[0] = 3;/* the length of logTemp*/
+				//logTemp[1] = INFO_SEND;
+				logTemp[1] = SEND_SUCCESSED;
+				logTemp[2] = data->dstAddr;
+				log(INFO_SEND, logTemp);
 				//BSP_TOGGLE_LED1();	
+/*				
 #ifndef LOGINFO
 				sprintf((char*)logTemp, "Send to %d success\n", data->dstAddr);	
 #else
 				sprintf((char*)logTemp, "ST:%dS\n", data->dstAddr);	
 #endif
 				log(ERROR, logTemp);
+				*/
 				break;
 			}
 			else
 			{
+				logTemp[0] = 5;/* the length of logTemp*/
+				//logTemp[1] = ERROR_SEND;
+				logTemp[1] = SEND_FAILED;
+				logTemp[2] = data->dstAddr;
+				logTemp[3] = rc;
+				logTemp[4] = i;   /*failed times*/
+				log(ERROR_SEND, logTemp);
+		
+	/*	
 #ifndef LOGINFO				
 				sprintf((char*)logTemp, "Send to %d failed for %d times:%s\n", data->dstAddr,i, getErrorText(rc));			
 #else
 				sprintf((char*)logTemp, "ST:%dF for %ds:%s\n", data->dstAddr,i, rc);				
 #endif	
 				log(ERROR, logTemp);
+				
+				*/
 			}
 		}
 		else

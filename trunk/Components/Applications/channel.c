@@ -22,7 +22,10 @@ void channelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 		SMPL_Ioctl(IOCTL_OBJ_FREQ, IOCTL_ACT_GET, &channel);
 		appOutFrame->msg[0] = (channel.logicalChan);
 		appOutFrame->len = 1;
-		log(INFO, "Send channel");
+		logTemp[0] = 2;/* the length of logTemp*/
+		logTemp[1] = SEND_CHANNEL;
+		log(INFO_OTHER, logTemp);
+		//log(INFO, "Send channel");
 	}
 	else
 	{
@@ -31,8 +34,10 @@ void channelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 			channel.logicalChan =  appInFrame->msg[1];
 			SMPL_Ioctl( IOCTL_OBJ_FREQ, IOCTL_ACT_SET, &channel);
 			appOutFrame->len = 0;
-			
-			log(INFO, "Set channel");
+			logTemp[0] = 2;/* the length of logTemp*/
+			logTemp[1] = SET_CHANNEL;
+			log(INFO_OTHER, logTemp);			
+			//log(INFO, "Set channel");
 		}
 	}	
 

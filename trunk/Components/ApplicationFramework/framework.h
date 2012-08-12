@@ -14,8 +14,9 @@
 #include "uart.h"
 
 
-enum LOGTYPE { ERROR, WARN, INFO, TRACE};
-#define LOGBUFFERLEN		500
+enum LOGTYPE { ERROR_SEND, ERROR_OTHER, WARN, INFO_SEND, INFO_OTHER, TRACE};
+#define LOGBUFFERLEN		50
+//#define LOGTEMP_SIZE		10
 #define UARTCOMMANDHEADSIZE	3
 #define APADDRESS	1
 #define SEND_UART_ECHO
@@ -24,7 +25,7 @@ enum LOGTYPE { ERROR, WARN, INFO, TRACE};
 
 //#define MSGMAXLEN	(MAX_APP_PAYLOAD - APPHEADSIZE)
 
-#define MSGMAXLEN	40
+#define MSGMAXLEN	50
 
 struct AppFrame
 {
@@ -77,6 +78,7 @@ void sendTest2AP(void);
 void consoleAP(char* data);
 
 void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutframe);
+void getLogInfor(char* log_Infor);
 
 #include "applications.h"
 

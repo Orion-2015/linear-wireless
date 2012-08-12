@@ -15,25 +15,36 @@ extern volatile uint16 logIndex;
  */
 void getLogHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 {
-	if(logIndex != 0)
+	if(logIndex != 0 && logIndex<=40)
 	{
+		
 		memcpy(appOutFrame->msg, logBuffer, logIndex);
 		appOutFrame->len = logIndex;
+		logTemp[0] = 2;/* the length of logTemp*/
+		logTemp[1] = SEND_LOG;
+		log(INFO_OTHER, logTemp);
+/*
 #ifndef LOGINFO
 		log(INFO, "Send log\n");
 #else
 		log(INFO, "SL\n");
-#endif
+#endif   */
 	}
-	else
+	else if(logIndex == 0)
 	{
-		memcpy(appOutFrame->msg, "No log", 6);
+		
+		memcpy(appOutFrame->msg, logBuffer, logIndex);
 		appOutFrame->len = strlen((char*)appOutFrame->msg);
+		logTemp[0] = 2;/* the length of logTemp*/
+		logTemp[1] = NO_LOG;
+		log(INFO_OTHER, logTemp);
+		
+/*		
 #ifndef LOGINFO
 		log(INFO, "No log\n");
 #else
 		log(INFO, "NL\n");
-#endif
+#endif		*/
 		
 	}
 	return;	
