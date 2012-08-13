@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  16:32:57 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:27:10 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -110,7 +110,7 @@ scan:
         INC     DPTR
         INC     DPTR
         INC     DPTR
-        MOV     A,#0x32
+        MOV     A,#0x1e
         MOVX    @DPTR,A
         MOV     DPL,R4
         MOV     DPH,R5
@@ -153,7 +153,7 @@ scan:
         ADDC    A,#0x0
         MOV     R1,A
         MOV     A,R0
-        SUBB    A,#0x32
+        SUBB    A,#0x1e
         MOV     A,R1
         SUBB    A,#0x0
         CLR     C
@@ -164,7 +164,7 @@ scan:
         MOV     A,#0x2
         MOVX    @DPTR,A
         INC     DPTR
-        MOV     A,#0xf
+        MOV     A,#0x13
         MOVX    @DPTR,A
         ; Setup parameters for call to function log
         MOV     R2,#logTemp & 0xff

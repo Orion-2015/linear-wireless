@@ -94,7 +94,7 @@
  */
 
 #if (defined MRFI_CC1110) || (defined MRFI_CC1111)
-#define MRFI_SETTING_PA_TABLE0    0x1D    /*60   C8  1D*/
+#define MRFI_SETTING_PA_TABLE0    0x1D   /*60   C8  1D*/
 #define MRFI_RADIO_PARTNUM        0x01
 #define MRFI_RADIO_MIN_VERSION    3
 

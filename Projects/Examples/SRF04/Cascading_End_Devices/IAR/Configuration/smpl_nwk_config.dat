@@ -38,7 +38,7 @@
 
 -DMAX_HOPS_FROM_ME=3
 -DCOMMAND_SIZE=10
--DLOGTEMP_SIZE=100
+-DLOGTEMP_SIZE=50
 
 /* max hops away from and AP. Keeps hop count and therefore replay
  * storms down for sending to and from polling End Devices. Also used

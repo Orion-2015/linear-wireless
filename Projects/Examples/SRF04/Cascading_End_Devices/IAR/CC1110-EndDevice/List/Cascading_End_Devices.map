@@ -3,8 +3,8 @@ Warning[w6]: Type conflict for external/entry "getAckFlag", in module framework 
   char getAckFlag;
   /* In module nwk: */
   char volatile getAckFlag;
-Warning[w6]: Type conflict for external/entry "EnableRecv", in module main_linear against external/entry in module radio; prototyped function vs K&R function
-  /* In module main_linear: */
+Warning[w6]: Type conflict for external/entry "EnableRecv", in module mrfi against external/entry in module radio; prototyped function vs K&R function
+  /* In module mrfi: */
   /* K&R Function, args 0, attr 0 */
   int (__xdata_reentrant EnableRecv)();
   /* In module radio: */
@@ -17,26 +17,11 @@ Warning[w6]: Type conflict for external/entry "EnableSend", in module mrfi again
   /* In module radio: */
   /* Function, args 0, attr 0 */
   void (__xdata_reentrant EnableSend)(void);
-Warning[w6]: Type conflict for external/entry "InitRFIO", in module main_linear against external/entry in module radio; prototyped function vs K&R function
-  /* In module main_linear: */
-  /* K&R Function, args 0, attr 0 */
-  int (__xdata_reentrant InitRFIO)();
-  /* In module radio: */
-  /* Function, args 0, attr 0 */
-  void (__xdata_reentrant InitRFIO)(void);
-Warning[w6]: Type conflict for external/entry "getRcText", in module framework against external/entry in module radio; prototyped function vs K&R function
-  /* In module framework: */
-  /* K&R Function, args 0, attr 0 */
-  int (__xdata_reentrant getRcText)();
-  /* In module radio: */
-  /* Function, args 1, attr 0 */
-  char * (__xdata_reentrant getRcText)(smplStatus_t);
-    typedef enum smplStatus smplStatus_t;
 ################################################################################
 #                                                                              #
 #      IAR Universal Linker V5.0.2.5/W32                                       #
 #                                                                              #
-#           Link time     =  12/Aug/2012  18:10:02                             #
+#           Link time     =  13/Aug/2012  21:35:47                             #
 #           Target CPU    =  x51                                               #
 #           List file     =  E:\linear-wireless\Projects\Examples\SRF04\Cascad #
 #                            ing_End_Devices\IAR\CC1110-EndDevice\List\Cascadi #
@@ -257,12 +242,12 @@ PDATA_ID             CODE               000000E5                     dse    0
 IXDATA_ID            CODE               000000E5                     dse    0
 BDATA_ID             CODE               000000E5                     dse    0
 IDATA_ID             CODE               000000E5                     dse    0
-XDATA_ID             CODE          000000E5 - 000005AC         4C8   rel    0
-RCODE                CODE          000005AD - 00001175         BC9   rel    0
-DIFUNCT              CODE               00001176                     dse    0
-CODE_N               CODE               00001176                     dse    0
-CODE_C               CODE               00001176                     dse    0
-NEAR_CODE            CODE          00001176 - 00005664        44EF   rel    0
+XDATA_ID             CODE          000000E5 - 0000060C         528   rel    0
+RCODE                CODE          0000060D - 000011F4         BE8   rel    0
+DIFUNCT              CODE               000011F5                     dse    0
+CODE_N               CODE               000011F5                     dse    0
+CODE_C               CODE               000011F5                     dse    0
+NEAR_CODE            CODE          000011F5 - 00005660        446C   rel    0
 REGISTERS            DATA          00000000 - 00000007           8   rel    0
 VREG                 DATA          00000008 - 0000000F           8   rel    0
 PSP                  DATA               00000010                     dse    0
@@ -292,8 +277,8 @@ SFR_AN               DATA          00000080 - 00000080           1   rel    0
                      DATA          000000F3 - 000000F4           2 
                      DATA          000000FE - 000000FE           1 
 XSTACK               XDATA         0000F000 - 0000F3FE         3FF   rel    0
-XDATA_Z              XDATA         0000F3FF - 0000F7CA         3CC   rel    0
-XDATA_I              XDATA         0000F7CB - 0000FC92         4C8   rel    0
+XDATA_Z              XDATA         0000F3FF - 0000F7AA         3AC   rel    0
+XDATA_I              XDATA         0000F7AB - 0000FCD2         528   rel    0
 ISTACK               IDATA         00000040 - 000000FF          C0   rel    0
 
                 ****************************************
@@ -302,12 +287,12 @@ ISTACK               IDATA         00000040 - 000000FF          C0   rel    0
                 *                                      *
                 ****************************************
 
- 22 117 bytes of CODE  memory
+ 22 113 bytes of CODE  memory
      18 bytes of DATA  memory (+ 35 absolute )
-  3 219 bytes of XDATA memory
+  3 283 bytes of XDATA memory
     192 bytes of IDATA memory
       8 bits  of BIT   memory
 
 Errors: none
-Warnings: 5
+Warnings: 3
 

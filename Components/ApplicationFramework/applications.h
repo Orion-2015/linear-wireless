@@ -8,7 +8,7 @@
 #define GETSTATIONDATA		1
 #define GETLOG						2
 #define GETTEST						3
-#define CHANNELHANDLE			4
+#define CHANNELHANDLE			15
 #define LOGLEVELHANDLE  	5
 #define SCAN					  	6
 #define DETECT  			  	7
@@ -16,6 +16,10 @@
 enum logInfor  {
 	SEND_SUCCESSED,
 	SEND_FAILED,
+	SEND_LOG_SUCCESSED,
+	SEND_LOG_FAILED,
+	SEND_CALLBACK_SUCCESSED,
+	SEND_CALLBACK_FAILED,
 	SEND_TEST_2AP_SUCCESSED,
 	SEND_TEST_2AP_FAILED,
 	FORWARD_SUCCESSED,
@@ -42,4 +46,8 @@ void channelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 void logLevelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 void scan(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
 void detect(struct AppFrame* appInFrame, struct AppFrame* appOutFrame);
+char* getRcText(smplStatus_t rc);
+void InitRFIO(void);
+void EnableRecv(void);
+void EnableSend(void);
 #endif

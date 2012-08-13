@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  18:10:02 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:35:47 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -176,7 +176,7 @@ main:
         RSEG XDATA_ID:CODE:NOROOT(0)
 `?<Initializer for sMyROMAddress>`:
         DATA8
-        DB 2
+        DB 5
 
         END
 // 
@@ -190,4 +190,4 @@ main:
 // 23 bytes of XDATA memory
 //
 //Errors: none
-//Warnings: 2
+//Warnings: none

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  16:49:46 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:27:12 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -98,10 +98,10 @@
 
         EXTERN SMPL_Receive
         EXTERN SMPL_Send_Linear
+        EXTERN MRFI_DelayMs
         EXTERN log
         EXTERN getNextAddress
         EXTERN getMyAddress
-        EXTERN MRFI_DelayMs
         EXTERN logTemp
 
 
@@ -272,8 +272,8 @@ send:
         MOV     DPL,R6
         MOV     DPH,R7
         INC     DPTR
-        MOV     ?V0 + 4,DPL
-        MOV     ?V0 + 5,DPH
+        MOV     ?V0 + 6,DPL
+        MOV     ?V0 + 7,DPH
         MOV     DPL,R6
         MOV     DPH,R7
         MOVX    A,@DPTR
@@ -281,57 +281,58 @@ send:
         JNZ     ??send_0
         ; Setup parameters for call to function SMPL_Send_Linear
         MOV     R4,?V0 + 2
-        MOV     DPL,?V0 + 4
-        MOV     DPH,?V0 + 5
+        MOV     DPL,?V0 + 6
+        MOV     DPH,?V0 + 7
         MOVX    A,@DPTR
         MOV     R1,A
         LCALL   SMPL_Send_Linear
         MOV     A,R1
+        MOV     ?V0 + 3,A
+        ; Setup parameters for call to function MRFI_DelayMs
+        MOV     R2,#0x32
+        MOV     R3,#0x0
+        LCALL   MRFI_DelayMs
+        MOV     A,?V0 + 3
         MOV     DPTR,#logTemp
         JNZ     ??send_1
-        MOV     A,#0x3
+        MOV     A,#0x2
         MOVX    @DPTR,A
         INC     DPTR
-        CLR     A
-        LCALL   ?Subroutine0
-??CrossCallReturnLabel_0:
+??send_2:
+        MOVX    @DPTR,A
         ; Setup parameters for call to function log
         MOV     R2,#logTemp & 0xff
         MOV     R3,#(logTemp >> 8) & 0xff
         MOV     R1,#0x3
-        SJMP    ??send_2
+??send_3:
+        LCALL   log
+        LJMP    ??send_4
 ??send_1:
-        MOV     A,#0x5
+        MOV     A,#0x3
         MOVX    @DPTR,A
         INC     DPTR
-        MOV     A,#0x1
-        LCALL   ?Subroutine0
-??CrossCallReturnLabel_1:
-        MOV     A,R1
-        INC     DPTR
         MOVX    @DPTR,A
+        MOV     A,?V0 + 3
         INC     DPTR
-        CLR     A
         MOVX    @DPTR,A
         ; Setup parameters for call to function log
         MOV     R2,#logTemp & 0xff
         MOV     R3,#(logTemp >> 8) & 0xff
-        MOV     R1,A
-??send_2:
-        LCALL   log
+        MOV     R1,#0x0
+        SJMP    ??send_3
 ??send_0:
         MOV     ?V0 + 0,#0x1
         MOV     A,R6
         ADD     A,#0x4
-        MOV     ?V0 + 6,A
+        MOV     ?V0 + 4,A
         MOV     A,R7
         ADDC    A,#0x0
-        MOV     ?V0 + 7,A
-??send_3:
+        MOV     ?V0 + 5,A
+??send_5:
         ; Setup parameters for call to function getNextAddress
         MOV     R3,?V0 + 0
-        MOV     DPL,?V0 + 4
-        MOV     DPH,?V0 + 5
+        MOV     DPL,?V0 + 6
+        MOV     DPH,?V0 + 7
         MOVX    A,@DPTR
         MOV     R2,A
         MOV     DPL,R6
@@ -342,9 +343,9 @@ send:
         MOV     R1,A
         LCALL   getNextAddress
         MOV     A,R1
-        JZ      ??send_4
-        MOV     DPL,?V0 + 6
-        MOV     DPH,?V0 + 7
+        JZ      ??send_6
+        MOV     DPL,?V0 + 4
+        MOV     DPH,?V0 + 5
         MOVX    @DPTR,A
         ; Setup parameters for call to function SMPL_Send_Linear
         MOV     R4,?V0 + 2
@@ -356,26 +357,22 @@ send:
         MOV     A,R1
         MOV     ?V0 + 3,A
         MOV     DPTR,#logTemp
-        JNZ     ??send_5
+        JNZ     ??send_7
         MOV     A,#0x3
         MOVX    @DPTR,A
         INC     DPTR
         CLR     A
-        LCALL   ?Subroutine1
-??CrossCallReturnLabel_2:
-        ; Setup parameters for call to function log
-        MOV     R2,#logTemp & 0xff
-        MOV     R3,#(logTemp >> 8) & 0xff
-        MOV     R1,#0x3
-        LCALL   log
-        SJMP    ??send_6
-??send_5:
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_0:
+        SJMP    ??send_2
+??send_7:
         MOV     A,#0x5
         MOVX    @DPTR,A
         INC     DPTR
         MOV     A,#0x1
-        LCALL   ?Subroutine1
-??CrossCallReturnLabel_3:
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_1:
+        MOVX    @DPTR,A
         MOV     A,R1
         INC     DPTR
         MOVX    @DPTR,A
@@ -387,28 +384,22 @@ send:
         MOV     R3,#(logTemp >> 8) & 0xff
         MOV     R1,#0x0
         LCALL   log
+        ; Setup parameters for call to function MRFI_DelayMs
+        MOV     R2,#0x14
+        MOV     R3,#0x0
+        LCALL   MRFI_DelayMs
         INC     ?V0 + 0
         MOV     A,?V0 + 0
         CLR     C
         SUBB    A,#0x4
-        JNC     ??send_6
-        SJMP    ??send_3
-??send_4:
-        MOV     ?V0 + 3,#0x5
+        JNC     ??send_4
+        SJMP    ??send_5
 ??send_6:
+        MOV     ?V0 + 3,#0x5
+??send_4:
         MOV     R1,?V0 + 3
         MOV     R7,#0x8
         LJMP    ?FUNC_LEAVE_XDATA
-
-        RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine1:
-        MOVX    @DPTR,A
-        MOV     DPL,?V0 + 6
-        MOV     DPH,?V0 + 7
-        MOVX    A,@DPTR
-        MOV     DPTR,#logTemp + 2
-        MOVX    @DPTR,A
-        RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
 ?Subroutine0:
@@ -417,7 +408,6 @@ send:
         MOV     DPH,?V0 + 5
         MOVX    A,@DPTR
         MOV     DPTR,#logTemp + 2
-        MOVX    @DPTR,A
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
@@ -612,13 +602,13 @@ EnableRecv:
 
         END
 // 
-// 429 bytes in segment NEAR_CODE
+// 420 bytes in segment NEAR_CODE
 //   3 bytes in segment SFR_AN
 // 203 bytes in segment XDATA_I
 // 203 bytes in segment XDATA_ID
 // 100 bytes in segment XDATA_Z
 // 
-// 632 bytes of CODE  memory
+// 623 bytes of CODE  memory
 //   0 bytes of DATA  memory (+ 3 bytes shared)
 // 303 bytes of XDATA memory
 //

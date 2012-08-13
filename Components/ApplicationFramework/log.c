@@ -31,9 +31,9 @@ void log(uint8 logType, char* logContent)
 		memcpy(logBuffer + logIndex, logContent, logContent[0] + 1);
 		logIndex += (logContent[0] + 1);
 		
-#ifdef COMDEBUG		
+		//#ifdef COMDEBUG		
 		//debug(logContent);
-#endif	
+		//#endif	
 	}
 }
 
@@ -43,27 +43,33 @@ void removeOldLog(uint16 newLogLength)
 {
 	uint16 i;
 	uint16 newIndex;
-	
-	i = newLogLength - 1;
-	/* search to the end log content */
-	while(logBuffer[i] != '\0' && i < LOGBUFFERLEN)
-	{
-		i++;
-	}
-	/* remove all log data */
-	if(i == LOGBUFFERLEN)
+	if(newLogLength >= logIndex)
 	{
 		logIndex = 0;
-		return;
 	}
-	i++; /* point to new log content */
-	newIndex = i;
-	
-	for(; i<LOGBUFFERLEN; i++)
+	else
 	{
-		logBuffer[i - newIndex] = logBuffer[i];
+			i = newLogLength - 1;
+			/* search to the end log content */
+			while(logBuffer[i] != '\0' && i < LOGBUFFERLEN)
+			{
+				i++;
+			}
+			/* remove all log data */
+			if(i == LOGBUFFERLEN)
+			{
+				logIndex = 0;
+				return;
+			}
+			i++; /* point to new log content */
+			newIndex = i;
+			
+			for(; i<LOGBUFFERLEN; i++)
+			{
+				logBuffer[i - newIndex] = logBuffer[i];
+			}
+			logIndex -= newIndex;
 	}
-	logIndex -= newIndex;
 	return;
 }
 

@@ -19,12 +19,12 @@ void scan(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 			logTemp[0] = 2;/* the length of logTemp*/
 			logTemp[1] = SCAN_SIZEOUT;
 			log(ERROR_OTHER, logTemp);
-/*			
-#ifndef LOGINFO
+			/*			
+			#ifndef LOGINFO
 			log(ERROR, "scan size is out\n");
-#else
+			#else
 			log(ERROR, "SSIO\n");
-#endif			*/
+			#endif			*/
 			
 			return;
 		}
