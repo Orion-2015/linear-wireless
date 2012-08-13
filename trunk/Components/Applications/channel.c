@@ -26,6 +26,7 @@ void channelHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 		logTemp[1] = SEND_CHANNEL;
 		log(INFO_OTHER, logTemp);
 		//log(INFO, "Send channel");
+		
 	}
 	else
 	{

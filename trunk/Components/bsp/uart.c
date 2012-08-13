@@ -24,14 +24,14 @@ void initUART(void)
 {
 #if UART_PORT == 0
 		IO_PER_LOC_UART0_AT_PORT0_PIN2345();
-  	UART_SETUP(0, 9600, HIGH_STOP);
+  	UART_SETUP(0, 19200, HIGH_STOP);
     INT_SETFLAG(INUM_UTX0, INT_SET);
 		IEN0 |= 0x84;				//开总中断，接收中断
 		Uart_R.count=0;
 		Uart_R.Flag=false;
 #else
 		IO_PER_LOC_UART1_AT_PORT1_PIN4567();
-  	UART_SETUP(1, 9600, HIGH_STOP);
+  	UART_SETUP(1, 19200, HIGH_STOP);
    	INT_SETFLAG(INUM_UTX1, INT_SET);
 #endif
 }
@@ -128,6 +128,7 @@ void putstr(uint8* msg, uint8 len)
 void puthex(uint8* data, uint8 len)
 {
 	extern char logTemp[LOGTEMP_SIZE];
+	
 	
 	uint8 i;
 	if(len * 2 > LOGTEMP_SIZE) return;

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  16:32:57 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:27:11 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -119,14 +119,6 @@ getLogHandle:
         MOV     A,R0
         ORL     A,R1
         JZ      ??getLogHandle_0
-        MOV     DPTR,#logIndex
-        CLR     C
-        MOVX    A,@DPTR
-        SUBB    A,#0x29
-        INC     DPTR
-        MOVX    A,@DPTR
-        SUBB    A,#0x0
-        JNC     ??getLogHandle_0
         ; Setup parameters for call to function memcpy
         MOV     DPTR,#logIndex
         LCALL   ?PUSH_XSTACK8_X_TWO
@@ -145,20 +137,25 @@ getLogHandle:
         INC     DPTR
         MOVX    A,@DPTR
         MOV     A,R0
+        MOV     DPL,?V0 + 0
+        MOV     DPH,?V0 + 1
+        MOVX    @DPTR,A
+        MOV     DPTR,#logTemp
+        MOV     A,#0x2
+        MOVX    @DPTR,A
+        INC     DPTR
+        MOV     A,#0xe
         LCALL   ?Subroutine0
 ??CrossCallReturnLabel_0:
-        MOV     A,#0xa
         SJMP    ??getLogHandle_1
 ??getLogHandle_0:
-        MOV     DPTR,#logIndex
-        MOVX    A,@DPTR
-        MOV     R0,A
+        MOV     DPTR,#logTemp
+        MOV     A,#0x2
+        MOVX    @DPTR,A
         INC     DPTR
-        MOVX    A,@DPTR
-        MOV     R1,A
-        MOV     A,R0
-        ORL     A,R1
-        JNZ     ??getLogHandle_2
+        MOV     A,#0xf
+        LCALL   ?Subroutine0
+??CrossCallReturnLabel_1:
         ; Setup parameters for call to function memcpy
         MOV     DPTR,#logIndex
         LCALL   ?PUSH_XSTACK8_X_TWO
@@ -178,36 +175,29 @@ getLogHandle:
         MOV     R3,A
         LCALL   strlen
         MOV     A,R2
-        LCALL   ?Subroutine0
-??CrossCallReturnLabel_1:
-        MOV     A,#0xb
-??getLogHandle_1:
+        MOV     DPL,?V0 + 0
+        MOV     DPH,?V0 + 1
         MOVX    @DPTR,A
-        ; Setup parameters for call to function log
-        MOV     R2,#logTemp & 0xff
-        MOV     R3,#(logTemp >> 8) & 0xff
-        MOV     R1,#0x4
-        LCALL   log
-??getLogHandle_2:
+??getLogHandle_1:
         MOV     R7,#0x2
         LJMP    ?FUNC_LEAVE_XDATA
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
 ?Subroutine0:
-        MOV     DPL,?V0 + 0
-        MOV     DPH,?V0 + 1
         MOVX    @DPTR,A
-        MOV     DPTR,#logTemp
-        MOV     A,#0x2
-        MOVX    @DPTR,A
-        INC     DPTR
+        ; Setup parameters for call to function log
+        ; Setup parameters for call to function log
+        MOV     R2,#logTemp & 0xff
+        MOV     R3,#(logTemp >> 8) & 0xff
+        MOV     R1,#0x4
+        LCALL   log
         RET
 
         END
 // 
-// 162 bytes in segment NEAR_CODE
+// 151 bytes in segment NEAR_CODE
 // 
-// 162 bytes of CODE memory
+// 151 bytes of CODE memory
 //
 //Errors: none
 //Warnings: none

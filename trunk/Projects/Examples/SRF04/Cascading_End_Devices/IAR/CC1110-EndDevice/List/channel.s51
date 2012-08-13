@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  16:32:57 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:27:10 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -163,7 +163,7 @@ channelHandle:
         INC     A
         MOVX    @DPTR,A
         INC     DPTR
-        MOV     A,#0x8
+        MOV     A,#0xc
         SJMP    ??channelHandle_2
 ??channelHandle_1:
         MOV     A,#0x1
@@ -201,7 +201,7 @@ channelHandle:
         MOV     A,#0x2
         MOVX    @DPTR,A
         INC     DPTR
-        MOV     A,#0x9
+        MOV     A,#0xd
 ??channelHandle_2:
         MOVX    @DPTR,A
         ; Setup parameters for call to function log

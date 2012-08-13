@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        12/Aug/2012  18:07:05 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:27:11 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -95,7 +95,7 @@
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
 logBuffer:
-        DS 50
+        DS 30
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_Z:XDATA:NOROOT(0)
@@ -151,7 +151,7 @@ log:
 ??CrossCallReturnLabel_0:
         CLR     C
         MOV     A,R0
-        SUBB    A,#0x33
+        SUBB    A,#0x1f
         MOV     A,R1
         SUBB    A,#0x0
         JC      ??log_1
@@ -217,42 +217,55 @@ removeOldLog:
         PUSH    DPH
         ; Saved register size: 2
         ; Auto size: 0
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        CLR     C
+        MOV     A,R2
+        SUBB    A,R0
+        MOV     A,R3
+        SUBB    A,R1
+        JC      ??removeOldLog_0
+??removeOldLog_1:
+        MOV     DPTR,#logIndex
+        CLR     A
+        MOVX    @DPTR,A
+        INC     DPTR
+        SJMP    ??removeOldLog_2
+??removeOldLog_0:
         MOV     A,R2
         ADD     A,#-0x1
         MOV     R0,A
         MOV     A,R3
         ADDC    A,#-0x1
-        SJMP    ??removeOldLog_0
-??removeOldLog_1:
+        SJMP    ??removeOldLog_3
+??removeOldLog_4:
         MOV     A,R0
         ADD     A,#0x1
         INC     R0
         MOV     A,R1
         ADDC    A,#0x0
-??removeOldLog_0:
+??removeOldLog_3:
         MOV     R1,A
         LCALL   ?Subroutine1
 ??CrossCallReturnLabel_3:
-        JZ      ??removeOldLog_2
+        JZ      ??removeOldLog_5
         CLR     C
         MOV     A,R0
-        SUBB    A,#0x32
+        SUBB    A,#0x1e
         MOV     A,R1
         SUBB    A,#0x0
-        JC      ??removeOldLog_1
-??removeOldLog_2:
-        MOV     A,#0x32
+        JC      ??removeOldLog_4
+??removeOldLog_5:
+        MOV     A,#0x1e
         XRL     A,R0
-        JNZ     ??removeOldLog_3
+        JNZ     ??removeOldLog_6
         MOV     A,R1
-??removeOldLog_3:
-        JNZ     ??removeOldLog_4
-        MOV     DPTR,#logIndex
-        CLR     A
-        MOVX    @DPTR,A
-        INC     DPTR
-        SJMP    ??removeOldLog_5
-??removeOldLog_4:
+??removeOldLog_6:
+        JZ      ??removeOldLog_1
         LCALL   ?Subroutine0
 ??CrossCallReturnLabel_1:
         MOV     A,R0
@@ -260,7 +273,7 @@ removeOldLog:
         MOV     A,R1
         MOV     R3,A
         SJMP    ??CrossCallReturnLabel_2
-??removeOldLog_6:
+??removeOldLog_7:
         LCALL   ?Subroutine1
 ??CrossCallReturnLabel_4:
         PUSH    A
@@ -283,10 +296,10 @@ removeOldLog:
 ??CrossCallReturnLabel_2:
         CLR     C
         MOV     A,R0
-        SUBB    A,#0x32
+        SUBB    A,#0x1e
         MOV     A,R1
         SUBB    A,#0x0
-        JC      ??removeOldLog_6
+        JC      ??removeOldLog_7
         MOV     DPTR,#logIndex
         CLR     C
         MOVX    A,@DPTR
@@ -295,7 +308,7 @@ removeOldLog:
         INC     DPTR
         MOVX    A,@DPTR
         SUBB    A,R3
-??removeOldLog_5:
+??removeOldLog_2:
         MOVX    @DPTR,A
         POP     DPH
         POP     DPL
@@ -329,13 +342,13 @@ removeOldLog:
 
         END
 // 
-// 267 bytes in segment NEAR_CODE
+// 282 bytes in segment NEAR_CODE
 //   1 byte  in segment XDATA_I
 //   1 byte  in segment XDATA_ID
-// 152 bytes in segment XDATA_Z
+// 132 bytes in segment XDATA_Z
 // 
-// 268 bytes of CODE  memory
-// 153 bytes of XDATA memory
+// 283 bytes of CODE  memory
+// 133 bytes of XDATA memory
 //
 //Errors: none
 //Warnings: none

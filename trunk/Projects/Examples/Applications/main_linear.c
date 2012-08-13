@@ -44,7 +44,7 @@
 #include "framework.h"
 #include "uart.h"
 
-addr_t   sMyROMAddress = { 2 };
+addr_t   sMyROMAddress = { 5 };
 
 
 /* For FHSS systems, calls to NWK_DELAY() will also call nwk_pllBackgrounder()
@@ -63,17 +63,10 @@ void main (void)
 	BSP_Init( );
 	
 	SET_MAIN_CLOCK_SOURCE(CRYSTAL);  
-	//if(getMyAddress() == APADDRESS)
+	initUART();
+	printf( "Start iwsn system...\n" );
 	
-		initUART();
-		printf( "Start iwsn system...\n" );
-		//printf("Run OS!\n");
-	
-	//else
-	
-		InitRFIO(); /* set io as normal io, not uart */
-	
- 	
+	InitRFIO(); /* set io as normal io, not uart */
 	
 	//P0DIR &= ~0x03; /* Set button as input */
 	EnableRecv();
@@ -85,7 +78,6 @@ void main (void)
 	/* turn on LED. */
 	BSP_TURN_ON_LED1( );
 	BSP_TURN_ON_LED2( );
-	//printf( "Start iwsn system...\n" );
 	
   /* never coming back... */
   framework_entry();
