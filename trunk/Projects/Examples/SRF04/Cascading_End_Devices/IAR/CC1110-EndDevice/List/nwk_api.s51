@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:21 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        15/Aug/2012  16:38:25 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -19,7 +19,7 @@
 //                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
 //                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
 //                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
-//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=30               /
 //                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
 //                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
 //                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
@@ -161,7 +161,8 @@ SMPL_Init:
         MOV     A,R7
         MOV     R3,A
         LCALL   nwk_nwkInit
-        MOV     A,R1
+        MOV     A,#0x1
+        XRL     A,R1
         JNZ     ??SMPL_Init_1
         ; Setup parameters for call to function MRFI_WakeUp
         LCALL   MRFI_WakeUp
@@ -249,11 +250,11 @@ SMPL_LinkListen:
         ; Setup parameters for call to function nwk_setListenContext
         MOV     R1,#0x1
         LCALL   nwk_setListenContext
-        MOV     R1,#0x1
+        MOV     R1,#0x2
         SJMP    ??SMPL_LinkListen_7
 ??SMPL_LinkListen_6:
         MOVX    @DPTR,A
-        MOV     R1,#0x0
+        MOV     R1,#0x1
 ??SMPL_LinkListen_7:
         REQUIRE ?Subroutine0
         ; // Fall through to label ?Subroutine0
@@ -362,7 +363,7 @@ SMPL_SendOpt:
         LCALL   nwk_getConnInfo
         MOV     ?V0 + 2,R2
         MOV     ?V0 + 3,R3
-        MOV     ?V0 + 0,#0x2
+        MOV     ?V0 + 0,#0x3
         ; Setup parameters for call to function MRFI_GetRadioState
         LCALL   MRFI_GetRadioState
         MOV     A,R1
@@ -379,6 +380,8 @@ SMPL_SendOpt:
         MOV     A,R1
         MOV     R0,A
         MOV     ?V0 + 0,R0
+        MOV     A,#0x1
+        XRL     A,R0
         JZ      ??SMPL_SendOpt_1
 ??SMPL_SendOpt_0:
         MOV     R1,?V0 + 0
@@ -425,7 +428,7 @@ SMPL_SendOpt:
         MOV     A,R6
         ORL     A,R7
         JNZ     ??SMPL_SendOpt_5
-        MOV     R1,#0x3
+        MOV     R1,#0x4
         SJMP    ??SMPL_SendOpt_2
 ??SMPL_SendOpt_3:
         MOV     A,R6
@@ -465,7 +468,7 @@ SMPL_SendOpt:
         MOV     ?V0 + 1,#0x1
         SJMP    ??SMPL_SendOpt_4
 ??SMPL_SendOpt_6:
-        MOV     R1,#0x2
+        MOV     R1,#0x3
         LJMP    ??SMPL_SendOpt_2
 ??SMPL_SendOpt_5:
         ; Setup parameters for call to function memcpy
@@ -497,6 +500,8 @@ SMPL_SendOpt:
         LCALL   nwk_sendFrame
         MOV     A,R1
         MOV     ?V0 + 0,A
+        MOV     A,#0x1
+        XRL     A,?V0 + 0
         JZ      $+5
         LJMP    ??SMPL_SendOpt_0
         MOV     A,?V0 + 1
@@ -547,7 +552,7 @@ SMPL_SendOpt:
         INC     DPTR
         CLR     A
         MOVX    @DPTR,A
-        MOV     ?V0 + 0,#0xc
+        MOV     ?V0 + 0,#0xd
 ??SMPL_SendOpt_11:
         MOV     A,R0
         MOV     C,0xE0 /* A   */.0
@@ -593,7 +598,7 @@ SMPL_Receive:
         MOV     ?V0 + 1,R5
         ; Setup parameters for call to function nwk_getConnInfo
         LCALL   nwk_getConnInfo
-        MOV     R6,#0x2
+        MOV     R6,#0x3
         MOV     A,R2
         ORL     A,R3
         JZ      ??SMPL_Receive_0
@@ -601,7 +606,10 @@ SMPL_Receive:
         MOV     R1,#0x0
         LCALL   nwk_checkConnInfo
         MOV     A,R1
+        MOV     R0,A
         MOV     R6,A
+        MOV     A,#0x1
+        XRL     A,R0
         JZ      ??SMPL_Receive_1
 ??SMPL_Receive_0:
         MOV     A,R6
@@ -669,7 +677,7 @@ SMPL_Ioctl:
         ADD     A,#-0x5
         JZ      ??SMPL_Ioctl_0
 ??SMPL_Ioctl_1:
-        MOV     R1,#0x2
+        MOV     R1,#0x3
         LJMP    ??SMPL_Ioctl_2
 ??SMPL_Ioctl_0:
         MOV     A,R1
@@ -777,17 +785,17 @@ SMPL_Ioctl:
         MOV     DPH,R7
         MOVX    @DPTR,A
 ??SMPL_Ioctl_12:
-        MOV     R1,#0x0
+        MOV     R1,#0x1
 ??SMPL_Ioctl_2:
         LJMP    ?Subroutine1
 
         END
 // 
-// 949 bytes in segment NEAR_CODE
+// 962 bytes in segment NEAR_CODE
 //   1 byte  in segment SFR_AN
 //   1 byte  in segment XDATA_Z
 // 
-// 949 bytes of CODE  memory
+// 962 bytes of CODE  memory
 //   0 bytes of DATA  memory (+ 1 byte shared)
 //   1 byte  of XDATA memory
 //

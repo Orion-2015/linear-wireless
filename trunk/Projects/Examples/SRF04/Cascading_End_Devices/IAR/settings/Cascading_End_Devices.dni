@@ -1,5 +1,5 @@
 [DebugChecksum]
-Checksum=702497928
+Checksum=-1601767223
 [DisAssemblyWindow]
 NumStates=_ 1
 State 1=_ 1
@@ -18,8 +18,8 @@ TriggerName=main
 LimitSize=0
 ByteLimit=50
 [Breakpoints]
-Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\radio.c}.63.3@1" 1 0 0 0 "" 0 ""
-Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\framework.c}.435.3@1" 1 0 0 0 "" 0 ""
+Bp0=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\framework.c}.468.4@1" 1 0 0 0 "" 0 ""
+Bp1=_ "STD_CODE" "{$PROJ_DIR$\..\..\..\..\..\Components\ApplicationFramework\framework.c}.250.3@1" 1 0 0 0 "" 0 ""
 Count=2
 [ChipconEmu]
 Stop timers on halt=1

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:18 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        15/Aug/2012  16:38:25 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -19,7 +19,7 @@
 //                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
 //                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
 //                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
-//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=30               /
 //                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
 //                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
 //                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
@@ -194,7 +194,7 @@ nwk_rawSend:
         LCALL   nwk_sendFrame
         SJMP    ??nwk_rawSend_4
 ??nwk_rawSend_3:
-        MOV     R1,#0x3
+        MOV     R1,#0x4
 ??nwk_rawSend_4:
         REQUIRE ?Subroutine0
         ; // Fall through to label ?Subroutine0
@@ -288,7 +288,7 @@ nwk_radioControl:
         MOV     R6,A
         MOV     A,R3
         MOV     R7,A
-        MOV     ?V0 + 0,#0x0
+        MOV     ?V0 + 0,#0x1
         MOV     A,#0x4
         XRL     A,?V0 + 1
         JNZ     ??nwk_radioControl_0
@@ -317,7 +317,7 @@ nwk_radioControl:
         MOV     A,R2
         ORL     A,R3
         JNZ     ??nwk_radioControl_4
-        MOV     R1,#0x2
+        MOV     R1,#0x3
         SJMP    ??nwk_radioControl_5
 ??nwk_radioControl_4:
         ; Setup parameters for call to function memcpy
@@ -366,7 +366,7 @@ nwk_radioControl:
         LCALL   MRFI_RxIdle
         SJMP    ??nwk_radioControl_1
 ??nwk_radioControl_8:
-        MOV     ?V0 + 0,#0x2
+        MOV     ?V0 + 0,#0x3
 ??nwk_radioControl_1:
         MOV     R1,?V0 + 0
 ??nwk_radioControl_5:
@@ -384,7 +384,7 @@ nwk_deviceAddress:
         MOV     R6,A
         MOV     A,R3
         MOV     R7,A
-        MOV     ?V0 + 0,#0x2
+        MOV     ?V0 + 0,#0x3
         MOV     A,#0x1
         XRL     A,?V0 + 1
         JNZ     ??nwk_deviceAddress_0
@@ -415,7 +415,7 @@ nwk_deviceAddress:
         MOV     A,R1
         JZ      ??nwk_deviceAddress_2
 ??nwk_deviceAddress_1:
-        MOV     ?V0 + 0,#0x0
+        MOV     ?V0 + 0,#0x1
 ??nwk_deviceAddress_2:
         MOV     R1,?V0 + 0
         LJMP    ?Subroutine0
@@ -437,7 +437,7 @@ nwk_connectionControl:
         XRL     A,R6
         JZ      ??nwk_connectionControl_0
 ??nwk_connectionControl_1:
-        MOV     R1,#0x2
+        MOV     R1,#0x3
         SJMP    ??nwk_connectionControl_2
 ??nwk_connectionControl_0:
         MOV     A,#-0x1
@@ -450,7 +450,7 @@ nwk_connectionControl:
         JZ      ??nwk_connectionControl_1
         ; Setup parameters for call to function nwk_freeConnection
         LCALL   nwk_freeConnection
-        MOV     R1,#0x0
+        MOV     R1,#0x1
 ??nwk_connectionControl_2:
         LJMP    ?Subroutine1
 
