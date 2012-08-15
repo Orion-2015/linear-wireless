@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:27:11 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        15/Aug/2012  17:08:49 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -19,7 +19,7 @@
 //                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
 //                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
 //                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
-//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=30               /
 //                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
 //                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
 //                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
@@ -89,6 +89,7 @@
         PUBLIC logTemp
         PUBLIC removeOldLog
 
+        EXTERN memset
         EXTERN memcpy
 
 
@@ -107,7 +108,7 @@ logIndex:
         RSEG XDATA_Z:XDATA:NOROOT(0)
         DATA8
 logTemp:
-        DS 100
+        DS 30
         REQUIRE __INIT_XDATA_Z
 
         RSEG XDATA_I:XDATA:NOROOT(0)
@@ -133,7 +134,30 @@ log:
         MOVX    A,@DPTR
         CLR     C
         SUBB    A,?V0 + 0
-        JC      ??log_0
+        JNC     $+5
+        LJMP    ??log_0
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,R0
+        ORL     A,R1
+        JNZ     ??log_1
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 2,#0x1e
+        MOV     ?V0 + 3,#0x0
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#logBuffer & 0xff
+        MOV     R3,#(logBuffer >> 8) & 0xff
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+??log_1:
         MOV     DPL,R6
         MOV     DPH,R7
         MOVX    A,@DPTR
@@ -154,7 +178,7 @@ log:
         SUBB    A,#0x1f
         MOV     A,R1
         SUBB    A,#0x0
-        JC      ??log_1
+        JC      ??log_2
         ; Setup parameters for call to function removeOldLog
         MOV     A,R2
         ADD     A,#0x1
@@ -163,31 +187,49 @@ log:
         ADDC    A,#0x0
         MOV     R3,A
         LCALL   removeOldLog
-??log_1:
+??log_2:
         ; Setup parameters for call to function memcpy
         MOV     DPL,R6
         MOV     DPH,R7
         MOVX    A,@DPTR
-        ADD     A,#0x1
         MOV     ?V0 + 2,A
-        CLR     A
-        ADDC    A,#0x0
-        MOV     ?V0 + 3,A
+        MOV     ?V0 + 3,#0x0
         MOV     R0,#?V0 + 2
         LCALL   ?PUSH_XSTACK_I_TWO
         MOV     A,R6
         MOV     R4,A
         MOV     A,R7
         MOV     R5,A
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_3:
+        LCALL   memcpy
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 2,#0x1
+        MOV     R0,#?V0 + 2
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     DPL,R6
+        MOV     DPH,R7
+        MOVX    A,@DPTR
+        MOV     R2,A
         MOV     DPTR,#logIndex
         MOVX    A,@DPTR
         ADD     A,#logBuffer & 0xff
-        MOV     R2,A
+        MOV     R0,A
         INC     DPTR
         MOVX    A,@DPTR
         ADDC    A,#(logBuffer >> 8) & 0xff
+        MOV     R1,A
+        MOV     A,R0
+        ADD     A,R2
+        MOV     R2,A
+        MOV     A,R1
+        ADDC    A,#0x0
         MOV     R3,A
-        LCALL   memcpy
+        LCALL   memset
         MOV     A,#0x2
         LCALL   ?DEALLOC_XSTACK8
         MOV     DPL,R6
@@ -213,9 +255,9 @@ log:
         RSEG NEAR_CODE:CODE:NOROOT(0)
 removeOldLog:
         CODE
-        PUSH    DPL
-        PUSH    DPH
-        ; Saved register size: 2
+        MOV     A,#-0x9
+        LCALL   ?FUNC_ENTER_XDATA
+        ; Saved register size: 9
         ; Auto size: 0
         MOV     DPTR,#logIndex
         MOVX    A,@DPTR
@@ -234,37 +276,47 @@ removeOldLog:
         CLR     A
         MOVX    @DPTR,A
         INC     DPTR
-        SJMP    ??removeOldLog_2
+        MOVX    @DPTR,A
+        ; Setup parameters for call to function memset
+        MOV     ?V0 + 0,#0x1e
+        MOV     ?V0 + 1,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        MOV     R2,#logBuffer & 0xff
+        MOV     R3,#(logBuffer >> 8) & 0xff
+        SJMP    ??CrossCallReturnLabel_4
 ??removeOldLog_0:
         MOV     A,R2
         ADD     A,#-0x1
         MOV     R0,A
         MOV     A,R3
         ADDC    A,#-0x1
-        SJMP    ??removeOldLog_3
-??removeOldLog_4:
+        SJMP    ??removeOldLog_2
+??removeOldLog_3:
         MOV     A,R0
         ADD     A,#0x1
         INC     R0
         MOV     A,R1
         ADDC    A,#0x0
-??removeOldLog_3:
+??removeOldLog_2:
         MOV     R1,A
-        LCALL   ?Subroutine1
-??CrossCallReturnLabel_3:
-        JZ      ??removeOldLog_5
+        LCALL   ?Subroutine2
+??CrossCallReturnLabel_5:
+        JZ      ??removeOldLog_4
         CLR     C
         MOV     A,R0
         SUBB    A,#0x1e
         MOV     A,R1
         SUBB    A,#0x0
-        JC      ??removeOldLog_4
-??removeOldLog_5:
+        JC      ??removeOldLog_3
+??removeOldLog_4:
         MOV     A,#0x1e
         XRL     A,R0
-        JNZ     ??removeOldLog_6
+        JNZ     ??removeOldLog_5
         MOV     A,R1
-??removeOldLog_6:
+??removeOldLog_5:
         JZ      ??removeOldLog_1
         LCALL   ?Subroutine0
 ??CrossCallReturnLabel_1:
@@ -273,9 +325,9 @@ removeOldLog:
         MOV     A,R1
         MOV     R3,A
         SJMP    ??CrossCallReturnLabel_2
-??removeOldLog_7:
-        LCALL   ?Subroutine1
-??CrossCallReturnLabel_4:
+??removeOldLog_6:
+        LCALL   ?Subroutine2
+??CrossCallReturnLabel_6:
         PUSH    A
         MOV     A,R0
         CLR     C
@@ -299,7 +351,7 @@ removeOldLog:
         SUBB    A,#0x1e
         MOV     A,R1
         SUBB    A,#0x0
-        JC      ??removeOldLog_7
+        JC      ??removeOldLog_6
         MOV     DPTR,#logIndex
         CLR     C
         MOVX    A,@DPTR
@@ -308,14 +360,35 @@ removeOldLog:
         INC     DPTR
         MOVX    A,@DPTR
         SUBB    A,R3
-??removeOldLog_2:
         MOVX    @DPTR,A
-        POP     DPH
-        POP     DPL
-        RET
+        ; Setup parameters for call to function memset
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        MOV     R0,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        MOV     R1,A
+        MOV     A,#0x1e
+        CLR     C
+        SUBB    A,R0
+        MOV     ?V0 + 0,A
+        CLR     A
+        SUBB    A,R1
+        MOV     ?V0 + 1,A
+        MOV     R0,#?V0 + 0
+        LCALL   ?PUSH_XSTACK_I_TWO
+        MOV     R4,#0x0
+        MOV     R5,#0x0
+        LCALL   ?Subroutine1
+??CrossCallReturnLabel_4:
+        LCALL   memset
+        MOV     A,#0x2
+        LCALL   ?DEALLOC_XSTACK8
+        MOV     R7,#0x2
+        LJMP    ?FUNC_LEAVE_XDATA
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
-?Subroutine1:
+?Subroutine2:
         MOV     A,#logBuffer & 0xff
         ADD     A,R0
         MOV     DPL,A
@@ -323,6 +396,18 @@ removeOldLog:
         ADDC    A,R1
         MOV     DPH,A
         MOVX    A,@DPTR
+        RET
+
+        RSEG NEAR_CODE:CODE:NOROOT(0)
+?Subroutine1:
+        MOV     DPTR,#logIndex
+        MOVX    A,@DPTR
+        ADD     A,#logBuffer & 0xff
+        MOV     R2,A
+        INC     DPTR
+        MOVX    A,@DPTR
+        ADDC    A,#(logBuffer >> 8) & 0xff
+        MOV     R3,A
         RET
 
         RSEG NEAR_CODE:CODE:NOROOT(0)
@@ -342,13 +427,13 @@ removeOldLog:
 
         END
 // 
-// 282 bytes in segment NEAR_CODE
+// 427 bytes in segment NEAR_CODE
 //   1 byte  in segment XDATA_I
 //   1 byte  in segment XDATA_ID
-// 132 bytes in segment XDATA_Z
+//  62 bytes in segment XDATA_Z
 // 
-// 283 bytes of CODE  memory
-// 133 bytes of XDATA memory
+// 428 bytes of CODE  memory
+//  63 bytes of XDATA memory
 //
 //Errors: none
-//Warnings: none
+//Warnings: 1

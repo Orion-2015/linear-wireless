@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        13/Aug/2012  21:27:10 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        15/Aug/2012  16:38:24 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -19,7 +19,7 @@
 //                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
 //                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
 //                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
-//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=30               /
 //                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
 //                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
 //                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /

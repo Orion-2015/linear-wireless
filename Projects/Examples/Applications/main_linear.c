@@ -44,7 +44,7 @@
 #include "framework.h"
 #include "uart.h"
 
-addr_t   sMyROMAddress = { 5 };
+addr_t   sMyROMAddress = { 4 };
 
 
 /* For FHSS systems, calls to NWK_DELAY() will also call nwk_pllBackgrounder()

@@ -17,6 +17,8 @@ void getLogHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 {
 	if(logIndex != 0)
 	{	
+		if(logIndex < LOGBUFFERLEN)
+			memset(&(appOutFrame->msg[logIndex]),0x00,(LOGBUFFERLEN-logIndex));
 		memcpy(appOutFrame->msg, logBuffer, logIndex);
 		appOutFrame->len = logIndex;
 		logTemp[0] = 2;/* the length of logTemp*/
@@ -29,7 +31,8 @@ void getLogHandle(struct AppFrame* appInFrame, struct AppFrame* appOutFrame)
 		logTemp[1] = NO_LOG;
 		log(INFO_OTHER, logTemp);
 		memcpy(appOutFrame->msg, logBuffer, logIndex);
-		appOutFrame->len = strlen((char*)appOutFrame->msg);
+		appOutFrame->len = logIndex;
+		//appOutFrame->len = strlen((char*)appOutFrame->msg);
 	}
 	return;	
 }

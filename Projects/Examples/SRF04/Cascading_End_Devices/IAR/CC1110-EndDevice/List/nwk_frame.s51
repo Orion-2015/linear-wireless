@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //                                                                            /
-// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        11/Aug/2012  13:38:22 /
+// IAR C/C++ Compiler V8.10.3.10338/W32 for 8051        15/Aug/2012  16:38:23 /
 // Copyright 2004-2011 IAR Systems AB.                                        /
 //                                                                            /
 //    Core               =  plain                                             /
@@ -19,7 +19,7 @@
 //                          E:\linear-wireless\Projects\Examples\SRF04\Cascad /
 //                          ing_End_Devices\IAR\Configuration\smpl_nwk_config /
 //                          .dat (-DMAX_HOPS=3 -DMAX_HOPS_FROM_ME=3           /
-//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=100              /
+//                          -DCOMMAND_SIZE=10 -DLOGTEMP_SIZE=30               /
 //                          -DMAX_HOPS_FROM_AP=1 -DMAX_NWK_PAYLOAD=34         /
 //                          -DMAX_APP_PAYLOAD=50 -DDEFAULT_LINK_TOKEN=0x01020 /
 //                          304 -DDEFAULT_JOIN_TOKEN=0x05060708               /
@@ -505,7 +505,7 @@ nwk_retrieveFrame:
         MOV     A,R2
         ORL     A,?V0 + 1
         JNZ     ??nwk_retrieveFrame_1
-        MOV     R1,#0x2
+        MOV     R1,#0x3
         LJMP    ??nwk_retrieveFrame_2
 ??nwk_retrieveFrame_1:
         MOV     DPL,R6
@@ -604,10 +604,10 @@ nwk_retrieveFrame:
         MOV     DPH,R7
         CLR     A
         MOVX    @DPTR,A
-        MOV     R1,A
+        MOV     R1,#0x1
         SJMP    ??nwk_retrieveFrame_2
 ??nwk_retrieveFrame_0:
-        MOV     R1,#0x4
+        MOV     R1,#0x5
 ??nwk_retrieveFrame_2:
         MOV     A,#0x2
         LCALL   ?DEALLOC_XSTACK8
@@ -840,10 +840,10 @@ nwk_sendFrame:
         LCALL   MRFI_Transmit
         MOV     A,R1
         JNZ     ??nwk_sendFrame_0
-        MOV     R1,#0x0
+        MOV     R1,#0x1
         SJMP    ??nwk_sendFrame_1
 ??nwk_sendFrame_0:
-        MOV     R1,#0x9
+        MOV     R1,#0xa
 ??nwk_sendFrame_1:
         MOV     DPL,R6
         MOV     DPH,R7
@@ -1010,12 +1010,12 @@ nwk_sendAckReply:
 
         END
 // 
-// 1 195 bytes in segment NEAR_CODE
+// 1 196 bytes in segment NEAR_CODE
 //    13 bytes in segment XDATA_I
 //    13 bytes in segment XDATA_ID
 //     7 bytes in segment XDATA_Z
 // 
-// 1 208 bytes of CODE  memory
+// 1 209 bytes of CODE  memory
 //    20 bytes of XDATA memory
 //
 //Errors: none

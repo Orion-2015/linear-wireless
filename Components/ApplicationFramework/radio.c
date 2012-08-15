@@ -56,26 +56,26 @@ smplStatus_t send(struct AppFrame* data, uint8 len)
 {
 	smplStatus_t 	rc;
 	uint8 				nextAddr;
-	if(data->port == GETLOG)
+	/*if(data->port == GETLOG)
 	{
 		rc = SMPL_Send_Linear(data->finnalDstAddr, (uint8_t*)data, len);
 		NWK_DELAY(50);
 		if(rc == SMPL_SUCCESS)
 			{
-				logTemp[0] = 2;/* the length of logTemp*/
+				logTemp[0] = 2;
 				logTemp[1] = SEND_LOG_SUCCESSED;
 				log(INFO_SEND, logTemp);
 			}
 			else
 			{
-				logTemp[0] = 3;/* the length of logTemp*/
+				logTemp[0] = 3;
 				logTemp[1] = SEND_LOG_FAILED;
 				logTemp[2] = rc;
 				log(ERROR_SEND, logTemp);
 			}
 	}
-	else
-	{
+	else   */
+
 			for(uint8 i = 1;i<=MAX_HOPS;i++)
 			{
 				nextAddr = getNextAddress(data->originalAddr, data->finnalDstAddr, i);
@@ -85,19 +85,21 @@ smplStatus_t send(struct AppFrame* data, uint8 len)
 					rc = SMPL_Send_Linear(data->dstAddr, (uint8_t*)data, len);
 					if(rc == SMPL_SUCCESS)
 					{
+						memset(logTemp, 0x00, 4);
 						logTemp[0] = 3;/* the length of logTemp*/
 						logTemp[1] = SEND_SUCCESSED;
-						logTemp[2] = data->dstAddr;
+						logTemp[2] = nextAddr;
 						log(INFO_SEND, logTemp);
 						break;
 					}
 					else
 					{
-						logTemp[0] = 5;/* the length of logTemp*/
+						memset(logTemp, 0x00, 5);
+						logTemp[0] = 4;/* the length of logTemp*/
 						logTemp[1] = SEND_FAILED;
-						logTemp[2] = data->dstAddr;
+						logTemp[2] = nextAddr;
 						logTemp[3] = rc;
-						logTemp[4] = i;   /*failed times*/
+						//logTemp[4] = i;   /*failed times*/
 						log(ERROR_SEND, logTemp);
 						NWK_DELAY(20);
 					}
@@ -108,8 +110,6 @@ smplStatus_t send(struct AppFrame* data, uint8 len)
 					break;
 				}
 			}	
-	}
-
 	return rc;
 }
 

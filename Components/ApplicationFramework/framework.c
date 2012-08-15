@@ -157,7 +157,7 @@ void send2Computer(struct AppFrame* pFrame)
 	else if(pFrame->port == GETLOG)
 	{
 		uint8 msgIndex = 0;
-		while(msgIndex <= pFrame->len)
+		while(msgIndex <= pFrame->len && pFrame->msg[msgIndex] != 0)
 		{		
 			getLogInfor(&(pFrame->msg[msgIndex]));
 			msgIndex += (pFrame->msg[msgIndex]+1);		
@@ -250,9 +250,9 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 		rc = fowardFrame(pInframe);
 		if(rc == SMPL_SUCCESS)
 		{
-			logTemp[0] = 3;/* the length of logTemp*/
+			logTemp[0] = 2;/* the length of logTemp*/
 			logTemp[1] = FORWARD_SUCCESSED;
-			logTemp[2] = getNextAddress(pInframe->originalAddr, pInframe->finnalDstAddr, 1);
+			//logTemp[2] = getNextAddress(pInframe->originalAddr, pInframe->finnalDstAddr, 1);
 			log(INFO_SEND, logTemp);
 
 			/*#ifndef LOGINFO
@@ -261,8 +261,7 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 			sprintf((char*)logTemp, "FT %dS\n", pInframe->dstAddr);
 			log(INFO, logTemp);
 			#endif
-			*/
-			
+			*/			
 		}
 		else
 		{
@@ -282,10 +281,10 @@ void handleRF(struct AppFrame* pInframe, BOOL fromUART)
 			}
 			else
 			{
-				logTemp[0] = 4;/* the length of logTemp*/
+				logTemp[0] = 3;/* the length of logTemp*/
 				logTemp[1] = FORWARD_FAILED;
-				logTemp[2] = getNextAddress(pInframe->originalAddr, pInframe->finnalDstAddr, 1);
-				logTemp[3] = rc;
+				//logTemp[2] = getNextAddress(pInframe->originalAddr, pInframe->finnalDstAddr, 1);
+				logTemp[2] = rc;
 				log(ERROR_SEND, logTemp);
 			
 				/*
@@ -379,6 +378,14 @@ void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 					logTemp[0] = 3;/* the length of logTemp*/
 					logTemp[1] = SEND_CALLBACK_SUCCESSED;
 					logTemp[2] = getMyAddress();
+					/*if(getMyAddress())
+					{
+						logTemp[2] = getMyAddress();
+					}
+					else
+					{
+						logTemp[2] = ':';
+					}*/
 					log(INFO_SEND, logTemp);
 				}
 				else
@@ -386,6 +393,15 @@ void callApplication(struct AppFrame* pInframe, struct AppFrame* pOutFrame)
 					logTemp[0] = 4;/* the length of logTemp*/
 					logTemp[1] = SEND_CALLBACK_FAILED;
 					logTemp[2] = getMyAddress();
+					/*
+					if(getMyAddress())
+					{
+						logTemp[2] = getMyAddress();
+					}
+					else
+					{
+						logTemp[2] = ':';
+					}*/
 					logTemp[3] = rc;
 					log(ERROR_SEND, logTemp);
 				}
@@ -476,10 +492,9 @@ void getLogInfor(char* log_Infor)
 	case SEND_FAILED:
 		//char rc1 = log_Infor[3];
 		//smplStatus_t rc1_1 = (smplStatus_t) log_Infor[3];
-		char* temp;
-		temp = getRcText((smplStatus_t) log_Infor[3]);
-		printf("ERROR_SEND:SEND_FAILED, dstAddr: %d, failed times:%d;\n", log_Infor[2], log_Infor[4]);
-		printf("rc: %s\n",temp);
+		char* temp = getRcText((smplStatus_t) log_Infor[3]);
+		printf("ERROR_SEND:SEND_FAILED, dstAddr: %d, rc:%s;\n", log_Infor[2], temp);
+		//printf("rc: %s\n",temp);
 		return;
 	case SEND_LOG_SUCCESSED:
 		printf("INFO_SEND:SEND_LOG_SUCCESSED;\n");
@@ -503,10 +518,10 @@ void getLogInfor(char* log_Infor)
 		printf("ERROR_SEND:SEND_TEST_2AP_FAILED, rc: %s;\n", getRcText((smplStatus_t) log_Infor[2]));
 		return;
 	case FORWARD_SUCCESSED:
-		printf("INFO_SEND:FORWARD_SUCCESSED, dstAddr: %d;\n", log_Infor[2]);
+		printf("INFO_SEND:FORWARD_SUCCESSED;\n");
 		return;
 	case FORWARD_FAILED:
-		printf("ERROR_SEND:FORWARD_FAILED, dstAddr: %d, rc: %s;\n", log_Infor[2], getRcText((smplStatus_t) log_Infor[3]));
+		printf("ERROR_SEND:FORWARD_FAILED, rc: %s;\n", getRcText((smplStatus_t) log_Infor[2]));
 		return;
 	case SEND_STATION_DATE:
 		return;

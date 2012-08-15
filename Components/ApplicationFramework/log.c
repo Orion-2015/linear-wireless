@@ -22,13 +22,18 @@ void log(uint8 logType, char* logContent)
 	if(logType <= logLevel)
 	{
 		/*the length of logContent is logContent[0],use it take place of strlen(logContent)*/
+		if(logIndex == 0)
+		{
+			memset(logBuffer, 0x00, LOGBUFFERLEN);
+		}
 		
 		if(logIndex + logContent[0] + 1 > LOGBUFFERLEN)
 		{
 			removeOldLog(logContent[0] + 1);
 		}
 		/* olgIndex has updated by removeOldLog() function if has call it */
-		memcpy(logBuffer + logIndex, logContent, logContent[0] + 1);
+		memcpy(logBuffer + logIndex, logContent, logContent[0] );
+		memset(logBuffer + logIndex + logContent[0], 0x00, 1);
 		logIndex += (logContent[0] + 1);
 		
 		//#ifdef COMDEBUG		
@@ -46,6 +51,7 @@ void removeOldLog(uint16 newLogLength)
 	if(newLogLength >= logIndex)
 	{
 		logIndex = 0;
+		memset(logBuffer, 0x00, LOGBUFFERLEN);
 	}
 	else
 	{
@@ -59,6 +65,7 @@ void removeOldLog(uint16 newLogLength)
 			if(i == LOGBUFFERLEN)
 			{
 				logIndex = 0;
+				memset(logBuffer, 0x00, LOGBUFFERLEN);
 				return;
 			}
 			i++; /* point to new log content */
@@ -69,6 +76,7 @@ void removeOldLog(uint16 newLogLength)
 				logBuffer[i - newIndex] = logBuffer[i];
 			}
 			logIndex -= newIndex;
+			memset(&(logBuffer[logIndex]), 0x00, (LOGBUFFERLEN-logIndex));
 	}
 	return;
 }
